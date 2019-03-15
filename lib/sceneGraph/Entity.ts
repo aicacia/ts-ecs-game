@@ -91,28 +91,24 @@ export class Entity {
     ] as T);
   }
 
-  addComponent<T extends Component>(component: T) {
-    if (!this.componentMap[component.getComponentName()]) {
-      component.setEntity(this);
-
-      this.components.push(component);
-      this.componentMap[component.getComponentName()] = component;
-
-      this.scene.map(scene => scene.addComponent(component));
-    }
+  addComponents(...components: Component[]) {
+    components.forEach(component => {
+      this._addComponent(component);
+    });
     return this;
   }
+  addComponent(...components: Component[]) {
+    return this.addComponents(...components);
+  }
 
-  removeComponent<T extends Component>(component: T) {
-    if (this.componentMap[component.getComponentName()]) {
-      component.UNSAFE_removeEntity();
-
-      this.components.splice(this.components.indexOf(component), 1);
-      delete this.componentMap[component.getComponentName()];
-
-      this.scene.map(scene => scene.removeComponent(component));
-    }
+  removeComponents(...components: Component[]) {
+    components.forEach(component => {
+      this._removeComponent(component);
+    });
     return this;
+  }
+  removeComponent(...components: Component[]) {
+    return this.removeComponents(...components);
   }
 
   getChildren() {
@@ -136,6 +132,30 @@ export class Entity {
   }
   removeChild(...children: Entity[]) {
     return this.removeChildren(...children);
+  }
+
+  private _addComponent<T extends Component>(component: T) {
+    if (!this.componentMap[component.getComponentName()]) {
+      component.setEntity(this);
+
+      this.components.push(component);
+      this.componentMap[component.getComponentName()] = component;
+
+      this.scene.map(scene => scene.addComponent(component));
+    }
+    return this;
+  }
+
+  private _removeComponent<T extends Component>(component: T) {
+    if (this.componentMap[component.getComponentName()]) {
+      component.UNSAFE_removeEntity();
+
+      this.components.splice(this.components.indexOf(component), 1);
+      delete this.componentMap[component.getComponentName()];
+
+      this.scene.map(scene => scene.removeComponent(component));
+    }
+    return this;
   }
 
   private _addChild(child: Entity) {

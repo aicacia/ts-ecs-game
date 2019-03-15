@@ -17,7 +17,7 @@ export abstract class Component {
   getComponentName(): string {
     return Object.getPrototypeOf(this).constructor.getComponentName();
   }
-  getManagerConstructor(): new () => Manager {
+  getManagerConstructor<M extends Manager = Manager>(): new () => M {
     return Object.getPrototypeOf(this).constructor.getManagerConstructor();
   }
 
@@ -33,7 +33,7 @@ export abstract class Component {
     return this.entity;
   }
 
-  setManager(manager: Manager) {
+  setManager<M extends Manager = Manager>(manager: M) {
     this.manager = some(manager);
     return this;
   }
@@ -41,8 +41,8 @@ export abstract class Component {
     this.entity = none();
     return this;
   }
-  getManager() {
-    return this.manager;
+  getManager<M extends Manager = Manager>() {
+    return this.manager as Option<M>;
   }
 
   onAdd() {

@@ -1,5 +1,5 @@
 import { mat2d, vec2 } from "gl-matrix";
-import { Component, Entity } from "../../sceneGraph";
+import { Component } from "../../sceneGraph";
 
 const VEC2_0 = vec2.create();
 
