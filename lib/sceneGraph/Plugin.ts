@@ -1,20 +1,27 @@
 import { none, Option, some } from "@aicacia/core";
+import { EventEmitter } from "events";
 
-export abstract class Plugin {
+export abstract class Plugin extends EventEmitter {
   static pluginName: string;
+  static pluginPriority: number = 0;
 
-  static getPluginName(): string {
+  static getPluginName() {
     return this.pluginName;
+  }
+  static getPluginPriority() {
+    return this.pluginPriority;
   }
 
   protected scene: Option<Scene> = none();
-  protected manager: Option<Manager> = none();
 
   getPluginName(): string {
     return Object.getPrototypeOf(this).constructor.getPluginName();
   }
+  getPluginPriority(): number {
+    return Object.getPrototypeOf(this).constructor.getPluginPriority();
+  }
 
-  setScene(scene: Scene) {
+  UNSAFE_setScene(scene: Scene) {
     this.scene = some(scene);
     return this;
   }
@@ -40,5 +47,4 @@ export abstract class Plugin {
   }
 }
 
-import { Manager } from "./Manager";
 import { Scene } from "./Scene";

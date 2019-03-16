@@ -1,0 +1,1 @@
+export { CanvasRendererPlugin } from "./CanvasRendererPlugin";

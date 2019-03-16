@@ -18,7 +18,8 @@
     "format.ts": "prettier-tslint fix '**/*.{ts,tsx}'",
     "format.js": "prettier --write '**/*.{js,jsx,json}' --ignore-path .gitignore",
     "format": "npm run format.ts && npm run format.js",
-    "lint": "tslint -c tslint.json 'lib/**/*.{ts,tsx}'"
+    "lint": "tslint -c tslint.json 'lib/**/*.{ts,tsx}'",
+    "simple": "cd examples/simple && parcel index.html"
   },
   "keywords": [
     "engine",
@@ -32,6 +33,7 @@
     "@types/gl-matrix": "^2.4.5",
     "@types/tape": "^4.2.33",
     "@types/uuid": "^3.4.4",
+    "parcel": "^1.12.2",
     "prettier": "^1.16.4",
     "prettier-tslint": "^0.4.2",
     "tap-spec": "^5.0.0",

@@ -10,6 +10,7 @@
     "no-empty": false,
     "member-access": false,
     "max-classes-per-file": false,
+    "no-bitwise": false,
     "variable-name": [
       true,
       "allow-pascal-case",

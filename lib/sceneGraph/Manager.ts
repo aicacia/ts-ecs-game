@@ -1,17 +1,25 @@
 import { none, Option, some } from "@aicacia/core";
+import { EventEmitter } from "events";
 
-export abstract class Manager {
+export abstract class Manager extends EventEmitter {
   static managerName: string;
+  static managerPriority: number = 0;
 
-  static getManagerName(): string {
+  static getManagerName() {
     return this.managerName;
+  }
+  static getManagerPriority() {
+    return this.managerPriority;
   }
 
   protected scene: Option<Scene> = none();
   protected components: Component[] = [];
 
   getManagerName(): string {
-    return Object.getPrototypeOf(this).constructor.getName();
+    return Object.getPrototypeOf(this).constructor.getManagerName();
+  }
+  getManagerPriority(): number {
+    return Object.getPrototypeOf(this).constructor.getManagerPriority();
   }
 
   addComponent(component: Component) {
@@ -31,20 +39,21 @@ export abstract class Manager {
     return this.components.length === 0;
   }
 
-  sortFunction = (a: Component, b: Component): number =>
-    a
+  sortFunction(a: Component, b: Component): number {
+    return a
       .getEntity()
       .flatMap(aEntity =>
         b.getEntity().map(bEntity => aEntity.getDepth() - bEntity.getDepth())
       )
       .unwrapOr(0);
+  }
 
   sort() {
     this.components.sort(this.sortFunction);
     return this;
   }
 
-  setScene(scene: Scene) {
+  UNSAFE_setScene(scene: Scene) {
     this.scene = some(scene);
     return this;
   }
@@ -52,7 +61,7 @@ export abstract class Manager {
     this.scene = none();
     return this;
   }
-  geScene(): Option<Scene> {
+  getScene(): Option<Scene> {
     return this.scene;
   }
 

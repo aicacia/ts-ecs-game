@@ -1,6 +1,7 @@
 import { none, Option, some } from "@aicacia/core";
+import { EventEmitter } from "events";
 
-export abstract class Component {
+export abstract class Component extends EventEmitter {
   static Manager: new () => Manager;
   static componentName: string;
 
@@ -21,7 +22,7 @@ export abstract class Component {
     return Object.getPrototypeOf(this).constructor.getManagerConstructor();
   }
 
-  setEntity(entity: Entity) {
+  UNSAFE_setEntity(entity: Entity) {
     this.entity = some(entity);
     return this;
   }
@@ -33,7 +34,7 @@ export abstract class Component {
     return this.entity;
   }
 
-  setManager<M extends Manager = Manager>(manager: M) {
+  UNSAFE_setManager<M extends Manager = Manager>(manager: M) {
     this.manager = some(manager);
     return this;
   }

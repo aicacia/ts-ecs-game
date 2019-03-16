@@ -1,6 +1,7 @@
 import { none, Option, some } from "@aicacia/core";
+import { EventEmitter } from "events";
 
-export class Entity {
+export class Entity extends EventEmitter {
   private depth: number = 0;
   private scene: Option<Scene> = none();
   private root: Entity = this;
@@ -47,7 +48,7 @@ export class Entity {
   getScene(): Option<Scene> {
     return this.scene;
   }
-  setScene(scene: Scene) {
+  UNSAFE_setScene(scene: Scene) {
     this.scene = some(scene);
     return this;
   }
@@ -92,22 +93,18 @@ export class Entity {
   }
 
   addComponents(...components: Component[]) {
-    components.forEach(component => {
-      this._addComponent(component);
-    });
+    components.forEach(component => this._addComponent(component));
     return this;
   }
   addComponent(...components: Component[]) {
     return this.addComponents(...components);
   }
 
-  removeComponents(...components: Component[]) {
-    components.forEach(component => {
-      this._removeComponent(component);
-    });
+  removeComponents(...components: Array<new (...args: any[]) => Component>) {
+    components.forEach(component => this._removeComponent(component));
     return this;
   }
-  removeComponent(...components: Component[]) {
+  removeComponent(...components: Array<new (...args: any[]) => Component>) {
     return this.removeComponents(...components);
   }
 
@@ -135,19 +132,28 @@ export class Entity {
   }
 
   private _addComponent<T extends Component>(component: T) {
-    if (!this.componentMap[component.getComponentName()]) {
-      component.setEntity(this);
+    const componentName = component.getComponentName();
+
+    if (!this.componentMap[componentName]) {
+      component.UNSAFE_setEntity(this);
 
       this.components.push(component);
-      this.componentMap[component.getComponentName()] = component;
+      this.componentMap[componentName] = component;
 
       this.scene.map(scene => scene.addComponent(component));
+      this.emit("add-component", component);
     }
     return this;
   }
 
-  private _removeComponent<T extends Component>(component: T) {
-    if (this.componentMap[component.getComponentName()]) {
+  private _removeComponent<T extends Component>(
+    Component: new (...args: any[]) => T
+  ) {
+    const componentName = (Component as any).getComponentName(),
+      component = this.componentMap[componentName];
+
+    if (component) {
+      this.emit("remove-component", component);
       component.UNSAFE_removeEntity();
 
       this.components.splice(this.components.indexOf(component), 1);
@@ -169,6 +175,7 @@ export class Entity {
       child.setDepth(this.depth + 1);
 
       this.scene.map(scene => scene.addEntity(child));
+      this.emit("add-child", child);
     }
     return this;
   }
@@ -176,6 +183,7 @@ export class Entity {
     const index = this.children.indexOf(child);
 
     if (index !== -1) {
+      this.emit("remove-child", child);
       this.children.splice(index, 1);
 
       child.parent = none();
