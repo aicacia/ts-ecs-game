@@ -1,4 +1,4 @@
-import { Plugin } from "../sceneGraph";
+import { Plugin } from "../../sceneGraph";
 
 export abstract class RendererPlugin extends Plugin {
   static pluginName = "engine.RendererPlugin";
@@ -31,13 +31,25 @@ export abstract class RendererPlugin extends Plugin {
     return this.removeRenderers(...renderers);
   }
 
+  onUpdate() {
+    this.renderers.forEach(renderer => {
+      renderer.onBeforeRender();
+      renderer.onRender();
+    });
+    return this;
+  }
+  onAfterUpdate() {
+    this.renderers.forEach(renderer => renderer.onAfterRender());
+    return this;
+  }
+
   private _addRenderer<T extends Renderer>(renderer: T) {
     const rendererName = renderer.getRendererName();
 
     if (!this.rendererMap[rendererName]) {
       this.renderers.push(renderer);
       this.rendererMap[rendererName] = renderer;
-      renderer.UNSAFE_setRendererSystem(this);
+      renderer.UNSAFE_setRendererPlugin(this);
       renderer.onAdd();
       this.emit("add-renderer", renderer);
     }
@@ -54,7 +66,7 @@ export abstract class RendererPlugin extends Plugin {
 
       this.renderers.splice(this.renderers.indexOf(renderer), 1);
       delete this.rendererMap[rendererName];
-      renderer.UNSAFE_removeRendererSystem();
+      renderer.UNSAFE_removeRendererPlugin();
     }
 
     return this;

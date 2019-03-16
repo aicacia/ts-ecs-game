@@ -12,7 +12,7 @@ export abstract class Plugin extends EventEmitter {
     return this.pluginPriority;
   }
 
-  protected scene: Option<Scene> = none();
+  private scene: Option<Scene> = none();
 
   getPluginName(): string {
     return Object.getPrototypeOf(this).constructor.getPluginName();

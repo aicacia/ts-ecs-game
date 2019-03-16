@@ -21,16 +21,22 @@ export abstract class Renderer extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.getRendererPriority();
   }
 
-  UNSAFE_setRendererSystem(rendererPlugin: RendererPlugin) {
+  UNSAFE_setRendererPlugin(rendererPlugin: RendererPlugin) {
     this.rendererPlugin = some(rendererPlugin);
     return this;
   }
-  UNSAFE_removeRendererSystem() {
+  UNSAFE_removeRendererPlugin() {
     this.rendererPlugin = none();
     return this;
   }
-  getRendererSystem() {
-    return this.rendererPlugin;
+  getRendererPlugin<T extends RendererPlugin = RendererPlugin>() {
+    return this.rendererPlugin as Option<T>;
+  }
+
+  getScene() {
+    return this.getRendererPlugin().flatMap(rendererPlugin =>
+      rendererPlugin.getScene()
+    );
   }
 
   onAdd() {

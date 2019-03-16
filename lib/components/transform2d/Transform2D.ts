@@ -1,11 +1,12 @@
 import { mat2d, vec2 } from "gl-matrix";
 import { Component } from "../../sceneGraph";
+import { Transform2DManager } from "./Transform2DManager";
 
 const VEC2_0 = vec2.create();
 
 export class Transform2D extends Component {
-  static Manager = null as any;
   static componentName = "engine.Transform2D";
+  static Manager = Transform2DManager;
 
   localPosition: vec2 = vec2.create();
   localScale: vec2 = vec2.fromValues(1, 1);
@@ -89,7 +90,7 @@ export class Transform2D extends Component {
     mat2d.scale(this.localMatrix, this.localMatrix, this.localScale);
     mat2d.translate(this.localMatrix, this.localMatrix, this.localPosition);
 
-    this.entity
+    this.getEntity()
       .flatMap(entity => entity.getParent())
       .flatMap(parent => parent.getComponent(Transform2D))
       .map(transform2d => {
@@ -115,7 +116,3 @@ export class Transform2D extends Component {
     return this;
   }
 }
-
-import { Transform2DManager } from "./Transform2DManager";
-
-Transform2D.Manager = Transform2DManager;

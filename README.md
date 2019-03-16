@@ -18,15 +18,19 @@ export class Test extends Component {
 
   onUpdate() {
     this.position += 1;
-    this.getEntity().map(entity =>
-      entity.getParent().map(parent =>
-        parent.getComponent(Test).map(component => {
-          this.globalPosition = component
-            ? component.position + this.position
-            : this.position;
-        })
+
+    this.getEntity()
+      .flatMap(entity =>
+        entity.getParent().flatMap(parent => parent.getComponent(Test))
       )
-    );
+      .mapOrElse(
+        parentComponent => {
+          this.globalPosition = parentComponent.position + this.position;
+        },
+        () => {
+          this.globalPosition = this.position;
+        }
+      );
 
     return this;
   }

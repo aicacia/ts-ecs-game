@@ -12,8 +12,8 @@ export abstract class Component extends EventEmitter {
     return this.Manager;
   }
 
-  protected entity: Option<Entity> = none();
-  protected manager: Option<Manager> = none();
+  private entity: Option<Entity> = none();
+  private manager: Option<Manager> = none();
 
   getComponentName(): string {
     return Object.getPrototypeOf(this).constructor.getComponentName();

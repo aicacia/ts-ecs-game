@@ -35,16 +35,10 @@ export class Entity extends EventEmitter {
     return this.root === this;
   }
 
-  hasParent(): boolean {
-    return !!this.parent;
-  }
   getParent(): Option<Entity> {
     return this.parent;
   }
 
-  hasScene(): boolean {
-    return !!this.scene;
-  }
   getScene(): Option<Scene> {
     return this.scene;
   }
@@ -92,39 +86,41 @@ export class Entity extends EventEmitter {
     ] as T);
   }
 
-  addComponents(...components: Component[]) {
+  addComponents(components: Component[]) {
     components.forEach(component => this._addComponent(component));
     return this;
   }
   addComponent(...components: Component[]) {
-    return this.addComponents(...components);
+    return this.addComponents(components);
   }
 
-  removeComponents(...components: Array<new (...args: any[]) => Component>) {
+  removeComponents(components: Array<new (...args: any[]) => Component>) {
     components.forEach(component => this._removeComponent(component));
     return this;
   }
   removeComponent(...components: Array<new (...args: any[]) => Component>) {
-    return this.removeComponents(...components);
+    return this.removeComponents(components);
   }
 
+  detach() {
+    this.parent.map(parent => {
+      parent._removeChild(this);
+      this.scene.map(scene => scene.addEntity(this));
+    });
+  }
   getChildren() {
     return this.children;
   }
-  addChildren(...children: Entity[]) {
-    children.forEach(child => {
-      this._addChild(child);
-    });
+  addChildren(children: Entity[]) {
+    children.forEach(child => this._addChild(child));
     return this;
   }
   addChild(...children: Entity[]) {
-    return this.addChildren(...children);
+    return this.addChildren(children);
   }
 
   removeChildren(...children: Entity[]) {
-    children.forEach(child => {
-      this._removeChild(child);
-    });
+    children.forEach(child => this._removeChild(child));
     return this;
   }
   removeChild(...children: Entity[]) {
@@ -140,7 +136,7 @@ export class Entity extends EventEmitter {
       this.components.push(component);
       this.componentMap[componentName] = component;
 
-      this.scene.map(scene => scene.addComponent(component));
+      this.scene.map(scene => scene.UNSAFE_addComponent(component));
       this.emit("add-component", component);
     }
     return this;
@@ -159,14 +155,17 @@ export class Entity extends EventEmitter {
       this.components.splice(this.components.indexOf(component), 1);
       delete this.componentMap[component.getComponentName()];
 
-      this.scene.map(scene => scene.removeComponent(component));
+      this.scene.map(scene => scene.UNSAFE_removeComponent(component));
     }
     return this;
   }
 
   private _addChild(child: Entity) {
     if (this.children.indexOf(child) === -1) {
-      child.parent.map(parent => parent.removeChild(child));
+      if (child.isRoot()) {
+        child.scene.map(scene => scene.removeEntity(child));
+      }
+      child.parent.map(parent => parent._removeChild(child));
 
       this.children.push(child);
 
@@ -174,7 +173,6 @@ export class Entity extends EventEmitter {
       child.root = this.root;
       child.setDepth(this.depth + 1);
 
-      this.scene.map(scene => scene.addEntity(child));
       this.emit("add-child", child);
     }
     return this;
@@ -187,10 +185,8 @@ export class Entity extends EventEmitter {
       this.children.splice(index, 1);
 
       child.parent = none();
-      child.root = this;
+      child.root = child;
       child.setDepth(0);
-
-      this.scene.map(scene => scene.removeEntity(child));
     }
     return this;
   }

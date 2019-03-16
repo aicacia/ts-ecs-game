@@ -32,14 +32,13 @@
   "devDependencies": {
     "@types/gl-matrix": "^2.4.5",
     "@types/tape": "^4.2.33",
-    "@types/uuid": "^3.4.4",
     "parcel": "^1.12.2",
     "prettier": "^1.16.4",
     "prettier-tslint": "^0.4.2",
     "tap-spec": "^5.0.0",
     "tape": "^4.10.1",
-    "ts-node": "^8.0.2",
-    "tslint": "^5.13.1",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.14.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.3333"
   },

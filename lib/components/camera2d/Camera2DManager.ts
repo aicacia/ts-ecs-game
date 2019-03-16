@@ -25,5 +25,4 @@ export class Camera2DManager extends Manager {
   }
 }
 
-import { resolveTxt } from "dns";
 import { Camera2D } from "./Camera2D";

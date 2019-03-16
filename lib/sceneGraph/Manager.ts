@@ -22,6 +22,10 @@ export abstract class Manager extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.getManagerPriority();
   }
 
+  getComponents<T extends Component = Component>() {
+    return this.components as T[];
+  }
+
   addComponent(component: Component) {
     this.components.push(component);
     return this;
@@ -39,7 +43,7 @@ export abstract class Manager extends EventEmitter {
     return this.components.length === 0;
   }
 
-  sortFunction(a: Component, b: Component): number {
+  sortFunction(a: Component, b: Component) {
     return a
       .getEntity()
       .flatMap(aEntity =>

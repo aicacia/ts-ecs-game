@@ -1,4 +1,4 @@
-import { Option } from "@aicacia/core";
+import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export class Scene extends EventEmitter {
@@ -31,9 +31,18 @@ export class Scene extends EventEmitter {
   }
 
   find(fn: (entity: Entity) => boolean): Option<Entity> {
-    return this.getEntities()
-      .iter()
-      .find(fn);
+    for (const entity of this.getEntities().iter()) {
+      if (fn(entity)) {
+        return some(entity);
+      } else {
+        const child = entity.find(fn);
+
+        if (child.isSome()) {
+          return child;
+        }
+      }
+    }
+    return none();
   }
 
   getEntities() {
@@ -54,39 +63,37 @@ export class Scene extends EventEmitter {
     return Option.from(this.pluginsMap[(Plugin as any).getPluginName()] as T);
   }
 
-  addPlugins<T extends Plugin>(...plugins: T[]) {
+  addPlugins<T extends Plugin>(plugins: T[]) {
     plugins.forEach(plugin => this._addPlugin(plugin));
     this.sortPlugins();
     return this;
   }
   addPlugin<T extends Plugin>(...plugins: T[]) {
-    return this.addPlugins(...plugins);
+    return this.addPlugins(plugins);
   }
 
-  removePlugins<T extends Plugin>(
-    ...plugins: Array<new (...args: any[]) => T>
-  ) {
+  removePlugins<T extends Plugin>(plugins: Array<new (...args: any[]) => T>) {
     plugins.forEach(plugin => this._removePlugin(plugin));
     return this;
   }
   removePlugin<T extends Plugin>(...plugins: Array<new (...args: any[]) => T>) {
-    return this.removePlugins(...plugins);
+    return this.removePlugins(plugins);
   }
 
-  addEntities(...entities: Entity[]) {
+  addEntities(entities: Entity[]) {
     this.entitiesToAdd.push(...entities);
     return this;
   }
   addEntity(...entities: Entity[]) {
-    return this.addEntities(...entities);
+    return this.addEntities(entities);
   }
 
-  removeEntities(...entities: Entity[]) {
+  removeEntities(entities: Entity[]) {
     this.entitiesToRemove.push(...entities);
     return this;
   }
   removeEntity(...entities: Entity[]) {
-    return this.removeEntities(...entities);
+    return this.removeEntities(entities);
   }
 
   addEntityNow(entity: Entity) {
@@ -96,8 +103,9 @@ export class Scene extends EventEmitter {
       this.entities.push(entity);
       entity.UNSAFE_setScene(this);
 
-      entity.getChildren().forEach(child => this.addEntityNow(child));
-      entity.getComponents().forEach(component => this.addComponent(component));
+      entity
+        .getComponents()
+        .forEach(component => this.UNSAFE_addComponent(component));
 
       this.emit("add-entity", entity);
     }
@@ -110,17 +118,16 @@ export class Scene extends EventEmitter {
       this.entities.splice(index, 1);
       entity.UNSAFE_removeScene();
 
-      entity.getChildren().forEach(child => this.removeEntityNow(child));
       entity
         .getComponents()
-        .forEach(component => this.removeComponent(component));
+        .forEach(component => this.UNSAFE_removeComponent(component));
 
       this.emit("remove-entity", entity);
     }
     return this;
   }
 
-  addComponent(component: Component) {
+  UNSAFE_addComponent(component: Component) {
     const Manager: any = component.getManagerConstructor(),
       managerName = Manager.getManagerName();
 
@@ -149,7 +156,7 @@ export class Scene extends EventEmitter {
     return this;
   }
 
-  removeComponent(component: Component) {
+  UNSAFE_removeComponent(component: Component) {
     const Manager: any = component.getManagerConstructor(),
       managerName = Manager.managerName;
 
@@ -181,8 +188,9 @@ export class Scene extends EventEmitter {
     if (index === -1) {
       this.plugins.push(plugin);
       this.pluginsMap[plugin.getPluginName()] = plugin;
-      this.sortPlugins();
+      plugin.UNSAFE_setScene(this);
       plugin.onAdd();
+      this.sortPlugins();
       this.emit("add-plugin", plugin);
     }
     return this;
@@ -192,10 +200,11 @@ export class Scene extends EventEmitter {
       plugin = this.pluginsMap[pluginName];
 
     if (plugin) {
+      plugin.onRemove();
       this.emit("remove-plugin", plugin);
+      plugin.UNSAFE_removeScene();
       this.plugins.splice(this.plugins.indexOf(plugin), 1);
       delete this.pluginsMap[pluginName];
-      plugin.onRemove();
     }
     return this;
   }

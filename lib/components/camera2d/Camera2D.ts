@@ -9,7 +9,7 @@ export class Camera2D extends Component {
   private height: number = 1.0;
   private aspect: number = 1.0;
 
-  private orthographicSize: number = 2;
+  private orthographicSize: number = 1;
   private minOrthographicSize = Number.EPSILON;
   private maxOrthographicSize = 1024;
 
