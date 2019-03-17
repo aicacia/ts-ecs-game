@@ -33,6 +33,9 @@ export abstract class Component extends EventEmitter {
   getEntity() {
     return this.entity;
   }
+  getScene() {
+    return this.entity.flatMap(entity => entity.getScene());
+  }
 
   UNSAFE_setManager<M extends Manager = Manager>(manager: M) {
     this.manager = some(manager);

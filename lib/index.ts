@@ -19,4 +19,10 @@ export {
   CtxRenderer
 } from "./plugins";
 export { Component, Manager, Entity, Scene, Plugin } from "./sceneGraph";
-export { Canvas, ICanvasOptions, Loop } from "./utils";
+export {
+  Canvas,
+  ICanvasOptions,
+  Loop,
+  composeMat2d,
+  decomposeMat2d
+} from "./utils";

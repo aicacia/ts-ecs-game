@@ -3,12 +3,11 @@
     "target": "es3",
     "module": "commonjs",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
     "declaration": true,
+    "outDir": "./src",
     "strict": true,
-    "types": ["node"],
+    "downlevelIteration": true,
     "lib": ["esnext", "dom"]
   },
-  "exclude": []
+  "include": ["lib"]
 }

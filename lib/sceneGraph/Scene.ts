@@ -63,20 +63,20 @@ export class Scene extends EventEmitter {
     return Option.from(this.pluginsMap[(Plugin as any).getPluginName()] as T);
   }
 
-  addPlugins<T extends Plugin>(plugins: T[]) {
+  addPlugins(plugins: Plugin[]) {
     plugins.forEach(plugin => this._addPlugin(plugin));
     this.sortPlugins();
     return this;
   }
-  addPlugin<T extends Plugin>(...plugins: T[]) {
+  addPlugin(...plugins: Plugin[]) {
     return this.addPlugins(plugins);
   }
 
-  removePlugins<T extends Plugin>(plugins: Array<new (...args: any[]) => T>) {
+  removePlugins(plugins: Array<new (...args: any[]) => Plugin>) {
     plugins.forEach(plugin => this._removePlugin(plugin));
     return this;
   }
-  removePlugin<T extends Plugin>(...plugins: Array<new (...args: any[]) => T>) {
+  removePlugin(...plugins: Array<new (...args: any[]) => Plugin>) {
     return this.removePlugins(plugins);
   }
 

@@ -41,7 +41,7 @@ export class CtxRendererPlugin extends RendererPlugin {
     return (width > height ? height : width) * 0.5;
   }
   getInvScale() {
-    return 1.0 / this.getScale()
+    return 1.0 / this.getScale();
   }
 
   getCamera() {
@@ -50,48 +50,17 @@ export class CtxRendererPlugin extends RendererPlugin {
     );
   }
 
-  render(fn: (ctx: CanvasRenderingContext2D) => void) {
+  render(fn: (ctx: CanvasRenderingContext2D) => void, model?: mat2d) {
     this.ctx.save();
-
-    this.ctx.translate(
-      this.canvas.getWidth() * 0.5,
-      this.canvas.getHeight() * 0.5
-    );
-    const scale = this.getScale();
-    this.ctx.scale(scale, -scale);
-
     this.getCamera().map(camera => {
       mat2d.mul(MAT2D_0, camera.getProjection(), camera.getView());
+      if (model) {
+        mat2d.mul(MAT2D_0, MAT2D_0, model);
+      }
       this.ctx.transform(
         MAT2D_0[0],
-        MAT2D_0[2],
         MAT2D_0[1],
-        MAT2D_0[3],
-        MAT2D_0[4],
-        MAT2D_0[5]
-      );
-    });
-    fn(this.ctx);
-    this.ctx.restore();
-  }
-
-  renderModel(model: mat2d, fn: (ctx: CanvasRenderingContext2D) => void) {
-    this.ctx.save();
-
-    this.ctx.translate(
-      this.canvas.getWidth() * 0.5,
-      this.canvas.getHeight() * 0.5
-    );
-    const scale = this.getScale();
-    this.ctx.scale(scale, -scale);
-
-    this.getCamera().map(camera => {
-      mat2d.mul(MAT2D_0, camera.getProjection(), camera.getView());
-      mat2d.mul(MAT2D_0, MAT2D_0, model);
-      this.ctx.transform(
-        MAT2D_0[0],
         MAT2D_0[2],
-        MAT2D_0[1],
         MAT2D_0[3],
         MAT2D_0[4],
         MAT2D_0[5]
@@ -102,8 +71,11 @@ export class CtxRendererPlugin extends RendererPlugin {
   }
 
   onUpdate() {
-      this.ctx.save();
-      this.ctx.lineWidth = this.getInvScale();
+    const scale = this.getScale(),
+      invScale = 1.0 / scale;
+
+    this.ctx.save();
+
     this.getCamera().map(camera => {
       const bg = camera.getBackground();
 
@@ -121,8 +93,17 @@ export class CtxRendererPlugin extends RendererPlugin {
       this.ctx.fillRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
       this.ctx.restore();
     });
+
+    this.ctx.lineWidth = invScale;
+    this.ctx.translate(
+      this.canvas.getWidth() * 0.5,
+      this.canvas.getHeight() * 0.5
+    );
+    this.ctx.scale(scale, -scale);
+
     super.onUpdate();
-      this.ctx.restore();
+    this.ctx.restore();
+
     return this;
   }
 }

@@ -1,4 +1,4 @@
-import { Plugin, Scene } from "../sceneGraph";
+import { Plugin } from "../sceneGraph";
 
 export class Time extends Plugin {
   static pluginName = "engine.Time";
@@ -26,6 +26,10 @@ export class Time extends Plugin {
 
   getDelta() {
     return this.delta;
+  }
+
+  getCurrent() {
+    return this.current;
   }
 
   getMinDelta() {

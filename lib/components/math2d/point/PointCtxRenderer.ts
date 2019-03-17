@@ -11,7 +11,7 @@ export class PointCtxRenderer extends CtxRenderer {
   }
 
   onRender() {
-    const invScale = this.getRendererPlugin<CtxRendererPlugin>().unwrap().getInvScale();
+    const invScale = this.getInvScale();
 
     this.getManager().map(manager =>
       manager.getComponents<Point>().forEach(point => {
@@ -20,11 +20,11 @@ export class PointCtxRenderer extends CtxRenderer {
           .flatMap(entity => entity.getComponent(Transform2D))
           .flatMap(transform2d =>
             this.getRendererPlugin<CtxRendererPlugin>().map(rendererPlugin =>
-              rendererPlugin.renderModel(transform2d.getMatrix(), ctx => {
+              rendererPlugin.render(ctx => {
                 ctx.beginPath();
                 ctx.arc(0, 0, point.getSize() * 2 * invScale, 0, 2 * Math.PI);
                 ctx.fill();
-              })
+              }, transform2d.getMatrix())
             )
           );
       })

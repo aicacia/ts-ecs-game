@@ -10,6 +10,16 @@ export class CtxRenderer extends Renderer {
   getCtx() {
     return this.ctx;
   }
+  getScale() {
+    return this.getRendererPlugin<CtxRendererPlugin>()
+      .unwrap()
+      .getScale();
+  }
+  getInvScale() {
+    return this.getRendererPlugin<CtxRendererPlugin>()
+      .unwrap()
+      .getInvScale();
+  }
 
   onAdd() {
     this.ctx = this.getRendererPlugin<CtxRendererPlugin>()

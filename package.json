@@ -43,7 +43,7 @@
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "@aicacia/core": "file://../ts-core",
+    "@aicacia/core": "^0.1.0",
     "gl-matrix": "^3.0.0"
   }
 }
