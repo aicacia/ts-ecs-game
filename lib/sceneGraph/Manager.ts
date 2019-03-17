@@ -6,6 +6,11 @@ export abstract class Manager extends EventEmitter {
   static managerPriority: number = 0;
 
   static getManagerName() {
+    if (!this.managerName) {
+      throw new Error(
+        "Invalid managerName for Manager `" + this.managerName + "` " + this
+      );
+    }
     return this.managerName;
   }
   static getManagerPriority() {

@@ -6,6 +6,11 @@ export abstract class Plugin extends EventEmitter {
   static pluginPriority: number = 0;
 
   static getPluginName() {
+    if (!this.pluginName) {
+      throw new Error(
+        "Invalid pluginName for Plugin `" + this.pluginName + "` " + this
+      );
+    }
     return this.pluginName;
   }
   static getPluginPriority() {

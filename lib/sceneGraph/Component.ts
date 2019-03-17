@@ -6,9 +6,26 @@ export abstract class Component extends EventEmitter {
   static componentName: string;
 
   static getComponentName(): string {
+    if (!this.componentName) {
+      throw new Error(
+        "Invalid componentName for Component `" +
+          this.componentName +
+          "` " +
+          this
+      );
+    }
     return this.componentName;
   }
   static getManagerConstructor(): new () => Manager {
+    if (!this.Manager) {
+      throw new Error(
+        this.getComponentName() +
+          " invalid Manager `" +
+          this.Manager +
+          "` " +
+          this
+      );
+    }
     return this.Manager;
   }
 
