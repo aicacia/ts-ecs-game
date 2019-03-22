@@ -1,4 +1,4 @@
+export { RendererHandler } from "./RendererHandler";
 export { Renderer } from "./Renderer";
-export { RendererPlugin } from "./RendererPlugin";
+export { CtxRendererHandler } from "./CtxRendererHandler";
 export { CtxRenderer } from "./CtxRenderer";
-export { CtxRendererPlugin } from "./CtxRendererPlugin";

@@ -2,74 +2,43 @@ import { vec2, vec4 } from "gl-matrix";
 import {
   Camera2D,
   Canvas,
-  Component,
-  CtxRendererPlugin,
+  CtxRenderer,
   Entity,
-  Line,
+  Input,
   Loop,
-  Manager,
-  Point,
+  PolygonBuilder,
   Scene,
   Time,
   Transform2D
 } from "../../lib";
 
-class RotatorManager extends Manager {
-  static managerName = "example.RotatorManager";
-}
-
-class Rotator extends Component {
-  static componentName = "example.Rotator";
-  static Manager = RotatorManager;
-
-  onUpdate() {
-    const time = this.getScene()
-      .flatMap(scene => scene.getPlugin(Time))
-      .unwrap();
-
-    this.getEntity()
-      .flatMap(entity => entity.getComponent(Transform2D))
-      .map(transform2d => {
-        const x = Math.cos(time.getCurrent()),
-          y = Math.sin(time.getCurrent());
-
-        transform2d.setLocalPosition(vec2.fromValues(x, y));
-      });
-    return this;
-  }
-}
-
-const canvas = new Canvas().set(256, 256),
-  start = new Entity()
-    .addTag("start-point")
-    .addComponent(
-      new Point(),
-      new Transform2D().setLocalPosition(vec2.fromValues(0, 0))
-    ),
-  end = new Entity()
-    .addTag("end-point")
-    .addComponent(
-      new Point(),
-      new Rotator(),
-      new Transform2D().setLocalPosition(vec2.fromValues(0.5, 0.5))
-    ),
-  line = new Entity().addTag("line").addComponent(new Line(start, end)),
+const canvas = new Canvas().set(512, 256),
   scene = new Scene()
     .addEntity(
       new Entity()
         .addTag("camera")
         .addComponent(
-          new Camera2D().setBackground(vec4.fromValues(0.9, 0.9, 0.9, 1.0)),
+          new Camera2D()
+            .setOrthographicSize(1)
+            .setBackground(vec4.fromValues(0.9, 0.9, 0.9, 1)),
           new Transform2D()
         ),
-      start,
-      end,
-      line
+      new PolygonBuilder()
+        .addPoint(vec2.fromValues(0, 0))
+        .addPoint(vec2.fromValues(1, 0))
+        .addPoint(vec2.fromValues(1, 1))
+        .build()
     )
-    .addPlugin(new Time(), new CtxRendererPlugin(canvas)),
+    .addPlugin(
+      new Time(),
+      new CtxRenderer(canvas),
+      new Input(canvas.getElement())
+    ),
   loop = new Loop(() => scene.update());
 
 const app = document.getElementById("app");
+
+(window as any).scene = scene;
 
 if (app) {
   app.appendChild(canvas.getElement());

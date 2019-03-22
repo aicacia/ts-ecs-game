@@ -1,24 +1,39 @@
+export { PolygonBuilder } from "./builders";
 export {
   Transform2D,
   Camera2D,
   Camera2DManager,
   Transform2DManager,
   Point,
-  PointCtxRenderer,
+  PointCtxRendererHandler,
   PointManager,
   Arc,
+  ArcManager,
+  ArcCtxRendererHandler,
   Line,
-  LineCtxRenderer,
+  LineCtxRendererHandler,
   LineManager
 } from "./components";
 export {
   Time,
   Renderer,
-  RendererPlugin,
-  CtxRendererPlugin,
-  CtxRenderer
+  RendererHandler,
+  CtxRendererHandler,
+  CtxRenderer,
+  Input,
+  InputHandler,
+  KeyboardInputHandler,
+  MouseInputHandler,
+  InputButton
 } from "./plugins";
-export { Component, Manager, Entity, Scene, Plugin } from "./sceneGraph";
+export {
+  Component,
+  IBuilder,
+  Manager,
+  Entity,
+  Scene,
+  Plugin
+} from "./sceneGraph";
 export {
   Canvas,
   ICanvasOptions,

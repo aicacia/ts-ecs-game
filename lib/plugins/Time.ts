@@ -2,6 +2,7 @@ import { Plugin } from "../sceneGraph";
 
 export class Time extends Plugin {
   static pluginName = "engine.Time";
+  static pluginPriority = -Infinity;
 
   private scale: number = 1.0;
 

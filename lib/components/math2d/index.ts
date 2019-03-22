@@ -1,3 +1,3 @@
-export { Line, LineCtxRenderer, LineManager } from "./line";
-export { Point, PointManager, PointCtxRenderer } from "./point";
-export { Arc } from "./arc";
+export { Line, LineCtxRendererHandler, LineManager } from "./line";
+export { Point, PointManager, PointCtxRendererHandler } from "./point";
+export { Arc, ArcManager, ArcCtxRendererHandler } from "./arc";

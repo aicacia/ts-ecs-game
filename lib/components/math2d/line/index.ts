@@ -1,3 +1,3 @@
 export { Line } from "./Line";
-export { LineCtxRenderer } from "./LineCtxRenderer";
+export { LineCtxRendererHandler } from "./LineCtxRendererHandler";
 export { LineManager } from "./LineManager";

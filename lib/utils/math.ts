@@ -36,3 +36,11 @@ export function decomposeMat2d(
 
   return Math.atan2(matrix[1], matrix[0]);
 }
+
+export function sign(value: number) {
+  return value < 0 ? -1 : 1;
+}
+
+export function clamp(value: number, min: number, max: number) {
+  return value < min ? min : value > max ? max : value;
+}

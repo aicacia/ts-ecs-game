@@ -19,7 +19,7 @@
     "format.js": "prettier --write '**/*.{js,jsx,json}' --ignore-path .gitignore",
     "format": "npm run format.ts && npm run format.js",
     "lint": "tslint -c tslint.json 'lib/**/*.{ts,tsx}'",
-    "simple": "cd examples/simple && parcel index.html"
+    "simple": "parcel examples/simple/index.html"
   },
   "keywords": [
     "engine",

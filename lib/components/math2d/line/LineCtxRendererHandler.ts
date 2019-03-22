@@ -1,9 +1,9 @@
-import { CtxRenderer, CtxRendererPlugin } from "../../../plugins/renderer";
+import { CtxRenderer, CtxRendererHandler } from "../../../plugins/renderer";
 import { Line } from "./Line";
 import { LineManager } from "./LineManager";
 
-export class LineCtxRenderer extends CtxRenderer {
-  static rendererName = "engine.LineCtxRenderer";
+export class LineCtxRendererHandler extends CtxRendererHandler {
+  static rendererHandlerName = "engine.LineCtxRendererHandler";
 
   getManager() {
     return this.getScene().flatMap(scene => scene.getManager(LineManager));
@@ -12,8 +12,8 @@ export class LineCtxRenderer extends CtxRenderer {
   onRender() {
     this.getManager().map(manager =>
       manager.getComponents<Line>().forEach(line => {
-        this.getRendererPlugin<CtxRendererPlugin>().map(rendererPlugin =>
-          rendererPlugin.render(ctx => {
+        this.getRenderer<CtxRenderer>().map(renderer =>
+          renderer.render(ctx => {
             const start = line.getStartPosition(),
               end = line.getEndPosition();
 

@@ -1,59 +1,98 @@
-import { none, Option, some } from "@aicacia/core";
-import { EventEmitter } from "events";
+import { Plugin } from "../../sceneGraph";
 
-export abstract class Renderer extends EventEmitter {
-  static rendererName: string;
-  static rendererPriority: number;
+export abstract class Renderer extends Plugin {
+  static pluginName = "engine.Renderer";
+  static pluginPriority = Infinity;
 
-  static getRendererName() {
-    return this.rendererName;
+  private rendererHandlers: RendererHandler[] = [];
+  private rendererHandlerMap: Record<string, RendererHandler> = {};
+
+  getRendererHandlers() {
+    return this.rendererHandlers;
   }
-  static getRendererPriority() {
-    return this.rendererPriority;
-  }
-
-  private rendererPlugin: Option<RendererPlugin> = none();
-
-  getRendererName(): string {
-    return Object.getPrototypeOf(this).constructor.getRendererName();
-  }
-  getRendererPriority(): number {
-    return Object.getPrototypeOf(this).constructor.getRendererPriority();
+  getRendererHandler<T extends RendererHandler>(
+    RendererHandler: new (...args: any[]) => T
+  ) {
+    return this.rendererHandlerMap[(RendererHandler as any).getRendererName()];
   }
 
-  UNSAFE_setRendererPlugin(rendererPlugin: RendererPlugin) {
-    this.rendererPlugin = some(rendererPlugin);
-    return this;
-  }
-  UNSAFE_removeRendererPlugin() {
-    this.rendererPlugin = none();
-    return this;
-  }
-  getRendererPlugin<T extends RendererPlugin = RendererPlugin>() {
-    return this.rendererPlugin as Option<T>;
-  }
-
-  getScene() {
-    return this.getRendererPlugin().flatMap(rendererPlugin =>
-      rendererPlugin.getScene()
+  addRendererHandlers(...rendererHandlers: RendererHandler[]) {
+    rendererHandlers.forEach(rendererHandler =>
+      this._addRendererHandler(rendererHandler)
     );
+    return this;
+  }
+  addRendererHandler(...rendererHandlers: RendererHandler[]) {
+    return this.addRendererHandlers(...rendererHandlers);
   }
 
-  onAdd() {
+  removeRendererHandlers(
+    ...rendererHandlers: Array<new () => RendererHandler>
+  ) {
+    rendererHandlers.forEach(rendererHandler =>
+      this._removeRendererHandler(rendererHandler)
+    );
+    this.sort();
     return this;
   }
-  onRemove() {
+  removeRendererHandler(...rendererHandlers: Array<new () => RendererHandler>) {
+    return this.removeRendererHandlers(...rendererHandlers);
+  }
+
+  onUpdate() {
+    this.rendererHandlers.forEach(rendererHandler => {
+      rendererHandler.onBeforeRender();
+      rendererHandler.onRender();
+    });
     return this;
   }
-  onBeforeRender() {
+  onAfterUpdate() {
+    this.rendererHandlers.forEach(rendererHandler =>
+      rendererHandler.onAfterRender()
+    );
     return this;
   }
-  onRender() {
+
+  private _addRendererHandler<T extends RendererHandler>(rendererHandler: T) {
+    const rendererHandlerName = rendererHandler.getRendererHandlerName();
+
+    if (!this.rendererHandlerMap[rendererHandlerName]) {
+      this.rendererHandlers.push(rendererHandler);
+      this.rendererHandlerMap[rendererHandlerName] = rendererHandler;
+      rendererHandler.UNSAFE_setRenderer(this);
+      rendererHandler.onAdd();
+      this.emit("add-renderer_handler", rendererHandler);
+    }
+
     return this;
   }
-  onAfterRender() {
+  private _removeRendererHandler<T extends RendererHandler>(
+    RendererHandler: new () => T
+  ) {
+    const rendererHandlerName = (RendererHandler as any).getRendererName(),
+      rendererHandler = this.rendererHandlerMap[rendererHandlerName];
+
+    if (rendererHandler) {
+      this.emit("remove-renderer_handler", rendererHandler);
+      rendererHandler.onRemove();
+
+      this.rendererHandlers.splice(
+        this.rendererHandlers.indexOf(rendererHandler),
+        1
+      );
+      delete this.rendererHandlerMap[rendererHandlerName];
+      rendererHandler.UNSAFE_removeRenderer();
+    }
+
     return this;
+  }
+
+  private sort() {
+    this.rendererHandlers.sort(this.sortFunction);
+  }
+  private sortFunction(a: RendererHandler, b: RendererHandler) {
+    return a.getRendererHandlerPriority() - b.getRendererHandlerPriority();
   }
 }
 
-import { RendererPlugin } from "./RendererPlugin";
+import { RendererHandler } from "./RendererHandler";

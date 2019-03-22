@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { Option } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export class Scene extends EventEmitter {
@@ -31,18 +31,9 @@ export class Scene extends EventEmitter {
   }
 
   find(fn: (entity: Entity) => boolean): Option<Entity> {
-    for (const entity of this.getEntities().iter()) {
-      if (fn(entity)) {
-        return some(entity);
-      } else {
-        const child = entity.find(fn);
-
-        if (child.isSome()) {
-          return child;
-        }
-      }
-    }
-    return none();
+    return this.getEntities()
+      .iter()
+      .find(fn);
   }
 
   getEntities() {
@@ -106,6 +97,7 @@ export class Scene extends EventEmitter {
       entity
         .getComponents()
         .forEach(component => this.UNSAFE_addComponent(component));
+      entity.getChildren().forEach(child => this.addEntityNow(child));
 
       this.emit("add-entity", entity);
     }
@@ -121,6 +113,7 @@ export class Scene extends EventEmitter {
       entity
         .getComponents()
         .forEach(component => this.UNSAFE_removeComponent(component));
+      entity.getChildren().forEach(child => this.removeEntityNow(child));
 
       this.emit("remove-entity", entity);
     }
@@ -200,8 +193,8 @@ export class Scene extends EventEmitter {
       plugin = this.pluginsMap[pluginName];
 
     if (plugin) {
-      plugin.onRemove();
       this.emit("remove-plugin", plugin);
+      plugin.onRemove();
       plugin.UNSAFE_removeScene();
       this.plugins.splice(this.plugins.indexOf(plugin), 1);
       delete this.pluginsMap[pluginName];

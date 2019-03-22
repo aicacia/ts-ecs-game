@@ -1,7 +1,14 @@
 export {
   Renderer,
-  RendererPlugin,
-  CtxRendererPlugin,
+  RendererHandler,
+  CtxRendererHandler,
   CtxRenderer
 } from "./renderer";
 export { Time } from "./Time";
+export {
+  Input,
+  InputHandler,
+  KeyboardInputHandler,
+  MouseInputHandler,
+  InputButton
+} from "./input";
