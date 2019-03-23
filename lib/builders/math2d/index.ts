@@ -1,1 +1,1 @@
-export { PolygonBuilder } from "./PolygonBuilder";
+export { Polygon2DBuilder } from "./Polygon2DBuilder";

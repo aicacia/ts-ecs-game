@@ -39,6 +39,12 @@ export abstract class Component extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.getManagerConstructor();
   }
 
+  getComponent<T extends Component = Component>(
+    Component: new (...args: any[]) => T
+  ) {
+    return this.getEntity().flatMap(entity => entity.getComponent(Component));
+  }
+
   UNSAFE_setEntity(entity: Entity) {
     this.entity = some(entity);
     return this;

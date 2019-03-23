@@ -1,33 +1,37 @@
 import { vec2, vec4 } from "gl-matrix";
 import {
-  Camera2D,
+  Camera2DBuilder,
   Canvas,
   CtxRenderer,
-  Entity,
   Input,
   Loop,
-  PolygonBuilder,
+  PointType,
+  Polygon2DBuilder,
   Scene,
-  Time,
-  Transform2D
+  Time
 } from "../../lib";
 
-const canvas = new Canvas().set(512, 256),
+const canvas = new Canvas().set(256, 256),
   scene = new Scene()
     .addEntity(
-      new Entity()
-        .addTag("camera")
-        .addComponent(
-          new Camera2D()
-            .setOrthographicSize(1)
-            .setBackground(vec4.fromValues(0.9, 0.9, 0.9, 1)),
-          new Transform2D()
-        ),
-      new PolygonBuilder()
-        .addPoint(vec2.fromValues(0, 0))
-        .addPoint(vec2.fromValues(1, 0))
-        .addPoint(vec2.fromValues(1, 1))
+      new Camera2DBuilder()
+        .mapCamera2D(camera =>
+          camera
+            .setOrthographicSize(1.5)
+            .setBackground(vec4.fromValues(0.9, 0.9, 0.9, 1.0))
+        )
         .build()
+        .addTag("camera"),
+      new Polygon2DBuilder()
+        .addPoint(vec2.fromValues(0, 1), point =>
+          point.setType(PointType.Triangle)
+        )
+        .addPoint(vec2.fromValues(0, 0))
+        .addPoint(vec2.fromValues(1, 0), point =>
+          point.setType(PointType.Triangle)
+        )
+        .build()
+        .addTag("triangle")
     )
     .addPlugin(
       new Time(),

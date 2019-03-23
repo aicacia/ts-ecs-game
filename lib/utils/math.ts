@@ -1,4 +1,4 @@
-import { mat2d, vec2 } from "gl-matrix";
+import { mat2d, vec2, vec3, vec4 } from "gl-matrix";
 
 export function composeMat2d(
   out: mat2d,
@@ -43,4 +43,17 @@ export function sign(value: number) {
 
 export function clamp(value: number, min: number, max: number) {
   return value < min ? min : value > max ? max : value;
+}
+
+export function angleVec2(out: vec2) {
+  return Math.atan2(out[1], out[0]) + Math.PI * 0.5;
+}
+
+export function toRgb(color: vec3 | vec4) {
+  return `rgb(${color[0] * 255}, ${color[1] * 255}, ${color[2] * 255}})`;
+}
+
+export function toRgba(color: vec4) {
+  return `rgba(${color[0] * 255}, ${color[1] * 255}, ${color[2] *
+    255}, ${color[3] * 255})`;
 }

@@ -1,3 +1,13 @@
 export { Line, LineCtxRendererHandler, LineManager } from "./line";
-export { Point, PointManager, PointCtxRendererHandler } from "./point";
-export { Arc, ArcManager, ArcCtxRendererHandler } from "./arc";
+export {
+  Point,
+  PointType,
+  PointManager,
+  PointCtxRendererHandler
+} from "./point";
+export {
+  Angle,
+  AngleSide,
+  AngleManager,
+  AngleCtxRendererHandler
+} from "./angle";

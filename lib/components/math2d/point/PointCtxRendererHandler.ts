@@ -1,6 +1,7 @@
 import { CtxRenderer, CtxRendererHandler } from "../../../plugins/renderer";
+import { toRgba } from "../../../utils/math";
 import { Transform2D } from "../../transform2d";
-import { Point } from "./Point";
+import { Point, PointType } from "./Point";
 import { PointManager } from "./PointManager";
 
 export class PointCtxRendererHandler extends CtxRendererHandler {
@@ -22,8 +23,38 @@ export class PointCtxRendererHandler extends CtxRendererHandler {
             this.getRenderer<CtxRenderer>().map(renderer =>
               renderer.render(ctx => {
                 ctx.beginPath();
-                ctx.arc(0, 0, point.getSize() * scale, 0, 2 * Math.PI);
-                ctx.fill();
+                ctx.fillStyle = toRgba(point.getColor());
+
+                switch (point.getType()) {
+                  case PointType.Square: {
+                    const size = point.getSize() * 2 * scale;
+
+                    ctx.moveTo(size, size);
+                    ctx.lineTo(-size, size);
+                    ctx.lineTo(-size, -size);
+                    ctx.lineTo(size, -size);
+                    break;
+                  }
+                  case PointType.Circle: {
+                    ctx.arc(0, 0, point.getSize() * scale, 0, 2 * Math.PI);
+                    break;
+                  }
+                  case PointType.Triangle: {
+                    const size = point.getSize() * 2 * scale;
+
+                    ctx.moveTo(0, size);
+                    ctx.lineTo(-size, -size);
+                    ctx.lineTo(size, -size);
+                    ctx.closePath();
+                    break;
+                  }
+                }
+
+                if (point.getFill()) {
+                  ctx.fill();
+                } else {
+                  ctx.stroke();
+                }
               }, transform2d.getMatrix())
             )
           );

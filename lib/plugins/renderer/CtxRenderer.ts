@@ -1,12 +1,13 @@
 import { mat2d } from "gl-matrix";
 import {
-  ArcCtxRendererHandler,
+  AngleCtxRendererHandler,
   Camera2D,
   Camera2DManager,
   LineCtxRendererHandler,
   PointCtxRendererHandler
 } from "../../components";
 import { Canvas } from "../../utils";
+import { toRgba } from "../../utils/math";
 import { Renderer } from "./Renderer";
 
 const MAT2D_0 = mat2d.create();
@@ -30,7 +31,7 @@ export class CtxRenderer extends Renderer {
     this.addRendererHandler(
       new PointCtxRendererHandler(),
       new LineCtxRendererHandler(),
-      new ArcCtxRendererHandler()
+      new AngleCtxRendererHandler()
     );
   }
 
@@ -91,16 +92,7 @@ export class CtxRenderer extends Renderer {
     const bg = camera.getBackground();
 
     this.ctx.save();
-    this.ctx.fillStyle =
-      "rgba(" +
-      bg[0] * 256 +
-      ", " +
-      bg[1] * 256 +
-      ", " +
-      bg[2] * 256 +
-      ", " +
-      bg[3] +
-      ")";
+    this.ctx.fillStyle = toRgba(bg);
     this.ctx.fillRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
     this.ctx.restore();
 
