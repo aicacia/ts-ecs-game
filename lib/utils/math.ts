@@ -54,6 +54,7 @@ export function toRgb(color: vec3 | vec4) {
 }
 
 export function toRgba(color: vec4) {
-  return `rgba(${color[0] * 255}, ${color[1] * 255}, ${color[2] *
-    255}, ${color[3] * 255})`;
+  return `rgba(${color[0] * 255}, ${color[1] * 255}, ${color[2] * 255}, ${
+    color[3]
+  })`;
 }

@@ -1,7 +1,6 @@
 import { vec2 } from "gl-matrix";
-import { Transform2D } from "../../../components";
-import { Component, Entity } from "../../../sceneGraph";
-import { angleVec2 } from "../../../utils/math";
+import { Component } from "../../../sceneGraph";
+import { Transform2D } from "../../transform2d";
 import { LineManager } from "./LineManager";
 
 const VEC2_0 = vec2.create();
@@ -10,56 +9,31 @@ export class Line extends Component {
   static componentName = "engine.Line";
   static Manager = LineManager;
 
-  private start: Entity;
-  private end: Entity;
+  private length: number = 1.0;
 
-  constructor(start: Entity, end: Entity) {
-    super();
-
-    this.start = start;
-    this.end = end;
-  }
-
-  getStart() {
-    return this.start;
-  }
-  getEnd() {
-    return this.end;
-  }
-  getStartPosition() {
-    return this.start
-      .getComponent(Transform2D)
-      .expect("start entity must have a transform component")
-      .getPosition();
-  }
-  getEndPosition() {
-    return this.end
-      .getComponent(Transform2D)
-      .expect("end entity must have a transform component")
-      .getPosition();
-  }
-  getLine(out: vec2) {
-    return vec2.sub(out, this.getStartPosition(), this.getEndPosition());
+  setLength(length: number) {
+    this.length = length;
+    return this;
   }
   getLength() {
-    return vec2.len(this.getLine(VEC2_0));
+    return this.length;
   }
 
-  onUpdate() {
-    this.start.getComponent(Transform2D).flatMap(start =>
-      this.end.getComponent(Transform2D).map(end => {
-        const direction = vec2.sub(
-            VEC2_0,
-            start.getPosition(),
-            end.getPosition()
-          ),
-          posAngle = angleVec2(direction),
-          negAngle = angleVec2(vec2.scale(direction, direction, -1));
+  getStart(out: vec2) {
+    this.getComponent(Transform2D).map(transform2d => {
+      vec2.copy(out, transform2d.getPosition());
+    });
+    return out;
+  }
+  getEnd(out: vec2) {
+    this.getComponent(Transform2D).map(transform2d => {
+      const angle = transform2d.getRotation() + Math.PI * 0.5;
 
-        start.setLocalRotation(negAngle);
-        end.setLocalRotation(posAngle);
-      })
-    );
-    return this;
+      vec2.copy(out, transform2d.getPosition());
+      vec2.set(VEC2_0, Math.cos(angle), Math.sin(angle));
+      vec2.scale(VEC2_0, VEC2_0, this.length);
+      vec2.add(out, out, VEC2_0);
+    });
+    return out;
   }
 }

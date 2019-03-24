@@ -1,3 +1,3 @@
-export { Angle, AngleSide } from "./Angle";
+export { Angle } from "./Angle";
 export { AngleManager } from "./AngleManager";
 export { AngleCtxRendererHandler } from "./AngleCtxRendererHandler";

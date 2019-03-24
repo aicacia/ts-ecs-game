@@ -28,11 +28,14 @@ export class Camera2D extends Component {
   }
 
   set(width: number, height: number) {
-    this.width = width;
-    this.height = height;
-    this.aspect = width / height;
-    this.needsUpdate = true;
-    return this;
+    if (width !== this.width || height !== this.height) {
+      this.width = width;
+      this.height = height;
+      this.aspect = width / height;
+      return this.setNeedsUpdate();
+    } else {
+      return this;
+    }
   }
   getWidth() {
     return this.width;
@@ -60,24 +63,21 @@ export class Camera2D extends Component {
         : orthographicSize > this.maxOrthographicSize
         ? this.maxOrthographicSize
         : orthographicSize;
-    this.needsUpdate = true;
-    return this;
+    return this.setNeedsUpdate();
   }
   getMinOrthographicSize() {
     return this.minOrthographicSize;
   }
   setMinOrthographicSize(minOrthographicSize: number) {
     this.minOrthographicSize = minOrthographicSize;
-    this.needsUpdate = true;
-    return this;
+    return this.setNeedsUpdate();
   }
   getMaxOrthographicSize() {
     return this.minOrthographicSize;
   }
   setMaxOrthographicSize(maxOrthographicSize: number) {
     this.maxOrthographicSize = maxOrthographicSize;
-    this.needsUpdate = true;
-    return this;
+    return this.setNeedsUpdate();
   }
 
   getView() {
@@ -88,10 +88,20 @@ export class Camera2D extends Component {
   }
 
   getProjection() {
+    return this.updateProjectionIfNeeded().projection;
+  }
+
+  setNeedsUpdate(needsUpdate: boolean = true) {
+    this.needsUpdate = needsUpdate;
+    return this;
+  }
+
+  updateProjectionIfNeeded() {
     if (this.needsUpdate) {
-      this.updateProjection();
+      return this.updateProjection();
+    } else {
+      return this;
     }
-    return this.projection;
   }
 
   setActive() {

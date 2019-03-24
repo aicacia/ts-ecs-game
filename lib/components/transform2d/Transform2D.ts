@@ -24,10 +24,7 @@ export class Transform2D extends Component {
     return this.setNeedsUpdate();
   }
   getPosition() {
-    if (this.getNeedsUpdate()) {
-      this.updateMatrix();
-    }
-    return this.position;
+    return this.updateMatrixIfNeeded().position;
   }
   getLocalPosition() {
     return this.localPosition;
@@ -38,10 +35,7 @@ export class Transform2D extends Component {
     return this.setNeedsUpdate();
   }
   getScale() {
-    if (this.getNeedsUpdate()) {
-      this.updateMatrix();
-    }
-    return this.scale;
+    return this.updateMatrixIfNeeded().scale;
   }
   getLocalScale() {
     return this.localScale;
@@ -52,20 +46,14 @@ export class Transform2D extends Component {
     return this.setNeedsUpdate();
   }
   getRotation() {
-    if (this.getNeedsUpdate()) {
-      this.updateMatrix();
-    }
-    return this.rotation;
+    return this.updateMatrixIfNeeded().rotation;
   }
   getLocalRotation() {
     return this.localRotation;
   }
 
   getMatrix() {
-    if (this.needsUpdate) {
-      this.updateMatrix();
-    }
-    return this.matrix;
+    return this.updateMatrixIfNeeded().matrix;
   }
   getLocalMatrix() {
     return this.localMatrix;
@@ -73,10 +61,27 @@ export class Transform2D extends Component {
 
   setNeedsUpdate(needsUpdate: boolean = true) {
     this.needsUpdate = needsUpdate;
+    this.getEntity().map(entity =>
+      entity
+        .getChildren()
+        .forEach(child =>
+          child
+            .getComponent(Transform2D)
+            .map(transform2d => transform2d.setNeedsUpdate(needsUpdate))
+        )
+    );
     return this;
   }
   getNeedsUpdate() {
     return this.needsUpdate;
+  }
+
+  updateMatrixIfNeeded() {
+    if (this.needsUpdate) {
+      return this.updateMatrix();
+    } else {
+      return this;
+    }
   }
 
   updateMatrix() {
@@ -93,8 +98,12 @@ export class Transform2D extends Component {
       .flatMap(entity => entity.getParent())
       .flatMap(parent => parent.getComponent(Transform2D))
       .mapOrElse(
-        transform2d => {
-          mat2d.mul(this.matrix, transform2d.getMatrix(), this.localMatrix);
+        parentTransform2d => {
+          mat2d.mul(
+            this.matrix,
+            parentTransform2d.getMatrix(),
+            this.localMatrix
+          );
           this.rotation = decomposeMat2d(
             this.matrix,
             this.position,

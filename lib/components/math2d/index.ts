@@ -5,9 +5,4 @@ export {
   PointManager,
   PointCtxRendererHandler
 } from "./point";
-export {
-  Angle,
-  AngleSide,
-  AngleManager,
-  AngleCtxRendererHandler
-} from "./angle";
+export { Angle, AngleManager, AngleCtxRendererHandler } from "./angle";

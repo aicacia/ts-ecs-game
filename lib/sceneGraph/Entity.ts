@@ -169,6 +169,7 @@ export class Entity extends EventEmitter {
 
       this.children.push(child);
 
+      child.scene = this.scene;
       child.parent = some(this);
       child.root = this.root;
       child.setDepth(this.depth + 1);
@@ -184,6 +185,7 @@ export class Entity extends EventEmitter {
       this.emit("remove-child", child);
       this.children.splice(index, 1);
 
+      child.scene = none();
       child.parent = none();
       child.root = child;
       child.setDepth(0);

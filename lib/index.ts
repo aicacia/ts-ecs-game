@@ -1,15 +1,16 @@
-export { Polygon2DBuilder, Camera2DBuilder } from "./builders";
 export {
   Transform2D,
   Camera2D,
   Camera2DManager,
+  GridCtxRendererHandler,
   Transform2DManager,
   Point,
+  Grid,
+  GridManager,
   PointType,
   PointCtxRendererHandler,
   PointManager,
   Angle,
-  AngleSide,
   AngleManager,
   AngleCtxRendererHandler,
   Line,

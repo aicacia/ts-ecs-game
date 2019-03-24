@@ -1,4 +1,5 @@
 import { CtxRenderer, CtxRendererHandler } from "../../../plugins/renderer";
+import { toRgba } from "../../../utils/math";
 import { Transform2D } from "../../transform2d";
 import { Angle } from "./Angle";
 import { AngleManager } from "./AngleManager";
@@ -21,9 +22,15 @@ export class AngleCtxRendererHandler extends CtxRendererHandler {
           .flatMap(transform2d =>
             this.getRenderer<CtxRenderer>().map(renderer =>
               renderer.render(ctx => {
-                ctx.fillStyle = "F00";
+                ctx.fillStyle = toRgba(angle.getColor());
                 ctx.beginPath();
-                ctx.arc(0, 0, angle.getRadius(), angle.getStart(), angle.getEnd());
+                ctx.arc(
+                  0,
+                  0,
+                  angle.getRadius(),
+                  angle.getStart(),
+                  angle.getEnd()
+                );
                 ctx.stroke();
               }, transform2d.getMatrix())
             )

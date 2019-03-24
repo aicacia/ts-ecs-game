@@ -1,4 +1,5 @@
 export { Camera2D, Camera2DManager } from "./camera2d";
+export { Grid, GridCtxRendererHandler, GridManager } from "./grid";
 export { Transform2D, Transform2DManager } from "./transform2d";
 export {
   Point,
@@ -6,7 +7,6 @@ export {
   PointCtxRendererHandler,
   PointManager,
   Angle,
-  AngleSide,
   AngleManager,
   AngleCtxRendererHandler,
   Line,

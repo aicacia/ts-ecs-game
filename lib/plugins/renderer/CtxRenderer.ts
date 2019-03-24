@@ -3,6 +3,7 @@ import {
   AngleCtxRendererHandler,
   Camera2D,
   Camera2DManager,
+  GridCtxRendererHandler,
   LineCtxRendererHandler,
   PointCtxRendererHandler
 } from "../../components";
@@ -31,7 +32,8 @@ export class CtxRenderer extends Renderer {
     this.addRendererHandler(
       new PointCtxRendererHandler(),
       new LineCtxRendererHandler(),
-      new AngleCtxRendererHandler()
+      new AngleCtxRendererHandler(),
+      new GridCtxRendererHandler()
     );
   }
 
@@ -40,17 +42,6 @@ export class CtxRenderer extends Renderer {
   }
   getCtx() {
     return this.ctx;
-  }
-  getCanvasSize() {
-    const width = this.canvas.getWidth(),
-      height = this.canvas.getHeight();
-
-    return (width > height ? height : width) * 0.5;
-  }
-  getScale() {
-    return (
-      (1.0 / this.getCanvasSize()) * this.getCamera().getOrthographicSize()
-    );
   }
 
   getCamera() {
@@ -61,6 +52,18 @@ export class CtxRenderer extends Renderer {
           .flatMap(manager => manager.getActive())
       )
       .expect("Scene should have an active Camera");
+  }
+
+  getCanvasSize() {
+    const width = this.canvas.getWidth(),
+      height = this.canvas.getHeight();
+
+    return (width > height ? height : width) * 0.5;
+  }
+  getScale() {
+    return (
+      (1.0 / this.getCanvasSize()) * this.getCamera().getOrthographicSize()
+    );
   }
 
   render(fn: (ctx: CanvasRenderingContext2D) => void, model?: mat2d) {
@@ -85,23 +88,23 @@ export class CtxRenderer extends Renderer {
 
   onUpdate() {
     const camera = this.getCamera(),
-      scale = this.getCanvasSize();
+      width = this.canvas.getWidth(),
+      height = this.canvas.getHeight(),
+      halfWidth = width * 0.5,
+      halfHeight = height * 0.5;
+
+    camera.set(width, height);
 
     this.ctx.save();
 
-    const bg = camera.getBackground();
-
     this.ctx.save();
-    this.ctx.fillStyle = toRgba(bg);
-    this.ctx.fillRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
+    this.ctx.fillStyle = toRgba(camera.getBackground());
+    this.ctx.fillRect(0, 0, width, height);
     this.ctx.restore();
 
-    this.ctx.lineWidth = this.getScale() * 2.0;
-    this.ctx.translate(
-      this.canvas.getWidth() * 0.5,
-      this.canvas.getHeight() * 0.5
-    );
-    this.ctx.scale(scale, -scale);
+    this.ctx.lineWidth = this.getScale();
+    this.ctx.translate(halfWidth, halfHeight);
+    this.ctx.scale(halfWidth, -halfHeight);
 
     super.onUpdate();
     this.ctx.restore();

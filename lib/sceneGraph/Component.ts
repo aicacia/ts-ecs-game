@@ -44,6 +44,9 @@ export abstract class Component extends EventEmitter {
   ) {
     return this.getEntity().flatMap(entity => entity.getComponent(Component));
   }
+  getPlugin<T extends Plugin = Plugin>(Plugin: new (...args: any[]) => T) {
+    return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+  }
 
   UNSAFE_setEntity(entity: Entity) {
     this.entity = some(entity);
@@ -85,3 +88,4 @@ export abstract class Component extends EventEmitter {
 
 import { Entity } from "./Entity";
 import { Manager } from "./Manager";
+import { Plugin } from "./Plugin";

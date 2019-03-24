@@ -1,37 +1,71 @@
 import { vec2, vec4 } from "gl-matrix";
 import {
-  Camera2DBuilder,
+  Camera2D,
   Canvas,
+  Component,
   CtxRenderer,
+  Entity,
+  Grid,
   Input,
+  Line,
   Loop,
+  Manager,
+  Point,
   PointType,
-  Polygon2DBuilder,
   Scene,
-  Time
+  Time,
+  Transform2D
 } from "../../lib";
+
+class RotatorManager extends Manager {
+  static managerName = "simple.RotatorManager";
+}
+
+class Rotator extends Component {
+  static componentName = "simple.Rotator";
+  static Manager = RotatorManager;
+
+  onUpdate() {
+    const current = this.getPlugin(Time)
+      .unwrap()
+      .getCurrent();
+
+    this.getComponent(Transform2D).map(transform2d => {
+      transform2d.setLocalRotation(current);
+    });
+    return this;
+  }
+}
 
 const canvas = new Canvas().set(256, 256),
   scene = new Scene()
     .addEntity(
-      new Camera2DBuilder()
-        .mapCamera2D(camera =>
-          camera
-            .setOrthographicSize(1.5)
+      new Entity().addComponent(
+        new Grid().setColor(vec4.fromValues(0, 0, 0, 0.05)).setSize(0.5)
+      ),
+      new Entity().addComponent(new Grid()),
+      new Entity()
+        .addTag("camera")
+        .addComponent(
+          new Transform2D(),
+          new Camera2D()
+            .setOrthographicSize(10)
             .setBackground(vec4.fromValues(0.9, 0.9, 0.9, 1.0))
+        ),
+      new Entity()
+        .addTag("line")
+        .addComponent(
+          new Transform2D(),
+          new Line().setLength(9),
+          new Point(),
+          new Rotator()
         )
-        .build()
-        .addTag("camera"),
-      new Polygon2DBuilder()
-        .addPoint(vec2.fromValues(0, 1), point =>
-          point.setType(PointType.Triangle)
+        .addChild(
+          new Entity().addComponent(
+            new Transform2D().setLocalPosition(vec2.fromValues(0, 9)),
+            new Point().setType(PointType.Triangle)
+          )
         )
-        .addPoint(vec2.fromValues(0, 0))
-        .addPoint(vec2.fromValues(1, 0), point =>
-          point.setType(PointType.Triangle)
-        )
-        .build()
-        .addTag("triangle")
     )
     .addPlugin(
       new Time(),

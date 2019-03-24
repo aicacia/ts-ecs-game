@@ -15,7 +15,7 @@ export class PointCtxRendererHandler extends CtxRendererHandler {
     const scale = this.getScale();
 
     this.getManager().map(manager =>
-      manager.getComponents<Point>().forEach(point => {
+      manager.getComponents<Point>().forEach(point =>
         point
           .getEntity()
           .flatMap(entity => entity.getComponent(Transform2D))
@@ -36,7 +36,13 @@ export class PointCtxRendererHandler extends CtxRendererHandler {
                     break;
                   }
                   case PointType.Circle: {
-                    ctx.arc(0, 0, point.getSize() * scale, 0, 2 * Math.PI);
+                    ctx.arc(
+                      0,
+                      0,
+                      point.getSize() * 1.5 * scale,
+                      0,
+                      2 * Math.PI
+                    );
                     break;
                   }
                   case PointType.Triangle: {
@@ -57,8 +63,8 @@ export class PointCtxRendererHandler extends CtxRendererHandler {
                 }
               }, transform2d.getMatrix())
             )
-          );
-      })
+          )
+      )
     );
     return this;
   }
