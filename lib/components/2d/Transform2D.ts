@@ -19,6 +19,11 @@ export class Transform2D extends Component {
 
   private needsUpdate: boolean = true;
 
+  translate(offset: vec2) {
+    vec2.add(this.localPosition, this.localPosition, offset);
+    return this.setNeedsUpdate();
+  }
+
   setLocalPosition(localPosition: vec2) {
     vec2.copy(this.localPosition, localPosition);
     return this.setNeedsUpdate();
@@ -60,16 +65,18 @@ export class Transform2D extends Component {
   }
 
   setNeedsUpdate(needsUpdate: boolean = true) {
-    this.needsUpdate = needsUpdate;
-    this.getEntity().map(entity =>
-      entity
-        .getChildren()
-        .forEach(child =>
-          child
-            .getComponent(Transform2D)
-            .map(transform2d => transform2d.setNeedsUpdate(needsUpdate))
-        )
-    );
+    if (needsUpdate !== this.needsUpdate) {
+      this.needsUpdate = needsUpdate;
+      this.getEntity().map(entity =>
+        entity
+          .getChildren()
+          .forEach(child =>
+            child
+              .getComponent(Transform2D)
+              .map(transform2d => transform2d.setNeedsUpdate(needsUpdate))
+          )
+      );
+    }
     return this;
   }
   getNeedsUpdate() {

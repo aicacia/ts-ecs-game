@@ -1,5 +1,5 @@
 import { vec4 } from "gl-matrix";
-import { Component } from "../../../sceneGraph";
+import { Component } from "../../sceneGraph";
 import { AngleManager } from "./AngleManager";
 
 export class Angle extends Component {

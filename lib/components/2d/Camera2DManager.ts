@@ -23,6 +23,18 @@ export class Camera2DManager extends Manager {
 
     return this;
   }
+
+  removeComponent(camera: Camera2D) {
+    super.removeComponent(camera);
+
+    this.active.map(active => {
+      if (active === camera) {
+        this.active = none();
+      }
+    });
+
+    return this;
+  }
 }
 
 import { Camera2D } from "./Camera2D";

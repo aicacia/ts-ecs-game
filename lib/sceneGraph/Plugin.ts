@@ -26,6 +26,12 @@ export abstract class Plugin extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.getPluginPriority();
   }
 
+  getPlugin<T extends Plugin = Plugin>(
+    Plugin: new (...args: any[]) => T
+  ): Option<T> {
+    return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+  }
+
   UNSAFE_setScene(scene: Scene) {
     this.scene = some(scene);
     return this;

@@ -86,5 +86,9 @@ export abstract class Manager extends EventEmitter {
   }
 }
 
+export class DefaultManager extends Manager {
+  static managerName = "engine.DefaultManager";
+}
+
 import { Component } from "./Component";
 import { Scene } from "./Scene";

@@ -1,8 +1,8 @@
-import { CtxRenderer, CtxRendererHandler } from "../../../plugins/renderer";
-import { toRgba } from "../../../utils/math";
-import { Transform2D } from "../../transform2d";
+import { CtxRenderer, CtxRendererHandler } from "../../plugins/renderer";
+import { toRgba } from "../../utils/math";
 import { Point, PointType } from "./Point";
 import { PointManager } from "./PointManager";
+import { Transform2D } from "./Transform2D";
 
 export class PointCtxRendererHandler extends CtxRendererHandler {
   static rendererHandlerName = "engine.PointCtxRendererHandler";

@@ -5,6 +5,8 @@ export {
   GridCtxRendererHandler,
   Transform2DManager,
   Point,
+  Camera2DControl,
+  Camera2DControlManager,
   Grid,
   GridManager,
   PointType,
@@ -15,7 +17,9 @@ export {
   AngleCtxRendererHandler,
   Line,
   LineCtxRendererHandler,
-  LineManager
+  LineManager,
+  HTML,
+  HTMLManager
 } from "./components";
 export {
   Time,
@@ -33,6 +37,7 @@ export {
   Component,
   IBuilder,
   Manager,
+  DefaultManager,
   Entity,
   Scene,
   Plugin

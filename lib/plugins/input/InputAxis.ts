@@ -1,4 +1,5 @@
 import { clamp, sign } from "../../utils/math";
+import { Time } from "../Time";
 
 export class InputAxis {
   private name: string;
@@ -69,7 +70,9 @@ export class InputAxis {
     return this;
   }
 
-  UNSAFE_update(delta: number, value: number, isNeg: boolean, isPos: boolean) {
+  UNSAFE_update(time: Time, value: number, isNeg: boolean, isPos: boolean) {
+    const delta = time.getDelta();
+
     if (isNeg) {
       value -= this.getSensitivity() * delta;
     }

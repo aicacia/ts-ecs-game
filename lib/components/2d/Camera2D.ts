@@ -1,5 +1,7 @@
-import { mat2d, vec4 } from "gl-matrix";
+import { mat2d, vec2, vec3 } from "gl-matrix";
 import { Component } from "../../sceneGraph";
+
+const MAT2D_0 = mat2d.create();
 
 export class Camera2D extends Component {
   static Manager = null as any;
@@ -11,19 +13,19 @@ export class Camera2D extends Component {
 
   private orthographicSize: number = 1;
   private minOrthographicSize = Number.EPSILON;
-  private maxOrthographicSize = 1024;
+  private maxOrthographicSize = Infinity;
 
   private projection = mat2d.create();
   private view = mat2d.create();
 
   private needsUpdate = true;
-  private background: vec4 = vec4.create();
+  private background: vec3 = vec3.create();
 
   getBackground() {
     return this.background;
   }
-  setBackground(background: vec4) {
-    vec4.copy(this.background, background);
+  setBackground(background: vec3) {
+    vec3.copy(this.background, background);
     return this;
   }
 
@@ -123,9 +125,33 @@ export class Camera2D extends Component {
 
     return this;
   }
+
+  toWorld(out: vec2, screen: vec2) {
+    const mat = MAT2D_0;
+
+    out[0] = 2.0 * (screen[0] / this.width) - 1.0;
+    out[1] = -2.0 * (screen[1] / this.height) + 1.0;
+
+    mat2d.mul(mat, this.projection, this.view);
+    mat2d.invert(mat, mat);
+    vec2.transformMat2d(out, out, mat);
+
+    return out;
+  }
+
+  toScreen(out: vec2, world: vec2) {
+    const mat = mat2d.mul(MAT2D_0, this.projection, this.view);
+
+    vec2.transformMat2d(out, world, mat);
+
+    out[0] = (out[0] + 1.0) * 0.5 * this.width;
+    out[1] = (1.0 - out[1]) * 0.5 * this.height;
+
+    return out;
+  }
 }
 
-import { Transform2D } from "../transform2d";
 import { Camera2DManager } from "./Camera2DManager";
+import { Transform2D } from "./Transform2D";
 
 Camera2D.Manager = Camera2DManager;

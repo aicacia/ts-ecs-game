@@ -30,17 +30,24 @@ export class Canvas extends EventEmitter {
   }
 
   set(width: number, height: number) {
-    this.width = width;
-    this.height = height;
+    if (width !== this.width || height !== this.height) {
+      this.width = width;
+      this.height = height;
 
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
+      this.canvas.width = this.width;
+      this.canvas.height = this.height;
 
-    this.canvas.style.width = this.width + "px";
-    this.canvas.style.height = this.height + "px";
+      this.canvas.style.width = this.width + "px";
+      this.canvas.style.height = this.height + "px";
 
-    this.emit("resize");
-
+      this.emit("resize");
+    }
     return this;
+  }
+
+  getImageURI() {
+    return this.canvas
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
   }
 }

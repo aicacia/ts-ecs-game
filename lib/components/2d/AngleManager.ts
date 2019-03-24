@@ -1,4 +1,4 @@
-import { Manager } from "../../../sceneGraph";
+import { Manager } from "../../sceneGraph";
 
 export class AngleManager extends Manager {
   static managerName = "engine.AngleManager";

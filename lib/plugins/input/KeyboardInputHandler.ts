@@ -1,3 +1,4 @@
+import { Time } from "../Time";
 import { InputHandler } from "./InputHandler";
 
 export class KeyboardInputHandler extends InputHandler {
@@ -17,15 +18,15 @@ export class KeyboardInputHandler extends InputHandler {
     return this;
   }
 
-  onEvent(e: KeyboardEvent) {
+  onEvent(time: Time, e: KeyboardEvent) {
     const input = this.getInput().unwrap();
 
     switch (e.type) {
       case "keydown":
-        input.UNSAFE_set(e.key, 1.0);
+        input.getOrCreateButton(e.key).UNSAFE_down(time.getFrame());
         break;
       case "keyup":
-        input.UNSAFE_set(e.key, 0.0);
+        input.getOrCreateButton(e.key).UNSAFE_up(time.getFrame());
         break;
     }
     return this;

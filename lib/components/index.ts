@@ -1,7 +1,15 @@
-export { Camera2D, Camera2DManager } from "./camera2d";
-export { Grid, GridCtxRendererHandler, GridManager } from "./grid";
-export { Transform2D, Transform2DManager } from "./transform2d";
+export { Grid } from "./Grid";
+export { GridCtxRendererHandler } from "./GridCtxRendererHandler";
+export { GridManager } from "./GridManager";
+export { HTML } from "./HTML";
+export { HTMLManager } from "./HTMLManager";
 export {
+  Camera2D,
+  Camera2DManager,
+  Transform2D,
+  Transform2DManager,
+  Camera2DControl,
+  Camera2DControlManager,
   Point,
   PointType,
   PointCtxRendererHandler,
@@ -12,4 +20,4 @@ export {
   Line,
   LineCtxRendererHandler,
   LineManager
-} from "./math2d";
+} from "./2d";

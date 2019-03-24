@@ -58,14 +58,18 @@ export abstract class InputHandler extends EventEmitter {
   onRemove() {
     return this;
   }
-  onUpdate() {
-    this.events.forEach(event => this.onEvent(event));
+  onUpdate(time: Time) {
+    this.events.forEach(event => this.onEvent(time, event));
     this.events.length = 0;
     return this;
   }
-  onEvent(event: Event) {
+  onAfterUpdate(time: Time) {
+    return this;
+  }
+  onEvent(time: Time, event: Event) {
     return this;
   }
 }
 
+import { Time } from "../Time";
 import { Input } from "./Input";

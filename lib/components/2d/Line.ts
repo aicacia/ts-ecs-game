@@ -1,7 +1,7 @@
 import { vec2 } from "gl-matrix";
-import { Component } from "../../../sceneGraph";
-import { Transform2D } from "../../transform2d";
+import { Component } from "../../sceneGraph";
 import { LineManager } from "./LineManager";
+import { Transform2D } from "./Transform2D";
 
 const VEC2_0 = vec2.create();
 

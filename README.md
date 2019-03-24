@@ -3,40 +3,124 @@
 engine
 
 ```ts
-import { Component, Manager, Plugin } from "@aicacia/engine";
+import { vec2, vec3, vec4 } from "gl-matrix";
+import {
+  Camera2D,
+  Camera2DControl,
+  Canvas,
+  Component,
+  CtxRenderer,
+  DefaultManager,
+  Entity,
+  Grid,
+  HTML,
+  Input,
+  Line,
+  Loop,
+  Point,
+  PointType,
+  Scene,
+  Time,
+  Transform2D
+} from "@aicacia/engine";
 
-export class TestManager extends Manager {
-  static managerName = "TestManager";
-}
-
-export class Test extends Component {
-  static Manager = TestManager;
-  static componentName = "Test";
-
-  position: number = 0;
-  globalPosition: number = 0;
+class Rotator extends Component {
+  static componentName = "simple.Rotator";
+  // only use this if you do not need a manager, it only uses the one manager so
+  // any other components using the DefaultManager will be in the same manager
+  static Manager = DefaultManager;
 
   onUpdate() {
-    this.position += 1;
+    const current = this.getPlugin(Time)
+      .unwrap()
+      .getCurrent();
 
-    this.getEntity()
-      .flatMap(entity =>
-        entity.getParent().flatMap(parent => parent.getComponent(Test))
-      )
-      .mapOrElse(
-        parentComponent => {
-          this.globalPosition = parentComponent.position + this.position;
-        },
-        () => {
-          this.globalPosition = this.position;
-        }
-      );
-
+    this.getComponent(Transform2D).map(transform2d => {
+      transform2d.setLocalRotation(current);
+    });
     return this;
   }
 }
 
-export class TestPlugin extends Plugin {
-  static pluginName = "TestPlugin";
+const element = document.createElement("p");
+
+element.textContent = "Hello, world!";
+
+const canvas = new Canvas().set(256, 256),
+  scene = new Scene()
+    .addEntity(
+      // Small gird
+      new Entity().addComponent(
+        new Grid().setColor(vec4.fromValues(0, 0, 0, 0.05)).setSize(0.5)
+      ),
+      // Big gird
+      new Entity().addComponent(new Grid()),
+      // Camera setup
+      new Entity().addTag("camera").addComponent(
+        new Transform2D(),
+        new Camera2DControl(),
+        new Camera2D()
+          .setOrthographicSize(10)
+          .setMinOrthographicSize(1)
+          .setMaxOrthographicSize(16)
+          .setBackground(vec3.fromValues(0.95, 0.95, 0.95))
+      ),
+      // Rotating line
+      new Entity()
+        .addTag("line-0")
+        .addComponent(
+          new Transform2D(),
+          new Line().setLength(9),
+          new Point(),
+          new Rotator()
+        )
+        .addChild(
+          // Lines arrow
+          new Entity()
+            .addComponent(
+              new Transform2D().setLocalPosition(vec2.fromValues(0, 9)),
+              new Point().setType(PointType.Triangle)
+            )
+            // HTML overlay text
+            .addChild(
+              new Entity().addComponent(new Transform2D(), new HTML(element))
+            )
+        ),
+      // Static line
+      new Entity()
+        .addTag("line-1")
+        .addComponent(new Transform2D(), new Line().setLength(9), new Point())
+        .addChild(
+          new Entity().addComponent(
+            new Transform2D().setLocalPosition(vec2.fromValues(0, 9)),
+            new Point().setType(PointType.Triangle)
+          )
+        )
+    )
+    .addPlugin(
+      // Handles all rendering
+      new CtxRenderer(canvas),
+      // Required by many Components and plugins
+      new Time(),
+      // Handles all input
+      new Input(canvas.getElement())
+    ),
+  loop = new Loop(() => scene.update());
+
+const app = document.getElementById("app"),
+  download = document.getElementById("download");
+
+if (app) {
+  app.style.position = "relative";
+  app.style.overflow = "hidden";
+  app.style.width = `${canvas.getWidth()}px`;
+  app.style.height = `${canvas.getHeight()}px`;
+  app.appendChild(element);
+  app.appendChild(canvas.getElement());
 }
+if (download) {
+  download.onclick = () => window.open(canvas.getImageURI());
+}
+
+loop.start();
 ```

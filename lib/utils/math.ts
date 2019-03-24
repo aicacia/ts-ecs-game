@@ -50,7 +50,7 @@ export function angleVec2(out: vec2) {
 }
 
 export function toRgb(color: vec3 | vec4) {
-  return `rgb(${color[0] * 255}, ${color[1] * 255}, ${color[2] * 255}})`;
+  return `rgb(${color[0] * 255}, ${color[1] * 255}, ${color[2] * 255})`;
 }
 
 export function toRgba(color: vec4) {

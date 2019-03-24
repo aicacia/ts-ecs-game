@@ -65,7 +65,7 @@ export class Input extends Plugin {
     return this.removeInputHandlers(...inputHandlers);
   }
 
-  UNSAFE_set(name: string, value: number = 0) {
+  getOrCreateButton(name: string) {
     let button = this.buttons[name];
 
     if (!button) {
@@ -73,26 +73,44 @@ export class Input extends Plugin {
       this.buttons[name] = button;
     }
 
-    button.UNSAFE_setValue(value);
-
-    return this;
+    return button;
   }
   getButton(name: string) {
     return Option.from(this.buttons[name]);
   }
-  get(name: string) {
+  getValue(name: string) {
     return this.getButton(name)
       .map(button => button.getValue())
       .unwrapOr(0.0);
   }
 
+  isDown(name: string) {
+    return this.getButton(name)
+      .map(button => button.getFrameDown() === this.getTime().getFrame())
+      .unwrapOr(false);
+  }
+  isUp(name: string) {
+    return this.getButton(name)
+      .map(button => button.getFrameUp() === this.getTime().getFrame())
+      .unwrapOr(false);
+  }
+
+  getTime() {
+    return this.getPlugin(Time).expect("Input requires the Time Plugin");
+  }
+
   onUpdate() {
-    const delta = this.getScene()
-      .flatMap(scene => scene.getPlugin(Time))
-      .map(time => time.getDelta())
-      .unwrapOr(1.0 / 60.0);
-    this.updateAxes(delta);
-    this.inputHandlers.forEach(inputHandler => inputHandler.onUpdate());
+    const time = this.getTime();
+    this.updateAxes(time);
+    this.inputHandlers.forEach(inputHandler => inputHandler.onUpdate(time));
+    return this;
+  }
+
+  onAfterUpdate() {
+    const time = this.getTime();
+    this.inputHandlers.forEach(inputHandler =>
+      inputHandler.onAfterUpdate(time)
+    );
     return this;
   }
 
@@ -110,16 +128,18 @@ export class Input extends Plugin {
     return this;
   }
 
-  private updateAxes(dt: number) {
-    Object.keys(this.axes).forEach(key => this.updateAxis(this.axes[key], dt));
+  private updateAxes(time: Time) {
+    Object.keys(this.axes).forEach(key =>
+      this.updateAxis(this.axes[key], time)
+    );
   }
 
-  private updateAxis(axis: InputAxis, delta: number) {
-    const posValue = this.get(axis.getPosButton()),
-      negValue = this.get(axis.getNegButton());
+  private updateAxis(axis: InputAxis, time: Time) {
+    const posValue = this.getValue(axis.getPosButton()),
+      negValue = this.getValue(axis.getNegButton());
 
     axis.UNSAFE_update(
-      delta,
+      time,
       axis.getValue(),
       posValue !== 0.0,
       negValue !== 0.0

@@ -1,3 +1,4 @@
+import { Time } from "../Time";
 import { InputHandler } from "./InputHandler";
 
 export class MouseInputHandler extends InputHandler {
@@ -9,7 +10,8 @@ export class MouseInputHandler extends InputHandler {
     element.addEventListener("mousemove", this.queueEvent);
     element.addEventListener("mousedown", this.queueEvent);
     element.addEventListener("mouseup", this.queueEvent);
-    element.addEventListener("mousewheel", this.queueEvent);
+    element.addEventListener("wheel", this.queueEvent);
+    element.addEventListener("mouseleave", this.queueEvent);
 
     return this;
   }
@@ -20,12 +22,13 @@ export class MouseInputHandler extends InputHandler {
     element.removeEventListener("mousemove", this.queueEvent);
     element.removeEventListener("mousedown", this.queueEvent);
     element.removeEventListener("mouseup", this.queueEvent);
-    element.removeEventListener("mousewheel", this.queueEvent);
+    element.removeEventListener("wheel", this.queueEvent);
+    element.removeEventListener("mouseleave", this.queueEvent);
 
     return this;
   }
 
-  onEvent(e: MouseEvent) {
+  onEvent(time: Time, e: MouseEvent) {
     const input = this.getInput().unwrap(),
       elementRect = input.getElement().getBoundingClientRect();
 
@@ -34,19 +37,31 @@ export class MouseInputHandler extends InputHandler {
         const x = e.clientX - elementRect.left,
           y = e.clientY - elementRect.top;
 
-        input.UNSAFE_set("mouseX", x);
-        input.UNSAFE_set("mouseY", y);
+        input.getOrCreateButton("mouseX").UNSAFE_setValue(x);
+        input.getOrCreateButton("mouseY").UNSAFE_setValue(y);
         break;
       case "mousedown":
-        input.UNSAFE_set("mouse" + e.which, 1.0);
+        input.getOrCreateButton("mouse" + e.which).UNSAFE_down(time.getFrame());
         break;
       case "mouseup":
-        input.UNSAFE_set("mouse" + e.which, 0.0);
+      case "mouseleave":
+        input.getOrCreateButton("mouse" + e.which).UNSAFE_up(time.getFrame());
         break;
-      case "mousewheel":
-        input.UNSAFE_set("mouseWheel", (e as any).wheelDelta);
+      case "wheel":
+        e.preventDefault();
+        input
+          .getOrCreateButton("mouseWheel")
+          .UNSAFE_setValue((e as any).deltaY);
         break;
     }
+    return this;
+  }
+
+  onAfterUpdate() {
+    this.getInput()
+      .unwrap()
+      .getOrCreateButton("mouseWheel")
+      .UNSAFE_setValue(0);
     return this;
   }
 }

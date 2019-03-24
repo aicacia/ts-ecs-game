@@ -1,5 +1,5 @@
 import { vec4 } from "gl-matrix";
-import { Component } from "../../sceneGraph";
+import { Component } from "../sceneGraph";
 import { GridManager } from "./GridManager";
 
 export class Grid extends Component {
@@ -7,7 +7,7 @@ export class Grid extends Component {
   static componentName = "engine.Grid";
 
   private size: number = 1.0;
-  private lineSize: number = 1.0;
+  private lineWidth: number = 1.0;
   private color: vec4 = vec4.fromValues(0, 0, 0, 0.2);
 
   getSize() {
@@ -18,11 +18,11 @@ export class Grid extends Component {
     return this;
   }
 
-  getLineSize() {
-    return this.lineSize;
+  getLineWidth() {
+    return this.lineWidth;
   }
-  setLineSize(lineSize: number) {
-    this.lineSize = lineSize;
+  setLineWidth(lineWidth: number) {
+    this.lineWidth = lineWidth;
     return this;
   }
 

@@ -1,5 +1,5 @@
 import { vec2 } from "gl-matrix";
-import { CtxRenderer, CtxRendererHandler } from "../../../plugins/renderer";
+import { CtxRenderer, CtxRendererHandler } from "../../plugins/renderer";
 import { Line } from "./Line";
 import { LineManager } from "./LineManager";
 

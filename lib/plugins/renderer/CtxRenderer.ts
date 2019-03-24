@@ -1,14 +1,13 @@
 import { mat2d } from "gl-matrix";
 import {
   AngleCtxRendererHandler,
-  Camera2D,
   Camera2DManager,
   GridCtxRendererHandler,
   LineCtxRendererHandler,
   PointCtxRendererHandler
 } from "../../components";
 import { Canvas } from "../../utils";
-import { toRgba } from "../../utils/math";
+import { toRgb } from "../../utils/math";
 import { Renderer } from "./Renderer";
 
 const MAT2D_0 = mat2d.create();
@@ -18,6 +17,7 @@ export class CtxRenderer extends Renderer {
 
   private canvas: Canvas;
   private ctx: CanvasRenderingContext2D;
+  private lineWidth: number = 1.0;
 
   constructor(canvas: Canvas) {
     super();
@@ -42,6 +42,14 @@ export class CtxRenderer extends Renderer {
   }
   getCtx() {
     return this.ctx;
+  }
+
+  getLineWidth() {
+    return this.lineWidth;
+  }
+  setLineWidth(lineWidth: number) {
+    this.lineWidth = lineWidth;
+    return this;
   }
 
   getCamera() {
@@ -98,11 +106,11 @@ export class CtxRenderer extends Renderer {
     this.ctx.save();
 
     this.ctx.save();
-    this.ctx.fillStyle = toRgba(camera.getBackground());
+    this.ctx.fillStyle = toRgb(camera.getBackground());
     this.ctx.fillRect(0, 0, width, height);
     this.ctx.restore();
 
-    this.ctx.lineWidth = this.getScale();
+    this.ctx.lineWidth = this.getLineWidth() * this.getScale();
     this.ctx.translate(halfWidth, halfHeight);
     this.ctx.scale(halfWidth, -halfHeight);
 

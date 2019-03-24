@@ -1,5 +1,5 @@
 import { vec4 } from "gl-matrix";
-import { Component } from "../../../sceneGraph";
+import { Component } from "../../sceneGraph";
 import { PointManager } from "./PointManager";
 
 export enum PointType {

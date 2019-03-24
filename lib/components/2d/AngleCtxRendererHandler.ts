@@ -1,8 +1,8 @@
-import { CtxRenderer, CtxRendererHandler } from "../../../plugins/renderer";
-import { toRgba } from "../../../utils/math";
-import { Transform2D } from "../../transform2d";
+import { CtxRenderer, CtxRendererHandler } from "../../plugins/renderer";
+import { toRgba } from "../../utils/math";
 import { Angle } from "./Angle";
 import { AngleManager } from "./AngleManager";
+import { Transform2D } from "./Transform2D";
 
 export class AngleCtxRendererHandler extends CtxRendererHandler {
   static rendererHandlerName = "engine.AngleCtxRendererHandler";
