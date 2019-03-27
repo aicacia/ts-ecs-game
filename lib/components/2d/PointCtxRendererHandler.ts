@@ -48,9 +48,9 @@ export class PointCtxRendererHandler extends CtxRendererHandler {
                   case PointType.Triangle: {
                     const size = point.getSize() * 2 * scale;
 
-                    ctx.moveTo(0, size);
+                    ctx.moveTo(size, 0);
+                    ctx.lineTo(-size, size);
                     ctx.lineTo(-size, -size);
-                    ctx.lineTo(size, -size);
                     ctx.closePath();
                     break;
                   }

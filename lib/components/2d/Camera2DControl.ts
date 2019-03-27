@@ -3,7 +3,8 @@ import { Component } from "../../sceneGraph";
 import { Camera2DControlManager } from "./Camera2DControlManager";
 import { Transform2D } from "./Transform2D";
 
-const VEC2_0 = vec2.create();
+const VEC2_0 = vec2.create(),
+  VEC2_1 = vec2.create();
 
 export class Camera2DControl extends Component {
   static Manager = Camera2DControlManager;
@@ -56,19 +57,18 @@ export class Camera2DControl extends Component {
         camera = this.getComponent(Camera2D).expect(
           "Camera2DControl - Camera2D Component is required"
         ),
-        orthographicSize = camera.getOrthographicSize();
+        size = camera.getSize(),
+        worldMouse = camera.toWorld(
+          VEC2_0,
+          vec2.set(VEC2_0, -input.getValue("mouseX"), -input.getValue("mouseY"))
+        );
 
       if (this.dragging) {
-        vec2.sub(
-          this.offset,
-          vec2.set(VEC2_0, input.getValue("mouseX"), input.getValue("mouseY")),
-          this.lastMouse
-        );
-        this.offset[0] = -this.offset[0];
+        vec2.sub(this.offset, worldMouse, this.lastMouse);
         vec2.scale(
           this.offset,
           this.offset,
-          time.getDelta() * this.panSpeed * orthographicSize * 0.5
+          time.getDelta() * this.panSpeed * 30
         );
         transform.translate(this.offset);
       }
@@ -81,20 +81,12 @@ export class Camera2DControl extends Component {
       }
 
       if (input.getValue("mouseWheel") > 0) {
-        camera.setOrthographicSize(
-          orthographicSize + 60 * this.zoomSpeed * time.getDelta()
-        );
+        camera.setSize(size + 60 * this.zoomSpeed * time.getDelta());
       } else if (input.getValue("mouseWheel") < 0) {
-        camera.setOrthographicSize(
-          orthographicSize - 60 * this.zoomSpeed * time.getDelta()
-        );
+        camera.setSize(size - 60 * this.zoomSpeed * time.getDelta());
       }
 
-      vec2.set(
-        this.lastMouse,
-        input.getValue("mouseX"),
-        input.getValue("mouseY")
-      );
+      vec2.copy(this.lastMouse, worldMouse);
     }
     return this;
   }

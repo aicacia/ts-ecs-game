@@ -1,6 +1,7 @@
 import { mat2d } from "gl-matrix";
 import {
-  AngleCtxRendererHandler,
+  ArcCtxRendererHandler,
+  AxisCtxRendererHandler,
   Camera2DManager,
   GridCtxRendererHandler,
   LineCtxRendererHandler,
@@ -32,8 +33,9 @@ export class CtxRenderer extends Renderer {
     this.addRendererHandler(
       new PointCtxRendererHandler(),
       new LineCtxRendererHandler(),
-      new AngleCtxRendererHandler(),
-      new GridCtxRendererHandler()
+      new ArcCtxRendererHandler(),
+      new GridCtxRendererHandler(),
+      new AxisCtxRendererHandler()
     );
   }
 
@@ -69,9 +71,7 @@ export class CtxRenderer extends Renderer {
     return (width > height ? height : width) * 0.5;
   }
   getScale() {
-    return (
-      (1.0 / this.getCanvasSize()) * this.getCamera().getOrthographicSize()
-    );
+    return (1.0 / this.getCanvasSize()) * this.getCamera().getSize();
   }
 
   render(fn: (ctx: CanvasRenderingContext2D) => void, model?: mat2d) {

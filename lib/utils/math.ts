@@ -37,6 +37,12 @@ export function decomposeMat2d(
   return Math.atan2(matrix[1], matrix[0]);
 }
 
+export function getPointFromAngle(out: vec2, angle: number) {
+  out[0] = Math.cos(angle);
+  out[1] = Math.sin(angle);
+  return out;
+}
+
 export function sign(value: number) {
   return value < 0 ? -1 : 1;
 }

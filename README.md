@@ -49,20 +49,20 @@ element.textContent = "Hello, world!";
 const canvas = new Canvas().set(256, 256),
   scene = new Scene()
     .addEntity(
-      // Small gird
+      // Small grid
       new Entity().addComponent(
         new Grid().setColor(vec4.fromValues(0, 0, 0, 0.05)).setSize(0.5)
       ),
-      // Big gird
+      // Big grid
       new Entity().addComponent(new Grid()),
       // Camera setup
       new Entity().addTag("camera").addComponent(
         new Transform2D(),
         new Camera2DControl(),
         new Camera2D()
-          .setOrthographicSize(10)
-          .setMinOrthographicSize(1)
-          .setMaxOrthographicSize(16)
+          .setSize(10)
+          .setMinSize(1)
+          .setMaxSize(16)
           .setBackground(vec3.fromValues(0.95, 0.95, 0.95))
       ),
       // Rotating line

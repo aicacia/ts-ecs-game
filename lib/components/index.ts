@@ -1,6 +1,9 @@
 export { Grid } from "./Grid";
 export { GridCtxRendererHandler } from "./GridCtxRendererHandler";
 export { GridManager } from "./GridManager";
+export { Axis } from "./Axis";
+export { AxisCtxRendererHandler } from "./AxisCtxRendererHandler";
+export { AxisManager } from "./AxisManager";
 export { HTML } from "./HTML";
 export { HTMLManager } from "./HTMLManager";
 export {
@@ -14,10 +17,11 @@ export {
   PointType,
   PointCtxRendererHandler,
   PointManager,
-  Angle,
-  AngleManager,
-  AngleCtxRendererHandler,
+  Arc,
+  ArcManager,
+  ArcCtxRendererHandler,
   Line,
+  LineType,
   LineCtxRendererHandler,
   LineManager
 } from "./2d";

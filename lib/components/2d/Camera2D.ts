@@ -11,9 +11,9 @@ export class Camera2D extends Component {
   private height: number = 1.0;
   private aspect: number = 1.0;
 
-  private orthographicSize: number = 1;
-  private minOrthographicSize = Number.EPSILON;
-  private maxOrthographicSize = Infinity;
+  private size: number = 1;
+  private minSize = Number.EPSILON;
+  private maxSize = Infinity;
 
   private projection = mat2d.create();
   private view = mat2d.create();
@@ -55,30 +55,30 @@ export class Camera2D extends Component {
     return this.aspect;
   }
 
-  getOrthographicSize() {
-    return this.orthographicSize;
+  getSize() {
+    return this.size;
   }
-  setOrthographicSize(orthographicSize: number) {
-    this.orthographicSize =
-      orthographicSize < this.minOrthographicSize
-        ? this.minOrthographicSize
-        : orthographicSize > this.maxOrthographicSize
-        ? this.maxOrthographicSize
-        : orthographicSize;
+  setSize(size: number) {
+    this.size =
+      size < this.minSize
+        ? this.minSize
+        : size > this.maxSize
+        ? this.maxSize
+        : size;
     return this.setNeedsUpdate();
   }
-  getMinOrthographicSize() {
-    return this.minOrthographicSize;
+  getMinSize() {
+    return this.minSize;
   }
-  setMinOrthographicSize(minOrthographicSize: number) {
-    this.minOrthographicSize = minOrthographicSize;
+  setMinSize(minSize: number) {
+    this.minSize = minSize;
     return this.setNeedsUpdate();
   }
-  getMaxOrthographicSize() {
-    return this.minOrthographicSize;
+  getMaxSize() {
+    return this.minSize;
   }
-  setMaxOrthographicSize(maxOrthographicSize: number) {
-    this.maxOrthographicSize = maxOrthographicSize;
+  setMaxSize(maxSize: number) {
+    this.maxSize = maxSize;
     return this.setNeedsUpdate();
   }
 
@@ -111,9 +111,9 @@ export class Camera2D extends Component {
     return this;
   }
   updateProjection() {
-    const right = this.orthographicSize * this.aspect,
+    const right = this.size * this.aspect,
       left = -right,
-      top = this.orthographicSize,
+      top = this.size,
       bottom = -top,
       width = right - left,
       height = top - bottom,
