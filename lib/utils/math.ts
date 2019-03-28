@@ -1,5 +1,8 @@
 import { mat2d, vec2, vec3, vec4 } from "gl-matrix";
 
+export const Deg2Rad = (Math.PI / 180);
+export const Rad2Deg = (180 / Math.PI);
+
 export function composeMat2d(
   out: mat2d,
   position: vec2,
