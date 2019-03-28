@@ -25,8 +25,6 @@ export class ArcCtxRendererHandler extends CtxRendererHandler {
                 const start = arc.getStart(),
                   end = start + arc.getEnd();
 
-                // todo: do we really need both fillStyle and strokeStyle?
-                ctx.fillStyle = toRgba(arc.getColor());
                 ctx.strokeStyle = toRgba(arc.getColor());
                 ctx.beginPath();
                 ctx.arc(0, 0, arc.getRadius(), start, end);

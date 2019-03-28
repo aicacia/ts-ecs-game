@@ -105,7 +105,7 @@ const canvas = new Canvas().set(512, 512),
           new Transform2D().setLocalRotation(Math.PI / 4),
           new Line().setType(LineType.Dashed).setLength(9),
           new Point(),
-          new Arc(),
+          new Arc().setColor(vec4.fromValues(0, 0, 0.9, 1)),
           new ArcHandler()
         )
         .addChild(
@@ -129,6 +129,8 @@ const app = document.getElementById("app"),
   download = document.getElementById("download");
 
 if (app) {
+  app.style.left = "0px";
+  app.style.top = "0px";
   app.style.position = "relative";
   app.style.overflow = "hidden";
   app.style.width = `${canvas.getWidth()}px`;

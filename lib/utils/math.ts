@@ -1,7 +1,7 @@
 import { mat2d, vec2, vec3, vec4 } from "gl-matrix";
 
-export const Deg2Rad = (Math.PI / 180);
-export const Rad2Deg = (180 / Math.PI);
+export const DEG_TO_RAD = (Math.PI / 180);
+export const RAD_TO_DEG = (180 / Math.PI);
 
 export function composeMat2d(
   out: mat2d,
@@ -56,6 +56,14 @@ export function clamp(value: number, min: number, max: number) {
 
 export function angleVec2(out: vec2) {
   return Math.atan2(out[1], out[0]) + Math.PI * 0.5;
+}
+
+export function radToDeg(rad: number) {
+  return rad * RAD_TO_DEG;
+}
+
+export function degToRad(def: number) {
+  return def * DEG_TO_RAD;
 }
 
 export function toRgb(color: vec3 | vec4) {

@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/gl-matrix": "^2.4.5",
     "@types/tape": "^4.2.33",
-    "parcel": "^1.12.2",
+    "parcel": "^1.12.3",
     "prettier": "^1.16.4",
     "prettier-tslint": "^0.4.2",
     "tap-spec": "^5.0.0",
@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@aicacia/core": "^0.1.0",
+    "collisions": "^2.0.13",
     "gl-matrix": "^3.0.0"
   }
 }

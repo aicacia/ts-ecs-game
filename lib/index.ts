@@ -47,6 +47,7 @@ export {
   Plugin
 } from "./sceneGraph";
 export {
+  AABB2,
   Canvas,
   ICanvasOptions,
   Loop,
