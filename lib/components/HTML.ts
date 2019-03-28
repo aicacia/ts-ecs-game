@@ -26,10 +26,13 @@ export class HTML extends Component {
       transform2d = this.getComponent(Transform2D).expect(
         "HTML Component - Transform2D Component is required"
       ),
-      position = camera.toScreen(VEC2_0, transform2d.getPosition());
+      position = camera.toScreen(VEC2_0, transform2d.getPosition()),
+      rotation = -1 * transform2d.getRotation() * Rad2Deg; // todo: fixme this is really bad!!!!
+                                                           // but we need text rotation
 
     this.element.style.left = `${position[0]}px`;
     this.element.style.top = `${position[1]}px`;
+    this.element.style.transform = `rotate(${rotation}deg)`;
 
     return this;
   }
