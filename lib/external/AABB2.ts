@@ -29,12 +29,18 @@ export class AABB2 {
     return out;
   }
 
+  static union(out: AABB2, a: AABB2, b: AABB2) {
+    vec2.min(out.min, a.min, b.min);
+    vec2.max(out.max, a.max, b.max);
+    return out;
+  }
+
   static intersects(a: AABB2, b: AABB2) {
     return (
-      a.min[0] > b.min[0] &&
-      a.min[1] > b.min[1] &&
-      a.max[0] < b.max[0] &&
-      a.max[1] < b.max[1]
+      a.min[0] <= b.max[0] &&
+      a.max[0] >= b.min[0] &&
+      a.min[1] <= b.max[1] &&
+      a.max[1] >= b.min[1]
     );
   }
 

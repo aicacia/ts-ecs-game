@@ -1,4 +1,4 @@
-import { vec2, vec3 } from "gl-matrix";
+import { vec2, vec3, vec4 } from "gl-matrix";
 import {
   Axis,
   Body2D,
@@ -20,7 +20,7 @@ import {
   Transform2D,
   World2D
 } from "../../lib";
-import { PlotBuilder } from "../../lib/components";
+import { PlotBuilder, PointType } from "../../lib/components";
 import { Body, Circle } from "../../lib/external/collide_2d";
 
 const VEC2_0 = vec2.create();
@@ -30,6 +30,25 @@ class MouseBall extends Component {
   // only use this if you do not need a manager, it only uses the one manager so
   // any other components using the DefaultManager will be in the same manager
   static Manager = DefaultManager;
+
+  onAdd() {
+    this.getEntity().map(entity => {
+      entity
+        .getComponent(Body2D)
+        .unwrap()
+        .getBody()
+        .on("collide-start", () => {
+          console.log("collide-start");
+        })
+        .on("colliding", () => {
+          console.log("colliding");
+        })
+        .on("collide-end", () => {
+          console.log("collide-end");
+        });
+    });
+    return this;
+  }
 
   onUpdate() {
     const input = this.getPlugin(Input).unwrap(),
@@ -41,9 +60,9 @@ class MouseBall extends Component {
         VEC2_0,
         vec2.set(VEC2_0, input.getValue("mouseX"), input.getValue("mouseY"))
       ),
-      transform2d = this.getComponent(Transform2D).unwrap();
+      body = this.getComponent(Body2D).unwrap();
 
-    transform2d.setLocalPosition(position);
+    body.getBody().setPosition(position);
 
     return this;
   }
@@ -70,23 +89,27 @@ const canvas = new Canvas().set(512, 512),
         .addTag("mouse")
         .addComponent(
           new Transform2D(),
-          new Body2D(new Body().addShape(new Circle().setRadius(0.1))),
-          new MouseBall()
+          new Point(),
+          new MouseBall(),
+          new Body2D(new Body().addShape(new Circle().setRadius(0.25)))
         ),
       new Entity()
         .addTag("body")
         .addComponent(
-          new Transform2D().setLocalPosition(vec2.fromValues(0, 1)),
+          new Transform2D().setLocalPosition(vec2.fromValues(0, 1.0)),
           new Point(),
-          new Body2D(new Body().addShape(new Circle()))
+          new Body2D(new Body().addShape(new Circle().setRadius(0.25)))
         ),
-      new PlotBuilder()
+      new PlotBuilder({
+        connected: false,
+        color: vec4.fromValues(1.0, 1.0, 0.0, 1.0)
+      })
         .addPoints([
-          vec2.fromValues(0, 0),
-          vec2.fromValues(1, 1),
-          vec2.fromValues(2, 4),
-          vec2.fromValues(3, 9),
-          vec2.fromValues(4, 16)
+          { point: vec2.fromValues(0, 0) },
+          { point: vec2.fromValues(1, 1) },
+          { point: vec2.fromValues(2, 4) },
+          { point: vec2.fromValues(3, 9) },
+          { point: vec2.fromValues(4, 16) }
         ])
         .build()
     )

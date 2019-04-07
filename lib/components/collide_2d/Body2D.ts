@@ -16,10 +16,18 @@ export class Body2D extends Component {
     this.body = body;
   }
 
+  getBody() {
+    return this.body;
+  }
+
   onAdd() {
     this.getPlugin(World2D).map(world2d =>
       world2d.getWorld().addBody(this.body)
     );
+    this.getComponent(Transform2D).map(transform2d => {
+      this.body.setPosition(transform2d.getPosition());
+      this.body.setRotation(transform2d.getRotation());
+    });
     return this;
   }
 
@@ -31,7 +39,10 @@ export class Body2D extends Component {
   }
 
   onUpdate() {
-    this.getComponent(Transform2D).map(transform2d => {});
+    this.getComponent(Transform2D).map(transform2d => {
+      transform2d.setLocalPosition(this.body.getPosition());
+      transform2d.setLocalRotation(this.body.getRotation());
+    });
     return this;
   }
 }

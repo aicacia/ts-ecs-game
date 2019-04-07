@@ -1,3 +1,4 @@
+import { hash } from "@aicacia/hash";
 import { vec2 } from "gl-matrix";
 import { Circle, Shape } from "../shapes";
 import { Contact } from "./Contact";
@@ -9,13 +10,10 @@ type IHandler = (si: Shape, sj: Shape, contacts: Contact[]) => void;
 
 export class NarrowPhase implements INarrowPhase {
   private contacts: Contact[] = [];
-  private handlers: Map<
-    [IShapeConstructor, IShapeConstructor],
-    IHandler
-  > = new Map();
+  private handlers: Map<number, IHandler> = new Map();
 
   constructor() {
-    this.handlers.set([Circle, Circle], circleToCircleHandler as any);
+    this.setHandler(Circle, Circle, circleToCircleHandler);
   }
 
   run(pairs: Array<[Shape, Shape]>): Contact[] {
@@ -30,18 +28,28 @@ export class NarrowPhase implements INarrowPhase {
       if (handler) {
         handler(si, sj, this.contacts);
       } else {
-        throw new Error(`No Handler for Shapes [${sj}, ${si}]`);
+        throw new TypeError(`No Handler for Shapes [${sj}, ${si}]`);
       }
     }
 
     return this.contacts;
   }
 
+  setHandler(a: IShapeConstructor, b: IShapeConstructor, handler: any) {
+    this.handlers.set(this.getHash(a, b), handler);
+    return this;
+  }
   getHandler(si: Shape, sj: Shape) {
-    return this.handlers.get([
-      Object.getPrototypeOf(si).constructor,
-      Object.getPrototypeOf(sj).constructor
-    ]);
+    return this.handlers.get(
+      this.getHash(
+        Object.getPrototypeOf(si).constructor,
+        Object.getPrototypeOf(sj).constructor
+      )
+    );
+  }
+
+  private getHash(a: IShapeConstructor, b: IShapeConstructor) {
+    return hash(a) + hash(b);
   }
 }
 
@@ -60,7 +68,7 @@ export const circleToCircleHandler = (
     d = vec2.sub(VEC2_0, xi, xj),
     r = si.getRadius() + sj.getRadius(),
     rsq = r * r,
-    dsq = vec2.dot(d, d);
+    dsq = vec2.squaredLength(d);
 
   if (dsq < rsq) {
     const depth = Math.sqrt(rsq) - Math.sqrt(dsq),

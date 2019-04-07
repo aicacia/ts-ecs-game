@@ -1,13 +1,19 @@
+import { hash } from "@aicacia/hash";
+import { EventEmitter } from "events";
 import { Body } from "./Body";
 import { BroadPhase } from "./phases/BroadPhase";
+import { Contact } from "./phases/Contact";
 import { IBroadPhase } from "./phases/IBroadPhase";
 import { INarrowPhase } from "./phases/INarrowPhase";
 import { NarrowPhase } from "./phases/NarrowPhase";
 
-export class World {
+export class World extends EventEmitter {
   private bodies: Body[] = [];
   private broadPhase: IBroadPhase = new BroadPhase();
   private narrowPhase: INarrowPhase = new NarrowPhase();
+
+  private lastColliding: Map<number, Contact> = new Map();
+  private colliding: Map<number, Contact> = new Map();
 
   addBodies(bodies: Body[]) {
     bodies.forEach(body => this._addBody(body));
@@ -30,8 +36,44 @@ export class World {
   }
 
   run() {
-    const pairs = this.broadPhase.run(this.bodies);
-    return this.narrowPhase.run(pairs);
+    this.bodies.forEach(body => body.update());
+
+    const pairs = this.broadPhase.run(this.bodies),
+      contacts = this.narrowPhase.run(pairs);
+
+    this.lastColliding = this.colliding;
+    this.colliding = new Map();
+
+    contacts.forEach(contact => {
+      const bi = contact.si.getBody().unwrap(),
+        bj = contact.sj.getBody().unwrap(),
+        hash = this.getHash(bi, bj),
+        lastCollide = this.lastColliding.has(hash),
+        newCollide = this.colliding.has(hash);
+
+      if (lastCollide && !newCollide) {
+        bi.emit("colliding", bj);
+        bj.emit("colliding", bi);
+      }
+      if (!lastCollide && !newCollide) {
+        bi.emit("collide-start", bj);
+        bj.emit("collide-start", bi);
+      }
+
+      this.colliding.set(hash, contact);
+    });
+
+    for (const [hash, contact] of this.lastColliding.entries()) {
+      if (!this.colliding.has(hash)) {
+        const bi = contact.si.getBody().unwrap(),
+          bj = contact.sj.getBody().unwrap();
+
+        bi.emit("collide-end", bj);
+        bj.emit("collide-end", bi);
+      }
+    }
+
+    return this;
   }
 
   private _addBody<B extends Body>(body: B) {
@@ -49,5 +91,9 @@ export class World {
     }
 
     return this;
+  }
+
+  private getHash(a: Body, b: Body) {
+    return hash(a) + hash(b);
   }
 }

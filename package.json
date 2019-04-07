@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@aicacia/core": "^0.1.0",
+    "@aicacia/hash": "^0.1.0",
     "collisions": "^2.0.13",
     "gl-matrix": "^3.0.0"
   }

@@ -18,12 +18,10 @@ export class BroadPhase implements IBroadPhase {
 
         if (AABB2.intersects(bi.getAABB(), bj.getAABB())) {
           const shapesi = bi.getShapes(),
-            shapesj = bj.getShapes(),
-            counti = shapesi.length,
-            countj = shapesj.length;
+            shapesj = bj.getShapes();
 
-          for (let k = 0; k < counti; k++) {
-            for (let l = 0; l < countj; l++) {
+          for (let k = 0, kl = shapesi.length; k < kl; k++) {
+            for (let l = 0, ll = shapesj.length; l < ll; l++) {
               const si = shapesi[k],
                 sj = shapesj[l];
 

@@ -1,4 +1,3 @@
-import { mat2d, vec2 } from "gl-matrix";
 import { Shape } from "./Shape";
 
 export class Circle extends Shape {
@@ -12,14 +11,13 @@ export class Circle extends Shape {
     return this;
   }
 
-  updateAABB(matrix: mat2d) {
-    this.aabb.min[0] = -this.radius;
-    this.aabb.min[1] = -this.radius;
-    this.aabb.max[0] = this.radius;
-    this.aabb.max[1] = this.radius;
+  update() {
+    super.update();
 
-    vec2.transformMat2d(this.aabb.min, this.aabb.min, matrix);
-    vec2.transformMat2d(this.aabb.max, this.aabb.max, matrix);
+    this.aabb.min[0] = this.position[0] - this.radius;
+    this.aabb.min[1] = this.position[1] - this.radius;
+    this.aabb.max[0] = this.position[0] + this.radius;
+    this.aabb.max[1] = this.position[1] + this.radius;
 
     return this;
   }

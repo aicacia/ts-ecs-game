@@ -1,3 +1,4 @@
+import { EventEmitter } from "events";
 import { mat2d, vec2 } from "gl-matrix";
 import { composeMat2d } from "../../utils";
 import { AABB2 } from "../AABB2";
@@ -5,7 +6,7 @@ import { Shape } from "./shapes";
 
 const SCALE2 = vec2.fromValues(1, 1);
 
-export class Body {
+export class Body extends EventEmitter {
   private shapes: Shape[] = [];
   private aabb: AABB2 = AABB2.create();
 
@@ -60,7 +61,11 @@ export class Body {
   }
 
   update() {
-    this.updateAABB();
+    this.shapes.reduce((aabb, shape) => {
+      shape.update();
+      AABB2.union(aabb, aabb, shape.getAABB());
+      return aabb;
+    }, AABB2.identity(this.aabb));
     return this;
   }
 
@@ -70,15 +75,8 @@ export class Body {
     return this;
   }
 
-  private updateAABB() {
-    this.shapes.reduce((aabb, shape) => {
-      shape.updateAABB(this.getMatrix());
-      return aabb;
-    }, AABB2.identity(this.aabb));
-    return this;
-  }
-
   private _addShape<S extends Shape>(shape: S) {
+    shape.UNSAFE_setBody(this);
     this.shapes.push(shape);
     return this;
   }

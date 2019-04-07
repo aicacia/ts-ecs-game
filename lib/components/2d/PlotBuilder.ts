@@ -1,31 +1,56 @@
-import { vec2 } from "gl-matrix";
+import { vec2, vec4 } from "gl-matrix";
 import { Entity, IBuilder } from "../../sceneGraph";
 import { angleVec2 } from "../../utils";
 import { Line } from "./Line";
-import { Point } from "./Point";
+import { Point, PointType } from "./Point";
 import { Transform2D } from "./Transform2D";
 
-const VEC2_0 = vec2.create();
+const VEC2_0 = vec2.create(),
+  BLACK = vec4.fromValues(0, 0, 0, 1.0);
+
+export interface IPlotOptions {
+  connected?: boolean;
+  color?: vec4;
+}
+
+export interface IPlotPointOptions {
+  point: vec2;
+  color?: vec4;
+}
 
 export class PlotBuilder implements IBuilder<Entity> {
   private entity: Entity = new Entity();
-  private points: vec2[] = [];
+  private points: IPlotPointOptions[] = [];
 
-  addPoints(points: vec2[]) {
+  private color: vec4 = vec4.create();
+  private connected: boolean = true;
+
+  constructor(options: IPlotOptions = {}) {
+    if (options.color) {
+      vec4.copy(this.color, options.color);
+    }
+    if (options.connected != null) {
+      this.connected = !!options.connected;
+    }
+  }
+
+  addPoints(points: IPlotPointOptions[]) {
     points.forEach(point => this.points.push(point));
     return this;
   }
-  addPoint(...points: vec2[]) {
+  addPoint(...points: IPlotPointOptions[]) {
     return this.addPoints(points);
   }
 
   build() {
     this.points.reduce(
-      (entity, point) =>
+      (entity, options) =>
         entity.addChild(
           new Entity().addComponent(
-            new Transform2D().setLocalPosition(point),
+            new Transform2D().setLocalPosition(options.point),
             new Point()
+              .setType(this.connected ? PointType.None : PointType.Circle)
+              .setColor(options.color || BLACK)
           )
         ),
       this.entity
@@ -38,7 +63,7 @@ export class PlotBuilder implements IBuilder<Entity> {
         end = children[i + 1],
         startTransform = start.getComponent(Transform2D).unwrap();
 
-      let len = 0;
+      let len = 0.0;
 
       if (end) {
         const endTransform = end.getComponent(Transform2D).unwrap(),
@@ -51,7 +76,14 @@ export class PlotBuilder implements IBuilder<Entity> {
         len = vec2.length(dist);
         startTransform.setLocalRotation(angleVec2(dist));
 
-        start.addComponent(new Line().setLength(len));
+        if (this.connected) {
+          start.addComponent(
+            new Line()
+              .setLineWidth(5)
+              .setColor(this.color)
+              .setLength(len)
+          );
+        }
       }
     }
 
