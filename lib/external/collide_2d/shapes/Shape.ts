@@ -1,5 +1,5 @@
 import { mat2d, vec2 } from "gl-matrix";
-import { AABB2 } from "../../../utils";
+import { AABB2 } from "../../AABB2";
 
 export abstract class Shape {
   protected aabb: AABB2 = AABB2.create();

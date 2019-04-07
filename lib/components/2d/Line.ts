@@ -16,6 +16,7 @@ export class Line extends Component {
   static Manager = LineManager;
 
   private length: number = 1.0;
+  private lineWidth: number = 1.0;
   private type: LineType = LineType.Normal;
   private color: vec4 = vec4.fromValues(0, 0, 0, 1.0);
 
@@ -25,6 +26,14 @@ export class Line extends Component {
   }
   getLength() {
     return this.length;
+  }
+
+  setLineWidth(lineWidth: number) {
+    this.lineWidth = lineWidth;
+    return this;
+  }
+  getLineWidth() {
+    return this.lineWidth;
   }
 
   setType(type: LineType) {

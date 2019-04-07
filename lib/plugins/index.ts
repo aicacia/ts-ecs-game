@@ -12,3 +12,4 @@ export {
   MouseInputHandler,
   InputButton
 } from "./input";
+export { World2D } from "./World2D";

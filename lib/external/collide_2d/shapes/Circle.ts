@@ -1,8 +1,6 @@
 import { mat2d, vec2 } from "gl-matrix";
 import { Shape } from "./Shape";
 
-const VEC2_0 = vec2.create();
-
 export class Circle extends Shape {
   private radius: number = 1.0;
 

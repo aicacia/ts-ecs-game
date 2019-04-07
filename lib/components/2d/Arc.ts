@@ -1,8 +1,10 @@
 import { vec2, vec4 } from "gl-matrix";
 import { Component } from "../../sceneGraph";
-import { getPointFromAngle } from "../../utils/math";
+import { getPointFromAngle, getTangentAngle } from "../../utils/math";
 import { ArcManager } from "./ArcManager";
 import { Transform2D } from "./Transform2D";
+
+const VEC2_0 = vec2.create();
 
 export class Arc extends Component {
   static componentName = "engine.Arc";
@@ -25,22 +27,28 @@ export class Arc extends Component {
     return this.start;
   }
   setStart(start: number) {
-    this.start = start;
+    this.start = start % (Math.PI * 2);
     return this;
   }
   getStartPosition(out: vec2) {
     return this.getPositionFromAngel(out, this.start);
+  }
+  getStartRotation() {
+    return getTangentAngle(this.getStartPosition(VEC2_0));
   }
 
   getEnd() {
     return this.end;
   }
   setEnd(end: number) {
-    this.end = end;
+    this.end = end % (Math.PI * 2);
     return this;
   }
   getEndPosition(out: vec2) {
     return this.getPositionFromAngel(out, this.end);
+  }
+  getEndRotation() {
+    return getTangentAngle(this.getEndPosition(VEC2_0));
   }
 
   setColor(color: vec4) {

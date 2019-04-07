@@ -48,9 +48,16 @@ class ArcHandler extends Component {
     const current = this.getPlugin(Time)
         .unwrap()
         .getCurrent(),
-      arc = this.getComponent(Arc).unwrap();
+      children = this.getEntity()
+        .map(entity => entity.getChildren())
+        .unwrap(),
+      arc = children[0].getComponent(Arc).unwrap(),
+      point = children[1].getComponent(Transform2D).unwrap();
 
-    arc.setEnd((current - Math.PI / 4) % (Math.PI * 2));
+    arc.setEnd(current - Math.PI / 4);
+
+    arc.getEndPosition(point.getLocalPosition());
+    point.setLocalRotation(arc.getEndRotation() + Math.PI);
 
     return this;
   }
@@ -104,15 +111,25 @@ const canvas = new Canvas().set(512, 512),
         .addComponent(
           new Transform2D().setLocalRotation(Math.PI / 4),
           new Line().setType(LineType.Dashed).setLength(9),
-          new Point(),
-          new Arc().setColor(vec4.fromValues(0, 0, 0.9, 1)),
-          new ArcHandler()
+          new Point()
         )
         .addChild(
           new Entity().addComponent(
             new Transform2D().setLocalPosition(vec2.fromValues(9, 0)),
             new Point().setType(PointType.Triangle)
-          )
+          ),
+          new Entity()
+            .addComponent(new ArcHandler())
+            .addChild(
+              new Entity().addComponent(
+                new Transform2D(),
+                new Arc().setColor(vec4.fromValues(0, 0, 0.9, 1))
+              ),
+              new Entity().addComponent(
+                new Transform2D(),
+                new Point().setType(PointType.Triangle)
+              )
+            )
         )
     )
     .addPlugin(

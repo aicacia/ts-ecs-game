@@ -29,6 +29,15 @@ export class AABB2 {
     return out;
   }
 
+  static intersects(a: AABB2, b: AABB2) {
+    return (
+      a.min[0] > b.min[0] &&
+      a.min[1] > b.min[1] &&
+      a.max[0] < b.max[0] &&
+      a.max[1] < b.max[1]
+    );
+  }
+
   min: vec2 = vec2.fromValues(Infinity, Infinity);
   max: vec2 = vec2.fromValues(-Infinity, -Infinity);
 }

@@ -3,6 +3,7 @@ import { Component } from "../../sceneGraph";
 import { PointManager } from "./PointManager";
 
 export enum PointType {
+  None = "None",
   Circle = "Circle",
   Square = "Square",
   Triangle = "Triangle"

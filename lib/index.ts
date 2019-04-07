@@ -23,7 +23,10 @@ export {
   LineCtxRendererHandler,
   LineManager,
   HTML,
-  HTMLManager
+  HTMLManager,
+  Body2D,
+  Body2DManager,
+  PlotBuilder
 } from "./components";
 export {
   Time,
@@ -35,7 +38,8 @@ export {
   InputHandler,
   KeyboardInputHandler,
   MouseInputHandler,
-  InputButton
+  InputButton,
+  World2D
 } from "./plugins";
 export {
   Component,
@@ -46,11 +50,4 @@ export {
   Scene,
   Plugin
 } from "./sceneGraph";
-export {
-  AABB2,
-  Canvas,
-  ICanvasOptions,
-  Loop,
-  composeMat2d,
-  decomposeMat2d
-} from "./utils";
+export * from "./utils";

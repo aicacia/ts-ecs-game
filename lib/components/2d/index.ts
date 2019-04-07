@@ -13,3 +13,4 @@ export { LineCtxRendererHandler } from "./LineCtxRendererHandler";
 export { Point, PointType } from "./Point";
 export { PointManager } from "./PointManager";
 export { PointCtxRendererHandler } from "./PointCtxRendererHandler";
+export { PlotBuilder } from "./PlotBuilder";

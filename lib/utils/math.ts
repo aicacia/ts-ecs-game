@@ -1,7 +1,7 @@
 import { mat2d, vec2, vec3, vec4 } from "gl-matrix";
 
-export const DEG_TO_RAD = (Math.PI / 180);
-export const RAD_TO_DEG = (180 / Math.PI);
+export const DEG_TO_RAD = Math.PI / 180;
+export const RAD_TO_DEG = 180 / Math.PI;
 
 export function composeMat2d(
   out: mat2d,
@@ -46,6 +46,20 @@ export function getPointFromAngle(out: vec2, angle: number) {
   return out;
 }
 
+export function getAngleFromPoint(out: vec2) {
+  return Math.atan2(out[1], out[0]);
+}
+
+export const getTangentAngle_VEC2_0 = vec2.create();
+
+export function getTangentAngle(vec: vec2) {
+  const tmp = vec2.copy(getTangentAngle_VEC2_0, vec),
+    tmpX = tmp[0];
+  tmp[0] = tmp[1];
+  tmp[1] = tmpX;
+  return getAngleFromPoint(tmp);
+}
+
 export function sign(value: number) {
   return value < 0 ? -1 : 1;
 }
@@ -55,7 +69,7 @@ export function clamp(value: number, min: number, max: number) {
 }
 
 export function angleVec2(out: vec2) {
-  return Math.atan2(out[1], out[0]) + Math.PI * 0.5;
+  return Math.atan2(out[1], out[0]);
 }
 
 export function radToDeg(rad: number) {
