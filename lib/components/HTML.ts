@@ -34,9 +34,7 @@ export class HTML extends Component {
         .flatMap(scene => scene.getManager(Camera2DManager))
         .flatMap(cameraManager => cameraManager.getActive())
         .expect("HTML Component requires an active Camera2D Component"),
-      transform2d = this.getComponent(Transform2D).expect(
-        "HTML Component requires Transform2D Component"
-      ),
+      transform2d = this.getRequiredComponent(Transform2D),
       position = camera.toScreen(VEC2_0, transform2d.getPosition());
 
     if (this.useRotation) {

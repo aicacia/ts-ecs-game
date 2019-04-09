@@ -31,8 +31,7 @@ class Rotator extends Component {
   static Manager = DefaultManager;
 
   onUpdate() {
-    const current = this.getPlugin(Time)
-      .unwrap()
+    const current = this.getRequiredPlugin(Time)
       .getCurrent();
 
     this.getComponent(Transform2D).map(transform2d => {

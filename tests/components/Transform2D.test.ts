@@ -18,8 +18,8 @@ tape("Transform2D", (assert: tape.Test) => {
 
   scene.update();
 
-  const parentTransform = parent.getComponent(Transform2D).unwrap();
-  const childTransform = child.getComponent(Transform2D).unwrap();
+  const parentTransform = parent.getRequiredComponent(Transform2D);
+  const childTransform = child.getRequiredComponent(Transform2D);
 
   assert.true(
     mat2d.equals(

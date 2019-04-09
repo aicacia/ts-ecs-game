@@ -32,8 +32,7 @@ class MouseBall extends Component {
   static Manager = DefaultManager;
 
   onAdd() {
-    this.getComponent(Body2D)
-      .unwrap()
+    this.getRequiredComponent(Body2D)
       .getBody()
       .on("collide-start", () => {
         console.log("collide-start");
@@ -48,7 +47,7 @@ class MouseBall extends Component {
   }
 
   onUpdate() {
-    const input = this.getPlugin(Input).unwrap(),
+    const input = this.getRequiredPlugin(Input),
       camera = this.getScene()
         .flatMap(scene => scene.getManager(Camera2DManager))
         .flatMap(camera2DManager => camera2DManager.getActive())

@@ -12,15 +12,11 @@ export class ArcCtxRendererHandler extends CtxRendererHandler {
   }
 
   onRender() {
-    const renderer = this.getRenderer<CtxRenderer>().expect(
-      "ArcCtxRendererHandler onRender called without having a CtxRenderer"
-    );
+    const renderer = this.getRequiredRenderer<CtxRenderer>();
 
     this.getManager().map(manager =>
       manager.getComponents<Arc>().forEach(arc => {
-        const transform2d = arc
-          .getComponent(Transform2D)
-          .expect("ArcCtxRendererHandler Arc rqeuires a Transform2D");
+        const transform2d = arc.getRequiredComponent(Transform2D);
 
         renderer.render(ctx => {
           const start = arc.getStart(),

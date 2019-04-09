@@ -22,9 +22,7 @@ export class CtxRendererHandler extends RendererHandler {
   }
 
   onAdd() {
-    this.ctx = this.getRenderer<CtxRenderer>()
-      .unwrap()
-      .getCtx();
+    this.ctx = this.getRequiredRenderer<CtxRenderer>().getCtx();
     return this;
   }
   onRemove() {

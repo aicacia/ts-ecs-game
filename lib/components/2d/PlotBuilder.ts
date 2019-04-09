@@ -61,12 +61,12 @@ export class PlotBuilder implements IBuilder<Entity> {
     for (let i = 0, il = children.length; i < il; i++) {
       const start = children[i],
         end = children[i + 1],
-        startTransform = start.getComponent(Transform2D).unwrap();
+        startTransform = start.getRequiredComponent(Transform2D);
 
       let len = 0.0;
 
       if (end) {
-        const endTransform = end.getComponent(Transform2D).unwrap(),
+        const endTransform = end.getRequiredComponent(Transform2D),
           dist = vec2.sub(
             VEC2_0,
             endTransform.getPosition(),

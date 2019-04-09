@@ -15,9 +15,7 @@ export class LineCtxRendererHandler extends CtxRendererHandler {
   }
 
   onRender() {
-    const renderer = this.getRenderer<CtxRenderer>().expect(
-      "LineCtxRendererHandler onRender called without having a CtxRenderer"
-    );
+    const renderer = this.getRequiredRenderer<CtxRenderer>();
 
     this.getManager().map(manager =>
       manager.getComponents<Line>().forEach(line => {

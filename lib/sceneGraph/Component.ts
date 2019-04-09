@@ -44,8 +44,22 @@ export abstract class Component extends EventEmitter {
   ) {
     return this.getEntity().flatMap(entity => entity.getComponent(Component));
   }
+  getRequiredComponent<T extends Component = Component>(
+    Component: new (...args: any[]) => T
+  ) {
+    return this.getComponent(Component).expect(
+      `${this.getComponentName()} Component requires ${(Component as any).getComponentName()} Component`
+    );
+  }
   getPlugin<T extends Plugin = Plugin>(Plugin: new (...args: any[]) => T) {
     return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+  }
+  getRequiredPlugin<T extends Plugin = Plugin>(
+    Plugin: new (...args: any[]) => T
+  ) {
+    return this.getPlugin(Plugin).expect(
+      `${this.getComponentName()} Component requires ${(Plugin as any).getPluginName()} Plugin`
+    );
   }
 
   UNSAFE_setEntity(entity: Entity) {

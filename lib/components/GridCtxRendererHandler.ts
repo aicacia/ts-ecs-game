@@ -13,18 +13,14 @@ export class GridCtxRendererHandler extends CtxRendererHandler {
 
   onRender() {
     const camera = this.getCamera(),
-      cameraTransform2D = camera
-        .getComponent(Transform2D)
-        .expect("Camera2D Component requires a Transform2D Component"),
+      cameraTransform2D = camera.getRequiredComponent(Transform2D),
       position = cameraTransform2D.getPosition(),
       scale = this.getScale(),
       width = camera.getWidth(),
       height = camera.getHeight(),
       halfWidth = width * 0.5,
       halfHeight = height * 0.5,
-      renderer = this.getRenderer<CtxRenderer>().expect(
-        "GridCtxRendererHandler onRender called without having a CtxRenderer"
-      );
+      renderer = this.getRequiredRenderer<CtxRenderer>();
 
     this.getManager().map(manager =>
       manager.getComponents<Grid>().forEach(grid =>

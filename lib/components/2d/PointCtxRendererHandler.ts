@@ -13,15 +13,11 @@ export class PointCtxRendererHandler extends CtxRendererHandler {
 
   onRender() {
     const scale = this.getScale(),
-      renderer = this.getRenderer<CtxRenderer>().expect(
-        "PointCtxRendererHandler onRender called without having a CtxRenderer"
-      );
+      renderer = this.getRequiredRenderer<CtxRenderer>();
 
     this.getManager().map(manager =>
       manager.getComponents<Point>().forEach(point => {
-        const transform2d = point
-          .getComponent(Transform2D)
-          .expect("PointCtxRendererHandler Point rqeuires a Transform2D");
+        const transform2d = point.getRequiredComponent(Transform2D);
 
         renderer.render(ctx => {
           ctx.beginPath();

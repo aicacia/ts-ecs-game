@@ -21,12 +21,8 @@ export class Body2D extends Component {
   }
 
   onAdd() {
-    const world2d = this.getPlugin(World2D).expect(
-        "Body2D Component requires a World2D Plugin"
-      ),
-      transform2d = this.getComponent(Transform2D).expect(
-        "Body2D Component requires a Transform2D Component"
-      );
+    const world2d = this.getRequiredPlugin(World2D),
+      transform2d = this.getRequiredComponent(Transform2D);
 
     world2d.getWorld().addBody(this.body);
 
@@ -37,9 +33,7 @@ export class Body2D extends Component {
   }
 
   onRemove() {
-    const world2d = this.getPlugin(World2D).expect(
-      "Body2D Component requires a World2D Plugin"
-    );
+    const world2d = this.getRequiredPlugin(World2D);
 
     world2d.getWorld().removeBody(this.body);
 
@@ -47,9 +41,7 @@ export class Body2D extends Component {
   }
 
   onUpdate() {
-    const transform2d = this.getComponent(Transform2D).expect(
-      "Body2D Component requires a Transform2D Component"
-    );
+    const transform2d = this.getRequiredComponent(Transform2D);
 
     transform2d.setLocalPosition(this.body.getPosition());
     transform2d.setLocalRotation(this.body.getRotation());

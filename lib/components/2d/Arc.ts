@@ -60,9 +60,7 @@ export class Arc extends Component {
   }
 
   private getPositionFromAngel(out: vec2, angle: number) {
-    const transform2d = this.getComponent(Transform2D).expect(
-      "Arc Component requires Transform2D"
-    );
+    const transform2d = this.getRequiredComponent(Transform2D);
     getPointFromAngle(out, angle);
     vec2.scale(out, out, this.radius);
     vec2.transformMat2d(out, out, transform2d.getMatrix());

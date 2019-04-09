@@ -83,9 +83,9 @@ export class Camera2D extends Component {
   }
 
   getView() {
-    this.getEntity()
-      .flatMap(entity => entity.getComponent(Transform2D))
-      .map(transform => mat2d.invert(this.view, transform.getMatrix()));
+    this.getComponent(Transform2D).map(transform =>
+      mat2d.invert(this.view, transform.getMatrix())
+    );
     return this.view;
   }
 

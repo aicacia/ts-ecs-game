@@ -29,10 +29,8 @@ class Rotator extends Component {
   static Manager = DefaultManager;
 
   onUpdate() {
-    const current = this.getPlugin(Time)
-        .unwrap()
-        .getCurrent(),
-      transform2d = this.getComponent(Transform2D).unwrap();
+    const current = this.getRequiredPlugin(Time).getCurrent(),
+      transform2d = this.getRequiredComponent(Transform2D);
 
     transform2d.setLocalRotation(current);
 
@@ -45,14 +43,12 @@ class ArcHandler extends Component {
   static Manager = DefaultManager;
 
   onUpdate() {
-    const current = this.getPlugin(Time)
-        .unwrap()
-        .getCurrent(),
+    const current = this.getRequiredPlugin(Time).getCurrent(),
       children = this.getEntity()
         .map(entity => entity.getChildren())
         .unwrap(),
-      arc = children[0].getComponent(Arc).unwrap(),
-      point = children[1].getComponent(Transform2D).unwrap();
+      arc = children[0].getRequiredComponent(Arc),
+      point = children[1].getRequiredComponent(Transform2D);
 
     arc.setEnd(current - Math.PI / 4);
 

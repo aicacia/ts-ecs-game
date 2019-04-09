@@ -45,18 +45,10 @@ export class Camera2DControl extends Component {
 
   onUpdate() {
     if (this.enabled) {
-      const input = this.getPlugin(Input).expect(
-          "Camera2DControl - Input Plugin is required"
-        ),
-        time = this.getPlugin(Time).expect(
-          "Camera2DControl - Time Plugin is required"
-        ),
-        transform = this.getComponent(Transform2D).expect(
-          "Camera2DControl - Transform2D Component is required"
-        ),
-        camera = this.getComponent(Camera2D).expect(
-          "Camera2DControl - Camera2D Component is required"
-        ),
+      const input = this.getRequiredPlugin(Input),
+        time = this.getRequiredPlugin(Time),
+        transform = this.getRequiredComponent(Transform2D),
+        camera = this.getRequiredComponent(Camera2D),
         size = camera.getSize(),
         worldMouse = camera.toWorld(
           VEC2_0,

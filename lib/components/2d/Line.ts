@@ -53,20 +53,19 @@ export class Line extends Component {
   }
 
   getStart(out: vec2) {
-    this.getComponent(Transform2D).map(transform2d => {
-      vec2.copy(out, transform2d.getPosition());
-    });
+    const transform2d = this.getRequiredComponent(Transform2D);
+    vec2.copy(out, transform2d.getPosition());
     return out;
   }
   getEnd(out: vec2) {
-    this.getComponent(Transform2D).map(transform2d => {
-      const angle = transform2d.getRotation();
+    const transform2d = this.getRequiredComponent(Transform2D),
+      angle = transform2d.getRotation();
 
-      vec2.copy(out, transform2d.getPosition());
-      vec2.set(VEC2_0, Math.cos(angle), Math.sin(angle));
-      vec2.scale(VEC2_0, VEC2_0, this.length);
-      vec2.add(out, out, VEC2_0);
-    });
+    vec2.copy(out, transform2d.getPosition());
+    vec2.set(VEC2_0, Math.cos(angle), Math.sin(angle));
+    vec2.scale(VEC2_0, VEC2_0, this.length);
+    vec2.add(out, out, VEC2_0);
+
     return out;
   }
 }

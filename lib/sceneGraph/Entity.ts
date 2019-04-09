@@ -85,6 +85,13 @@ export class Entity extends EventEmitter {
       (Component as any).getComponentName()
     ] as T);
   }
+  getRequiredComponent<T extends Component = Component>(
+    Component: new (...args: any[]) => T
+  ) {
+    return this.getComponent(Component).expect(
+      `Entity expect to have a ${(Component as any).getComponentName()} Component`
+    );
+  }
 
   addComponents(components: Component[]) {
     components.forEach(component => this._addComponent(component));

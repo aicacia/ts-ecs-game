@@ -40,6 +40,11 @@ export abstract class RendererHandler extends EventEmitter {
   getRenderer<T extends Renderer = Renderer>() {
     return this.renderer as Option<T>;
   }
+  getRequiredRenderer<T extends Renderer = Renderer>() {
+    return this.renderer.expect(
+      `${this.getRendererHandlerName()} expected to be added to a Renderer first`
+    ) as T;
+  }
 
   getScene() {
     return this.getRenderer().flatMap(renderer => renderer.getScene());

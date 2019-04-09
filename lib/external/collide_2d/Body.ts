@@ -1,8 +1,8 @@
 import { EventEmitter } from "events";
 import { mat2d, vec2 } from "gl-matrix";
-import { composeMat2d } from "../../utils";
 import { AABB2 } from "../AABB2";
 import { Shape } from "./shapes";
+import { composeMat2d } from "../math";
 
 const SCALE2 = vec2.fromValues(1, 1);
 
