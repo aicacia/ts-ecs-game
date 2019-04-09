@@ -1,6 +1,6 @@
 import { vec2 } from "gl-matrix";
+import { radToDeg } from "../external/math";
 import { Component } from "../sceneGraph";
-import { radToDeg } from "../utils/math";
 import { Camera2DManager, Transform2D } from "./2d";
 import { HTMLManager } from "./HTMLManager";
 
@@ -33,9 +33,9 @@ export class HTML extends Component {
     const camera = this.getScene()
         .flatMap(scene => scene.getManager(Camera2DManager))
         .flatMap(cameraManager => cameraManager.getActive())
-        .expect("HTML Component must have an active Camera2D"),
+        .expect("HTML Component requires an active Camera2D Component"),
       transform2d = this.getComponent(Transform2D).expect(
-        "HTML Component - Transform2D Component is required"
+        "HTML Component requires Transform2D Component"
       ),
       position = camera.toScreen(VEC2_0, transform2d.getPosition());
 

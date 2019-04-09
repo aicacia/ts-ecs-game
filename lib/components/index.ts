@@ -26,4 +26,4 @@ export {
   LineManager,
   PlotBuilder
 } from "./2d";
-export { Body2D, Body2DManager } from "./collide_2d";
+export { Body2D, Body2DManager, Body2DCtxRendererHandler } from "./collide_2d";

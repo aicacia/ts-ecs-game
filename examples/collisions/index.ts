@@ -32,21 +32,18 @@ class MouseBall extends Component {
   static Manager = DefaultManager;
 
   onAdd() {
-    this.getEntity().map(entity => {
-      entity
-        .getComponent(Body2D)
-        .unwrap()
-        .getBody()
-        .on("collide-start", () => {
-          console.log("collide-start");
-        })
-        .on("colliding", () => {
-          console.log("colliding");
-        })
-        .on("collide-end", () => {
-          console.log("collide-end");
-        });
-    });
+    this.getComponent(Body2D)
+      .unwrap()
+      .getBody()
+      .on("collide-start", () => {
+        console.log("collide-start");
+      })
+      .on("colliding", () => {
+        console.log("colliding");
+      })
+      .on("collide-end", () => {
+        console.log("collide-end");
+      });
     return this;
   }
 

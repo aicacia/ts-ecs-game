@@ -2,16 +2,21 @@ import { mat2d } from "gl-matrix";
 import {
   ArcCtxRendererHandler,
   AxisCtxRendererHandler,
+  Body2DCtxRendererHandler,
   Camera2DManager,
   GridCtxRendererHandler,
   LineCtxRendererHandler,
   PointCtxRendererHandler
 } from "../../components";
+import { toRgb } from "../../external/math";
 import { Canvas } from "../../utils";
-import { toRgb } from "../../utils/math";
 import { Renderer } from "./Renderer";
 
 const MAT2D_0 = mat2d.create();
+
+interface ICtxRendererOptions {
+  debug?: boolean;
+}
 
 export class CtxRenderer extends Renderer {
   static pluginName = "engine.CtxRenderer";
@@ -20,7 +25,7 @@ export class CtxRenderer extends Renderer {
   private ctx: CanvasRenderingContext2D;
   private lineWidth: number = 1.0;
 
-  constructor(canvas: Canvas) {
+  constructor(canvas: Canvas, options: ICtxRendererOptions = {}) {
     super();
     this.canvas = canvas;
 
@@ -37,6 +42,10 @@ export class CtxRenderer extends Renderer {
       new GridCtxRendererHandler(),
       new AxisCtxRendererHandler()
     );
+
+    if (options.debug !== false) {
+      this.addRendererHandler(new Body2DCtxRendererHandler());
+    }
   }
 
   getCanvas() {

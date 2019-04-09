@@ -1,5 +1,5 @@
+import { toRgba } from "../../external/math";
 import { CtxRenderer, CtxRendererHandler } from "../../plugins/renderer";
-import { toRgba } from "../../utils/math";
 import { Arc } from "./Arc";
 import { ArcManager } from "./ArcManager";
 import { Transform2D } from "./Transform2D";
@@ -12,26 +12,25 @@ export class ArcCtxRendererHandler extends CtxRendererHandler {
   }
 
   onRender() {
-    const scale = this.getScale();
+    const renderer = this.getRenderer<CtxRenderer>().expect(
+      "ArcCtxRendererHandler onRender called without having a CtxRenderer"
+    );
 
     this.getManager().map(manager =>
       manager.getComponents<Arc>().forEach(arc => {
-        arc
-          .getEntity()
-          .flatMap(entity => entity.getComponent(Transform2D))
-          .flatMap(transform2d =>
-            this.getRenderer<CtxRenderer>().map(renderer =>
-              renderer.render(ctx => {
-                const start = arc.getStart(),
-                  end = start + arc.getEnd();
+        const transform2d = arc
+          .getComponent(Transform2D)
+          .expect("ArcCtxRendererHandler Arc rqeuires a Transform2D");
 
-                ctx.strokeStyle = toRgba(arc.getColor());
-                ctx.beginPath();
-                ctx.arc(0, 0, arc.getRadius(), start, end);
-                ctx.stroke();
-              }, transform2d.getMatrix())
-            )
-          );
+        renderer.render(ctx => {
+          const start = arc.getStart(),
+            end = start + arc.getEnd();
+
+          ctx.strokeStyle = toRgba(arc.getColor());
+          ctx.beginPath();
+          ctx.arc(0, 0, arc.getRadius(), start, end);
+          ctx.stroke();
+        }, transform2d.getMatrix());
       })
     );
     return this;

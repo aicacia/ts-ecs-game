@@ -1,6 +1,6 @@
 import { mat2d, vec2 } from "gl-matrix";
+import { composeMat2d, decomposeMat2d } from "../../external/math";
 import { Component } from "../../sceneGraph";
-import { composeMat2d, decomposeMat2d } from "../../utils";
 import { Transform2DManager } from "./Transform2DManager";
 
 export class Transform2D extends Component {

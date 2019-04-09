@@ -1,6 +1,6 @@
 import { vec2, vec4 } from "gl-matrix";
+import { getPointFromAngle, getTangentAngle } from "../../external/math";
 import { Component } from "../../sceneGraph";
-import { getPointFromAngle, getTangentAngle } from "../../utils/math";
 import { ArcManager } from "./ArcManager";
 import { Transform2D } from "./Transform2D";
 

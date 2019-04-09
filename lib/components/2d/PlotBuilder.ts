@@ -1,6 +1,6 @@
 import { vec2, vec4 } from "gl-matrix";
+import { angleVec2 } from "../../external/math";
 import { Entity, IBuilder } from "../../sceneGraph";
-import { angleVec2 } from "../../utils";
 import { Line } from "./Line";
 import { Point, PointType } from "./Point";
 import { Transform2D } from "./Transform2D";

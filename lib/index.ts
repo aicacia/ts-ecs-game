@@ -26,6 +26,7 @@ export {
   HTMLManager,
   Body2D,
   Body2DManager,
+  Body2DCtxRendererHandler,
   PlotBuilder
 } from "./components";
 export {

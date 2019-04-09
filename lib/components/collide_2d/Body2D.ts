@@ -21,28 +21,39 @@ export class Body2D extends Component {
   }
 
   onAdd() {
-    this.getPlugin(World2D).map(world2d =>
-      world2d.getWorld().addBody(this.body)
-    );
-    this.getComponent(Transform2D).map(transform2d => {
-      this.body.setPosition(transform2d.getPosition());
-      this.body.setRotation(transform2d.getRotation());
-    });
+    const world2d = this.getPlugin(World2D).expect(
+        "Body2D Component requires a World2D Plugin"
+      ),
+      transform2d = this.getComponent(Transform2D).expect(
+        "Body2D Component requires a Transform2D Component"
+      );
+
+    world2d.getWorld().addBody(this.body);
+
+    this.body.setPosition(transform2d.getPosition());
+    this.body.setRotation(transform2d.getRotation());
+
     return this;
   }
 
   onRemove() {
-    this.getPlugin(World2D).map(world2d =>
-      world2d.getWorld().removeBody(this.body)
+    const world2d = this.getPlugin(World2D).expect(
+      "Body2D Component requires a World2D Plugin"
     );
+
+    world2d.getWorld().removeBody(this.body);
+
     return this;
   }
 
   onUpdate() {
-    this.getComponent(Transform2D).map(transform2d => {
-      transform2d.setLocalPosition(this.body.getPosition());
-      transform2d.setLocalRotation(this.body.getRotation());
-    });
+    const transform2d = this.getComponent(Transform2D).expect(
+      "Body2D Component requires a Transform2D Component"
+    );
+
+    transform2d.setLocalPosition(this.body.getPosition());
+    transform2d.setLocalRotation(this.body.getRotation());
+
     return this;
   }
 }

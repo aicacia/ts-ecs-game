@@ -1,5 +1,5 @@
+import { toRgba } from "../../external/math";
 import { CtxRenderer, CtxRendererHandler } from "../../plugins/renderer";
-import { toRgba } from "../../utils/math";
 import { Point, PointType } from "./Point";
 import { PointManager } from "./PointManager";
 import { Transform2D } from "./Transform2D";
@@ -12,59 +12,53 @@ export class PointCtxRendererHandler extends CtxRendererHandler {
   }
 
   onRender() {
-    const scale = this.getScale();
+    const scale = this.getScale(),
+      renderer = this.getRenderer<CtxRenderer>().expect(
+        "PointCtxRendererHandler onRender called without having a CtxRenderer"
+      );
 
     this.getManager().map(manager =>
-      manager.getComponents<Point>().forEach(point =>
-        point
-          .getEntity()
-          .flatMap(entity => entity.getComponent(Transform2D))
-          .flatMap(transform2d =>
-            this.getRenderer<CtxRenderer>().map(renderer =>
-              renderer.render(ctx => {
-                ctx.beginPath();
-                ctx.fillStyle = toRgba(point.getColor());
+      manager.getComponents<Point>().forEach(point => {
+        const transform2d = point
+          .getComponent(Transform2D)
+          .expect("PointCtxRendererHandler Point rqeuires a Transform2D");
 
-                switch (point.getType()) {
-                  case PointType.Square: {
-                    const size = point.getSize() * 2 * scale;
+        renderer.render(ctx => {
+          ctx.beginPath();
+          ctx.fillStyle = toRgba(point.getColor());
 
-                    ctx.moveTo(size, size);
-                    ctx.lineTo(-size, size);
-                    ctx.lineTo(-size, -size);
-                    ctx.lineTo(size, -size);
-                    break;
-                  }
-                  case PointType.Circle: {
-                    ctx.arc(
-                      0,
-                      0,
-                      point.getSize() * 1.5 * scale,
-                      0,
-                      2 * Math.PI
-                    );
-                    break;
-                  }
-                  case PointType.Triangle: {
-                    const size = point.getSize() * 2 * scale;
+          switch (point.getType()) {
+            case PointType.Square: {
+              const size = point.getSize() * 2 * scale;
 
-                    ctx.moveTo(size, 0);
-                    ctx.lineTo(-size, size);
-                    ctx.lineTo(-size, -size);
-                    ctx.closePath();
-                    break;
-                  }
-                }
+              ctx.moveTo(size, size);
+              ctx.lineTo(-size, size);
+              ctx.lineTo(-size, -size);
+              ctx.lineTo(size, -size);
+              break;
+            }
+            case PointType.Circle: {
+              ctx.arc(0, 0, point.getSize() * 1.5 * scale, 0, 2 * Math.PI);
+              break;
+            }
+            case PointType.Triangle: {
+              const size = point.getSize() * 2 * scale;
 
-                if (point.getFill()) {
-                  ctx.fill();
-                } else {
-                  ctx.stroke();
-                }
-              }, transform2d.getMatrix())
-            )
-          )
-      )
+              ctx.moveTo(size, 0);
+              ctx.lineTo(-size, size);
+              ctx.lineTo(-size, -size);
+              ctx.closePath();
+              break;
+            }
+          }
+
+          if (point.getFill()) {
+            ctx.fill();
+          } else {
+            ctx.stroke();
+          }
+        }, transform2d.getMatrix());
+      })
     );
     return this;
   }
