@@ -1,4 +1,4 @@
-import { Option } from "@aicacia/core";
+import { Option } from "@stembord/core";
 import { EventEmitter } from "events";
 
 export class Scene extends EventEmitter {

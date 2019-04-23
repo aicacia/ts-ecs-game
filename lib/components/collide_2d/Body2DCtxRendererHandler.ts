@@ -15,7 +15,8 @@ export class Body2DCtxRendererHandler extends CtxRendererHandler {
   }
 
   onRender() {
-    const renderer = this.getRequiredRenderer<CtxRenderer>();
+    const renderer = this.getRequiredRenderer<CtxRenderer>(),
+      world = this.getPlugin();
 
     this.getManager().map(manager =>
       manager.getComponents<Body2D>().forEach(body2d => {

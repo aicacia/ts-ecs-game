@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some } from "@stembord/core";
 import { EventEmitter } from "events";
 
 export abstract class RendererHandler extends EventEmitter {
@@ -50,6 +50,15 @@ export abstract class RendererHandler extends EventEmitter {
     return this.getRenderer().flatMap(renderer => renderer.getScene());
   }
 
+  getPlugin<P extends Plugin>(Plugin: new (...args: any[]) => P) {
+    return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+  }
+  getRequiredPlugin<P extends Plugin>(Plugin: new (...args: any[]) => P) {
+    return this.getPlugin(Plugin).expect(
+      `${this.getRendererHandlerName()} required ${(Plugin as any).getPluginName()} Plugin`
+    );
+  }
+
   onAdd() {
     return this;
   }
@@ -67,4 +76,5 @@ export abstract class RendererHandler extends EventEmitter {
   }
 }
 
+import { Plugin } from "../../sceneGraph";
 import { Renderer } from "./Renderer";

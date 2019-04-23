@@ -1,10 +1,10 @@
 {
-  "name": "@aicacia/engine",
+  "name": "@stembord/engine",
   "version": "0.1.0",
   "description": "engine",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/aicacia/ts-engine.git"
+    "url": "https://gitlab.com/stembord/ts-engine.git"
   },
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
@@ -13,8 +13,7 @@
     "build": "tsc",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "ts-node node_modules/tape/bin/tape ./tests/**/*.test.ts | tap-spec",
-    "clean": "npm run clean_build",
-    "clean_build": "rm -rf ./src",
+    "clean": "rm -rf ./src",
     "format.ts": "prettier-tslint fix '**/*.{ts,tsx}'",
     "format.js": "prettier --write '**/*.{js,jsx,json}' --ignore-path .gitignore",
     "format": "npm run format.ts && npm run format.js",
@@ -41,12 +40,11 @@
     "ts-node": "^8.0.3",
     "tslint": "^5.14.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.4.4"
   },
   "dependencies": {
-    "@aicacia/core": "^0.1.0",
-    "@aicacia/hash": "^0.1.0",
-    "collisions": "^2.0.13",
+    "@stembord/core": "^0.1.0",
+    "@stembord/hash": "^0.1.1",
     "gl-matrix": "^3.0.0"
   }
 }

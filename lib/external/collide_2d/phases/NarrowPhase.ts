@@ -1,4 +1,4 @@
-import { hash } from "@aicacia/hash";
+import { hash } from "@stembord/hash";
 import { vec2 } from "gl-matrix";
 import { Circle, Shape } from "../shapes";
 import { Contact } from "./Contact";

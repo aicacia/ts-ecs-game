@@ -1,4 +1,4 @@
-import { Option } from "@aicacia/core";
+import { Option } from "@stembord/core";
 import { Plugin } from "../../sceneGraph";
 import { Time } from "../Time";
 import { InputAxis } from "./InputAxis";

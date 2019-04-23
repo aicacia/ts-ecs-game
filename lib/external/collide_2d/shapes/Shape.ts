@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some } from "@stembord/core";
 import { EventEmitter } from "events";
 import { mat2d, vec2 } from "gl-matrix";
 import { AABB2 } from "../../AABB2";

@@ -22,7 +22,7 @@ import {
   Scene,
   Time,
   Transform2D
-} from "@aicacia/engine";
+} from "@stembord/engine";
 
 class Rotator extends Component {
   static componentName = "simple.Rotator";
@@ -31,8 +31,7 @@ class Rotator extends Component {
   static Manager = DefaultManager;
 
   onUpdate() {
-    const current = this.getRequiredPlugin(Time)
-      .getCurrent();
+    const current = this.getRequiredPlugin(Time).getCurrent();
 
     this.getComponent(Transform2D).map(transform2d => {
       transform2d.setLocalRotation(current);
