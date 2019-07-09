@@ -1,4 +1,4 @@
-import { Option } from "@stembord/core";
+import { iter, Option } from "@stembord/core";
 import { EventEmitter } from "events";
 
 export class Scene extends EventEmitter {
@@ -31,9 +31,7 @@ export class Scene extends EventEmitter {
   }
 
   find(fn: (entity: Entity) => boolean): Option<Entity> {
-    return this.getEntities()
-      .iter()
-      .find(fn);
+    return iter(this.getEntities()).find(fn);
   }
 
   getEntities() {

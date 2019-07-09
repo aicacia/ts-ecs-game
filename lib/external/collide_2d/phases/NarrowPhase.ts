@@ -20,9 +20,7 @@ export class NarrowPhase implements INarrowPhase {
     this.contacts.length = 0;
 
     for (let i = 0, il = pairs.length; i < il; i++) {
-      const pair = pairs[i],
-        si = pair[0],
-        sj = pair[1],
+      const [si, sj] = pairs[i],
         handler = this.getHandler(si, sj);
 
       if (handler) {

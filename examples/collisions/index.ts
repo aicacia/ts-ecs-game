@@ -12,7 +12,6 @@ import {
   Entity,
   Grid,
   Input,
-  Line,
   Loop,
   Point,
   Scene,
@@ -20,7 +19,7 @@ import {
   Transform2D,
   World2D
 } from "../../lib";
-import { PlotBuilder, PointType } from "../../lib/components";
+import { PlotBuilder } from "../../lib/components";
 import { Body, Circle } from "../../lib/external/collide_2d";
 
 const VEC2_0 = vec2.create();

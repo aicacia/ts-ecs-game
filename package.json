@@ -12,10 +12,11 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run clean && npm run build",
-    "test": "ts-node node_modules/tape/bin/tape ./tests/**/*.test.ts | tap-spec",
+    "test": "ts-node node_modules/.bin/tape test/**/*.test.{ts,tsx} | tap-spec",
+    "coverage": "nyc --reporter=lcov --require ts-node/register tape test/**/*.test.{ts,tsx} | tap-spec; nyc report ---reporter=text",
     "clean": "rm -rf ./src",
-    "format.ts": "prettier-tslint fix '**/*.{ts,tsx}'",
-    "format.js": "prettier --write '**/*.{js,jsx,json}' --ignore-path .gitignore",
+    "formatTS": "prettier-tslint fix '**/*.{ts,tsx}'",
+    "formatJS": "prettier --write '**/*.{js,jsx,json}' --ignore-path .gitignore",
     "format": "npm run format.ts && npm run format.js",
     "lint": "tslint -c tslint.json 'lib/**/*.{ts,tsx}'",
     "simple": "parcel examples/simple/index.html",
@@ -30,21 +31,34 @@
   "license": "(MIT OR Apache-2.0)",
   "readmeFilename": "README.md",
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "@types/gl-matrix": "^2.4.5",
     "@types/tape": "^4.2.33",
+    "nyc": "^14.1.1",
     "parcel": "^1.12.3",
-    "prettier": "^1.16.4",
+    "prettier": "^1.18.2",
     "prettier-tslint": "^0.4.2",
+    "source-map-support": "^0.5.12",
+    "tap-nyc": "^1.0.3",
     "tap-spec": "^5.0.0",
-    "tape": "^4.10.1",
-    "ts-node": "^8.0.3",
-    "tslint": "^5.14.0",
+    "tape": "^4.11.0",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.4.4"
+    "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@stembord/core": "^0.1.0",
+    "@stembord/core": "^0.1.3",
     "@stembord/hash": "^0.1.1",
     "gl-matrix": "^3.0.0"
+  },
+  "nyc": {
+    "include": [
+      "lib/**/*"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ]
   }
 }
