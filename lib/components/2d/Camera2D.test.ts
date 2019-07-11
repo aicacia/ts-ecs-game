@@ -1,6 +1,6 @@
 import { mat2d, vec2 } from "gl-matrix";
 import * as tape from "tape";
-import { Camera2D, Entity, Scene, Transform2D } from "../../lib";
+import { Camera2D, Entity, Scene, Transform2D } from "../..";
 
 tape("Camera2D", (assert: tape.Test) => {
   const camera = new Camera2D().set(256, 256);

@@ -1,5 +1,5 @@
 import * as tape from "tape";
-import { Scene, Time } from "../../lib";
+import { Scene, Time } from "..";
 
 tape("Time", (assert: tape.Test) => {
   const scene = new Scene().addPlugin(new Time());

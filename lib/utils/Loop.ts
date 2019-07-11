@@ -1,3 +1,5 @@
+import raf = require("raf");
+
 export class Loop {
   private id: number | null = null;
   private running: boolean = false;
@@ -16,7 +18,7 @@ export class Loop {
     this.running = false;
 
     if (this.id !== null) {
-      cancelAnimationFrame(this.id);
+      raf.cancel(this.id);
       this.id = null;
     }
     return this;
@@ -35,7 +37,7 @@ export class Loop {
   };
 
   private request() {
-    this.id = requestAnimationFrame(this.run);
+    this.id = raf(this.run);
     return this;
   }
 }

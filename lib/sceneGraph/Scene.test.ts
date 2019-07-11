@@ -1,5 +1,5 @@
 import * as tape from "tape";
-import { Component, Entity, Manager, Plugin, Scene } from "../../lib";
+import { Component, Entity, Manager, Plugin, Scene } from "..";
 
 export class TestManager extends Manager {
   static managerName = "test.TestManager";
