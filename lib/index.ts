@@ -16,6 +16,7 @@ export {
   PointCtxRendererHandler,
   PointManager,
   Arc,
+  Direction,
   ArcManager,
   ArcCtxRendererHandler,
   Line,

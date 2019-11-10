@@ -30,7 +30,10 @@ export class Canvas extends EventEmitter {
   }
 
   set(width: number, height: number) {
-    if (width !== this.width || height !== this.height) {
+    const origWidth = this.width,
+      origHeight = this.height;
+
+    if (width !== origWidth || height !== origHeight) {
       this.width = width;
       this.height = height;
 
@@ -40,7 +43,7 @@ export class Canvas extends EventEmitter {
       this.canvas.style.width = this.width + "px";
       this.canvas.style.height = this.height + "px";
 
-      this.emit("resize");
+      this.emit("resize", width, height, origWidth, origHeight);
     }
     return this;
   }

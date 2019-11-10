@@ -47,7 +47,7 @@ export function getPointFromAngle(out: vec2, angle: number) {
 }
 
 export function getAngleFromPoint(out: vec2) {
-  return Math.atan2(out[1], out[0]);
+  return Math.atan2(out[1], out[0]) - Math.PI * 0.5;
 }
 
 export const getTangentAngle_VEC2_0 = vec2.create();
@@ -78,6 +78,10 @@ export function radToDeg(rad: number) {
 
 export function degToRad(def: number) {
   return def * DEG_TO_RAD;
+}
+
+export function toHex(color: vec3 | vec4) {
+  return `#${((color[0] * 255) | 0).toString(16)}${((color[1] * 255) | 0).toString(16)}${((color[2] * 255) | 0).toString(16)}`;
 }
 
 export function toRgb(color: vec3 | vec4) {

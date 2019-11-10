@@ -33,14 +33,14 @@ class MouseBall extends Component {
   onAdd() {
     this.getRequiredComponent(Body2D)
       .getBody()
-      .on("collide-start", () => {
-        console.log("collide-start");
+      .on("collide-start", (b, c) => {
+        console.log("collide-start", c.depth);
       })
-      .on("colliding", () => {
-        console.log("colliding");
+      .on("colliding", (b, c) => {
+        console.log("colliding", c.depth);
       })
-      .on("collide-end", () => {
-        console.log("collide-end");
+      .on("collide-end", (b, c) => {
+        console.log("collide-end", c.depth);
       });
     return this;
   }

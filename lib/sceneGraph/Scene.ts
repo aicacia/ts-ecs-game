@@ -42,14 +42,14 @@ export class Scene extends EventEmitter {
     return this.managers;
   }
   getManager<T extends Manager>(Manager: new (...args: any[]) => T): Option<T> {
-    return Option.from(this.managerMap[(Manager as any).getManagerName()] as T);
+    return Option.from(this.managerMap[(Manager as any).getManagerName()]) as Option<T>;
   }
 
   getPlugins() {
     return this.plugins;
   }
   getPlugin<T extends Plugin>(Plugin: new (...args: any[]) => T): Option<T> {
-    return Option.from(this.pluginsMap[(Plugin as any).getPluginName()] as T);
+    return Option.from(this.pluginsMap[(Plugin as any).getPluginName()]) as Option<T>;
   }
 
   addPlugins(plugins: Plugin[]) {

@@ -1,8 +1,8 @@
 import { EventEmitter } from "events";
 import { mat2d, vec2 } from "gl-matrix";
 import { AABB2 } from "../AABB2";
-import { Shape } from "./shapes";
 import { composeMat2d } from "../math";
+import { Shape } from "./shapes";
 
 const SCALE2 = vec2.fromValues(1, 1);
 
@@ -70,7 +70,7 @@ export class Body extends EventEmitter {
   }
 
   private updateMatrix() {
-    this.needsUpdate = false;
+    this.setNeedsUpdate(false);
     composeMat2d(this.matrix, this.position, SCALE2, this.rotation);
     return this;
   }

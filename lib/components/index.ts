@@ -1,11 +1,6 @@
-export { Grid } from "./Grid";
-export { GridCtxRendererHandler } from "./GridCtxRendererHandler";
-export { GridManager } from "./GridManager";
-export { Axis } from "./Axis";
-export { AxisCtxRendererHandler } from "./AxisCtxRendererHandler";
-export { AxisManager } from "./AxisManager";
-export { HTML } from "./HTML";
-export { HTMLManager } from "./HTMLManager";
+export { Grid, GridCtxRendererHandler, GridManager } from "./Grid";
+export { Axis, AxisCtxRendererHandler, AxisManager } from "./Axis";
+export { HTML, HTMLManager } from "./HTML";
 export {
   Camera2D,
   Camera2DManager,
@@ -18,6 +13,7 @@ export {
   PointCtxRendererHandler,
   PointManager,
   Arc,
+  Direction,
   ArcManager,
   ArcCtxRendererHandler,
   Line,

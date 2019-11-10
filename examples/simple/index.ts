@@ -8,6 +8,7 @@ import {
   Component,
   CtxRenderer,
   DefaultManager,
+  Direction,
   Entity,
   Grid,
   HTML,
@@ -21,6 +22,7 @@ import {
   Time,
   Transform2D
 } from "../../lib";
+import { getPointFromAngle } from "../../lib/external/math";
 
 class Rotator extends Component {
   static componentName = "simple.Rotator";
@@ -38,22 +40,29 @@ class Rotator extends Component {
   }
 }
 
+const ARC_HANDLER_VEC2_0 = vec2.create();
+
 class ArcHandler extends Component {
   static componentName = "simple.ArcHandler";
   static Manager = DefaultManager;
 
   onUpdate() {
-    const current = this.getRequiredPlugin(Time).getCurrent(),
+    const line = this.getScene()
+        .flatMap(scene => scene.find(entity => entity.hasTag("rotating-line")))
+        .unwrap()
+        .getRequiredComponent(Transform2D),
       children = this.getEntity()
         .map(entity => entity.getChildren())
         .unwrap(),
       arc = children[0].getRequiredComponent(Arc),
-      point = children[1].getRequiredComponent(Transform2D);
+      point = children[1].getRequiredComponent(Transform2D),
+      rotation = line.getLocalRotation();
 
-    arc.setEnd(current - Math.PI / 4);
+    const rotationVec = getPointFromAngle(ARC_HANDLER_VEC2_0, rotation);
 
-    arc.getEndPosition(point.getLocalPosition());
-    point.setLocalRotation(arc.getEndRotation() + Math.PI);
+    arc.setEnd(rotationVec);
+    point.setLocalPosition(rotationVec);
+    point.setLocalRotation(rotation + Math.PI * 0.5);
 
     return this;
   }
@@ -80,30 +89,8 @@ const canvas = new Canvas().set(512, 512),
           .setMaxSize(16)
           .setBackground(vec3.fromValues(0.98, 0.98, 0.98))
       ),
-      // Rotating line
       new Entity()
-        .addTag("line-0")
-        .addComponent(
-          new Transform2D(),
-          new Line().setLength(9),
-          new Point(),
-          new Rotator()
-        )
-        .addChild(
-          // Lines arrow
-          new Entity()
-            .addComponent(
-              new Transform2D().setLocalPosition(vec2.fromValues(9, 0)),
-              new Point().setType(PointType.Triangle)
-            )
-            // HTML overlay text
-            .addChild(
-              new Entity().addComponent(new Transform2D(), new HTML(element))
-            )
-        ),
-      // Static line
-      new Entity()
-        .addTag("line-1")
+        .addTag("static-line")
         .addComponent(
           new Transform2D().setLocalRotation(Math.PI / 4),
           new Line().setType(LineType.Dashed).setLength(9),
@@ -115,11 +102,38 @@ const canvas = new Canvas().set(512, 512),
             new Point().setType(PointType.Triangle)
           ),
           new Entity()
+            .addTag("rotating-line")
+            .addComponent(
+              new Transform2D(),
+              new Line().setLength(9),
+              new Point(),
+              new Rotator()
+            )
+            .addChild(
+              // Lines arrow
+              new Entity()
+                .addComponent(
+                  new Transform2D().setLocalPosition(vec2.fromValues(9, 0)),
+                  new Point().setType(PointType.Triangle)
+                )
+                // HTML overlay text
+                .addChild(
+                  new Entity().addComponent(
+                    new Transform2D(),
+                    new HTML(element)
+                  )
+                )
+            ),
+          new Entity()
+            .addTag("arc")
             .addComponent(new ArcHandler())
             .addChild(
               new Entity().addComponent(
                 new Transform2D(),
-                new Arc().setColor(vec4.fromValues(0, 0, 0.9, 1))
+                new Arc()
+                  .setDirection(Direction.CW)
+                  .setRadius(1)
+                  .setColor(vec4.fromValues(0, 0, 1.0, 1))
               ),
               new Entity().addComponent(
                 new Transform2D(),

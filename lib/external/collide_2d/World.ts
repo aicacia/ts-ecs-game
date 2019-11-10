@@ -52,12 +52,12 @@ export class World extends EventEmitter {
         newCollide = this.colliding.has(hash);
 
       if (lastCollide && !newCollide) {
-        bi.emit("colliding", bj);
-        bj.emit("colliding", bi);
+        bi.emit("colliding", bj, contact);
+        bj.emit("colliding", bi, contact);
       }
       if (!lastCollide && !newCollide) {
-        bi.emit("collide-start", bj);
-        bj.emit("collide-start", bi);
+        bi.emit("collide-start", bj, contact);
+        bj.emit("collide-start", bi, contact);
       }
 
       this.colliding.set(hash, contact);
@@ -68,8 +68,8 @@ export class World extends EventEmitter {
         const bi = contact.si.getBody().unwrap(),
           bj = contact.sj.getBody().unwrap();
 
-        bi.emit("collide-end", bj);
-        bj.emit("collide-end", bi);
+        bi.emit("collide-end", bj, contact);
+        bj.emit("collide-end", bi, contact);
       }
     }
 
