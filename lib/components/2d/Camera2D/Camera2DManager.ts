@@ -1,4 +1,4 @@
-import { none, Option, some } from "@stembord/core";
+import { none, Option, some } from "@aicacia/core";
 import { Manager } from "../../../sceneGraph";
 
 export class Camera2DManager extends Manager {

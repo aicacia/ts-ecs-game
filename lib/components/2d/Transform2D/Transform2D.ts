@@ -1,8 +1,8 @@
+import { Option } from "@aicacia/core";
 import { mat2d, vec2 } from "gl-matrix";
 import { composeMat2d, decomposeMat2d } from "../../../external/math";
 import { Component, Entity } from "../../../sceneGraph";
 import { Transform2DManager } from "./Transform2DManager";
-import { Option } from "@stembord/core";
 
 export class Transform2D extends Component {
   static componentName = "engine.Transform2D";
@@ -129,14 +129,13 @@ export class Transform2D extends Component {
   }
 }
 
-const getParentTransform2D = (entity: Entity): Option<Transform2D> => 
-  entity.getParent()
-    .flatMap(parent => {
-      const parentTransform2D = parent.getComponent(Transform2D);
+const getParentTransform2D = (entity: Entity): Option<Transform2D> =>
+  entity.getParent().flatMap(parent => {
+    const parentTransform2D = parent.getComponent(Transform2D);
 
-      if (parentTransform2D.isSome()) {
-        return parentTransform2D;
-      } else {
-        return getParentTransform2D(parent);
-      }
-    });
+    if (parentTransform2D.isSome()) {
+      return parentTransform2D;
+    } else {
+      return getParentTransform2D(parent);
+    }
+  });

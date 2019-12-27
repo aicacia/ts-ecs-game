@@ -1,4 +1,4 @@
-import { hash } from "@stembord/hash";
+import { hash } from "@aicacia/hash";
 import { vec2 } from "gl-matrix";
 import { Circle, Shape } from "../shapes";
 import { Contact } from "./Contact";
@@ -51,10 +51,10 @@ export class NarrowPhase implements INarrowPhase {
   }
 }
 
-const VEC2_0 = vec2.create(),
-  VEC2_1 = vec2.create(),
-  VEC2_2 = vec2.create(),
-  VEC2_3 = vec2.create();
+const CIRCLE_TO_CIRCLE_VEC2_0 = vec2.create(),
+  CIRCLE_TO_CIRCLE_VEC2_1 = vec2.create(),
+  CIRCLE_TO_CIRCLE_VEC2_2 = vec2.create(),
+  CIRCLE_TO_CIRCLE_VEC2_3 = vec2.create();
 
 export const circleToCircleHandler = (
   si: Circle,
@@ -63,18 +63,18 @@ export const circleToCircleHandler = (
 ) => {
   const xi = si.getPosition(),
     xj = sj.getPosition(),
-    d = vec2.sub(VEC2_0, xi, xj),
+    d = vec2.sub(CIRCLE_TO_CIRCLE_VEC2_0, xi, xj),
     r = si.getRadius() + sj.getRadius(),
     rsq = r * r,
     dsq = vec2.squaredLength(d);
 
   if (dsq < rsq) {
     const depth = Math.sqrt(rsq) - Math.sqrt(dsq),
-      normal = vec2.normalize(VEC2_1, d),
+      normal = vec2.normalize(CIRCLE_TO_CIRCLE_VEC2_1, d),
       position = vec2.add(
-        VEC2_2,
+        CIRCLE_TO_CIRCLE_VEC2_2,
         xi,
-        vec2.scale(VEC2_3, normal, si.getRadius())
+        vec2.scale(CIRCLE_TO_CIRCLE_VEC2_3, normal, si.getRadius())
       );
 
     contacts.push(new Contact(si, sj, position, normal, depth));

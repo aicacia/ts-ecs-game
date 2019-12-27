@@ -9,5 +9,6 @@
     "downlevelIteration": true,
     "lib": ["esnext", "dom"]
   },
-  "include": ["lib"]
+  "include": ["lib"],
+  "exclude": ["lib/**/*.test.*"]
 }

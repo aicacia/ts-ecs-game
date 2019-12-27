@@ -1,4 +1,4 @@
-import { hash } from "@stembord/hash";
+import { hash } from "@aicacia/hash";
 import { EventEmitter } from "events";
 import { Body } from "./Body";
 import { BroadPhase } from "./phases/BroadPhase";

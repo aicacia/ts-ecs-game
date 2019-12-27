@@ -1,4 +1,4 @@
-import { none, Option, some } from "@stembord/core";
+import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class RendererHandler extends EventEmitter {

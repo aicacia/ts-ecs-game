@@ -1,4 +1,4 @@
-import { none, Option, some } from "@stembord/core";
+import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export class Entity extends EventEmitter {
@@ -63,7 +63,7 @@ export class Entity extends EventEmitter {
         for (let i = 0, il = children.length; i < il; i++) {
           const child = children[i].find(fn);
 
-          if (child) {
+          if (child.isSome()) {
             return child;
           }
         }
@@ -81,9 +81,9 @@ export class Entity extends EventEmitter {
   getComponent<T extends Component = Component>(
     Component: new (...args: any[]) => T
   ): Option<T> {
-    return Option.from(this.componentMap[
-      (Component as any).getComponentName()
-    ] as T);
+    return Option.from(
+      this.componentMap[(Component as any).getComponentName()] as T
+    );
   }
   getRequiredComponent<T extends Component = Component>(
     Component: new (...args: any[]) => T

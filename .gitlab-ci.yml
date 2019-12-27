@@ -9,4 +9,5 @@ cache:
 
 test:
   script:
+    - npm run lint
     - npm run coverage

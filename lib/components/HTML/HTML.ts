@@ -39,13 +39,9 @@ export class HTML extends Component {
 
     if (this.useRotation) {
       const rotation = radToDeg(-transform2d.getRotation());
-      this.element.style.transform = `translate(${position[0]}px, ${
-        position[1]
-      }px) rotate(${rotation}deg)`;
+      this.element.style.transform = `translate(${position[0]}px, ${position[1]}px) rotate(${rotation}deg)`;
     } else {
-      this.element.style.transform = `translate(${position[0]}px, ${
-        position[1]
-      }px)`;
+      this.element.style.transform = `translate(${position[0]}px, ${position[1]}px)`;
     }
 
     return this;

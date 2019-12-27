@@ -22,7 +22,7 @@ import {
   Scene,
   Time,
   Transform2D
-} from "@stembord/engine";
+} from "@aicacia/engine";
 
 class Rotator extends Component {
   static componentName = "simple.Rotator";

@@ -1,10 +1,10 @@
 {
-  "name": "@stembord/engine",
+  "name": "@aicacia/engine",
   "version": "0.1.0",
   "description": "engine",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/stembord/ts-engine.git"
+    "url": "https://gitlab.com/aicacia/libs/ts-engine.git"
   },
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
@@ -18,7 +18,7 @@
     "formatTS": "prettier-tslint fix '**/*.{ts,tsx}'",
     "formatJS": "prettier --write '**/*.{js,jsx,json}' --ignore-path .gitignore",
     "format": "npm run formatTS && npm run formatJS",
-    "lint": "tslint -c tslint.json 'lib/**/*.{ts,tsx}'",
+    "lint": "tslint -c tslint.json 'lib/**/*.{ts,tsx}' -e 'lib/**/*.test.*'",
     "simple": "parcel examples/simple/index.html",
     "collisions": "parcel examples/collisions/index.html"
   },
@@ -31,7 +31,6 @@
   "license": "(MIT OR Apache-2.0)",
   "readmeFilename": "README.md",
   "devDependencies": {
-    "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "@types/gl-matrix": "^2.4.5",
     "@types/tape": "^4.2.33",
     "nyc": "^14.1.1",
@@ -48,8 +47,8 @@
     "typescript": "^3.7.2"
   },
   "dependencies": {
-    "@stembord/core": "^0.1.3",
-    "@stembord/hash": "^0.1.1",
+    "@aicacia/core": "^0.1.1",
+    "@aicacia/hash": "^0.1.2",
     "@types/raf": "^3.4.0",
     "gl-matrix": "^3.1.0",
     "raf": "^3.4.1"

@@ -1,5 +1,4 @@
 import { vec2, vec4 } from "gl-matrix";
-import { equals } from "gl-matrix/cjs/common";
 import { getAngleFromPoint } from "../../../external/math";
 import { Component } from "../../../sceneGraph";
 import { Transform2D } from "../Transform2D";
@@ -31,7 +30,11 @@ export class Arc extends Component {
   }
 
   getStart(out: vec2) {
-    vec2.add(out, this.getRequiredComponent(Transform2D).getLocalPosition(), this.start);
+    vec2.add(
+      out,
+      this.getRequiredComponent(Transform2D).getLocalPosition(),
+      this.start
+    );
     return out;
   }
   setStart(start: vec2) {
@@ -43,7 +46,11 @@ export class Arc extends Component {
   }
 
   getEnd(out: vec2) {
-    vec2.add(out, this.getRequiredComponent(Transform2D).getLocalPosition(), this.end);
+    vec2.add(
+      out,
+      this.getRequiredComponent(Transform2D).getLocalPosition(),
+      this.end
+    );
     return out;
   }
   setEnd(end: vec2) {
@@ -55,7 +62,7 @@ export class Arc extends Component {
   }
 
   setDirection(direction: Direction) {
-    this.direction = direction
+    this.direction = direction;
     return this;
   }
   getDirection() {

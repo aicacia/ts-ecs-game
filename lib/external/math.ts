@@ -2,6 +2,7 @@ import { mat2d, vec2, vec3, vec4 } from "gl-matrix";
 
 export const DEG_TO_RAD = Math.PI / 180;
 export const RAD_TO_DEG = 180 / Math.PI;
+export const EPSILON = 0.000001;
 
 export function composeMat2d(
   out: mat2d,
@@ -80,8 +81,15 @@ export function degToRad(def: number) {
   return def * DEG_TO_RAD;
 }
 
+export function equals(a: number, b: number) {
+  return Math.abs(a - b) <= EPSILON * Math.max(1.0, Math.abs(a), Math.abs(b));
+}
+
 export function toHex(color: vec3 | vec4) {
-  return `#${((color[0] * 255) | 0).toString(16)}${((color[1] * 255) | 0).toString(16)}${((color[2] * 255) | 0).toString(16)}`;
+  return `#${((color[0] * 255) | 0).toString(16)}${(
+    (color[1] * 255) |
+    0
+  ).toString(16)}${((color[2] * 255) | 0).toString(16)}`;
 }
 
 export function toRgb(color: vec3 | vec4) {

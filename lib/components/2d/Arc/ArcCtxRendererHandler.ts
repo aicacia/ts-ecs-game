@@ -22,7 +22,9 @@ export class ArcCtxRendererHandler extends CtxRendererHandler {
           const start = arc.getStartAngle(),
             end =
               arc.getEndAngle() +
-              (arc.getDirection() === Direction.CCW ? Math.PI * -1.5 : Math.PI * 0.5);
+              (arc.getDirection() === Direction.CCW
+                ? Math.PI * -1.5
+                : Math.PI * 0.5);
 
           ctx.strokeStyle = toRgba(arc.getColor());
           ctx.beginPath();
