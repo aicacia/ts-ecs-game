@@ -5,6 +5,7 @@ export {
   CtxRenderer
 } from "./renderer";
 export { Time } from "./Time";
+export { Control } from "./Control";
 export {
   Input,
   InputHandler,

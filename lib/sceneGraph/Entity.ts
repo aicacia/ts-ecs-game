@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { iter, none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export class Entity extends EventEmitter {
@@ -6,19 +6,22 @@ export class Entity extends EventEmitter {
   private scene: Option<Scene> = none();
   private root: Entity = this;
   private parent: Option<Entity> = none();
-  private tags: string[] = [];
+  private tags: Set<string> = new Set();
   private children: Entity[] = [];
   private components: Component[] = [];
   private componentMap: Record<string, Component> = {};
 
-  hasTag(tag: string) {
-    return this.tags.indexOf(tag) !== -1;
+  hasTags(tags: string[]) {
+    return tags.every(tag => this.tags.has(tag));
+  }
+  hasTag(...tags: string[]) {
+    return this.hasTags(tags);
   }
   getTags() {
     return this.tags;
   }
   addTags(tags: string[]) {
-    this.tags.push(...tags);
+    tags.forEach(tag => this.tags.add(tag));
     return this;
   }
   addTag(...tags: string[]) {
@@ -51,10 +54,7 @@ export class Entity extends EventEmitter {
     return this;
   }
 
-  find(
-    fn: (entity: Entity) => boolean,
-    recur: boolean = false
-  ): Option<Entity> {
+  find(fn: (entity: Entity) => boolean, recur: boolean = true): Option<Entity> {
     const children = this.getChildren(),
       entity = children.find(fn);
 
@@ -74,19 +74,25 @@ export class Entity extends EventEmitter {
       return some(entity);
     }
   }
+  findWithTag(...tags: string[]) {
+    return this.find(entity => entity.hasTags(tags));
+  }
+  findWithTags(tags: string[]) {
+    return this.findWithTag(...tags);
+  }
 
   getComponents() {
     return this.components;
   }
   getComponent<T extends Component = Component>(
-    Component: new (...args: any[]) => T
+    Component: IConstructor<T>
   ): Option<T> {
     return Option.from(
       this.componentMap[(Component as any).getComponentName()] as T
     );
   }
   getRequiredComponent<T extends Component = Component>(
-    Component: new (...args: any[]) => T
+    Component: IConstructor<T>
   ) {
     return this.getComponent(Component).expect(
       `Entity expect to have a ${(Component as any).getComponentName()} Component`
@@ -149,9 +155,7 @@ export class Entity extends EventEmitter {
     return this;
   }
 
-  private _removeComponent<T extends Component>(
-    Component: new (...args: any[]) => T
-  ) {
+  private _removeComponent<T extends Component>(Component: IConstructor<T>) {
     const componentName = (Component as any).getComponentName(),
       component = this.componentMap[componentName];
 
@@ -207,5 +211,6 @@ export class Entity extends EventEmitter {
   }
 }
 
+import { IConstructor } from "../utils";
 import { Component } from "./Component";
 import { Scene } from "./Scene";

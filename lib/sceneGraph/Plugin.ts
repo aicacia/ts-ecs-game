@@ -26,10 +26,22 @@ export abstract class Plugin extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.getPluginPriority();
   }
 
-  getPlugin<T extends Plugin = Plugin>(
-    Plugin: new (...args: any[]) => T
-  ): Option<T> {
+  getPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>): Option<T> {
     return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+  }
+  getRequiredPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>) {
+    return this.getPlugin(Plugin).expect(
+      `${this.getPluginName()} required ${(Plugin as any).getPluginName()} Plugin`
+    );
+  }
+
+  getManager<T extends Manager = Manager>(Manager: IConstructor<T>): Option<T> {
+    return this.getScene().flatMap(scene => scene.getManager(Manager));
+  }
+  getRequiredManager<T extends Manager = Manager>(Manager: IConstructor<T>) {
+    return this.getManager(Manager).expect(
+      `${this.getPluginName()} required ${(Manager as any).getManagerName()} Manager`
+    );
   }
 
   UNSAFE_setScene(scene: Scene) {
@@ -58,4 +70,6 @@ export abstract class Plugin extends EventEmitter {
   }
 }
 
+import { IConstructor } from "../utils";
+import { Manager } from "./Manager";
 import { Scene } from "./Scene";

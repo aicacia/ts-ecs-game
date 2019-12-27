@@ -1,4 +1,4 @@
-import { iter, Option } from "@aicacia/core";
+import { iter, none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export class Scene extends EventEmitter {
@@ -30,8 +30,28 @@ export class Scene extends EventEmitter {
     return this;
   }
 
-  find(fn: (entity: Entity) => boolean): Option<Entity> {
-    return iter(this.getEntities()).find(fn);
+  find(fn: (entity: Entity) => boolean, recur: boolean = true): Option<Entity> {
+    const entities = this.getEntities();
+
+    for (const entity of entities) {
+      if (fn(entity)) {
+        return some(entity);
+      } else if (recur) {
+        const found = entity.find(fn, recur);
+
+        if (found.isSome()) {
+          return found;
+        }
+      }
+    }
+
+    return none();
+  }
+  findWithTag(...tags: string[]) {
+    return this.find(entity => entity.hasTags(tags));
+  }
+  findWithTags(tags: string[]) {
+    return this.findWithTag(...tags);
   }
 
   getEntities() {
@@ -41,19 +61,29 @@ export class Scene extends EventEmitter {
   getManagers() {
     return this.managers;
   }
-  getManager<T extends Manager>(Manager: new (...args: any[]) => T): Option<T> {
+  getManager<T extends Manager>(Manager: IConstructor<T>): Option<T> {
     return Option.from(
       this.managerMap[(Manager as any).getManagerName()]
     ) as Option<T>;
+  }
+  getRequiredManager<T extends Manager>(Manager: IConstructor<T>) {
+    return this.getManager(Manager).expect(
+      `Scene required ${(Manager as any).getManagerName()} Manager`
+    );
   }
 
   getPlugins() {
     return this.plugins;
   }
-  getPlugin<T extends Plugin>(Plugin: new (...args: any[]) => T): Option<T> {
+  getPlugin<T extends Plugin>(Plugin: IConstructor<T>): Option<T> {
     return Option.from(
       this.pluginsMap[(Plugin as any).getPluginName()]
     ) as Option<T>;
+  }
+  getRequiredPlugin<T extends Plugin>(Plugin: IConstructor<T>) {
+    return this.getPlugin(Plugin).expect(
+      `Scene required ${(Plugin as any).getPluginName()} Plugin`
+    );
   }
 
   addPlugins(plugins: Plugin[]) {
@@ -190,7 +220,7 @@ export class Scene extends EventEmitter {
     }
     return this;
   }
-  private _removePlugin<T extends Plugin>(Plugin: new (...args: any[]) => T) {
+  private _removePlugin<T extends Plugin>(Plugin: IConstructor<T>) {
     const pluginName = (Plugin as any).getPluginName(),
       plugin = this.pluginsMap[pluginName];
 
@@ -219,6 +249,7 @@ export class Scene extends EventEmitter {
   }
 }
 
+import { IConstructor } from "../utils";
 import { Component } from "./Component";
 import { Entity } from "./Entity";
 import { Manager } from "./Manager";

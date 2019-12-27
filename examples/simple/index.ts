@@ -5,7 +5,7 @@ import {
   Camera2D,
   Camera2DControl,
   Canvas,
-  Component,
+  Control,
   CtxRenderer,
   DefaultManager,
   Direction,
@@ -16,6 +16,7 @@ import {
   Line,
   LineType,
   Loop,
+  PausableComponent,
   Point,
   PointType,
   Scene,
@@ -24,25 +25,27 @@ import {
 } from "../../lib";
 import { getPointFromAngle } from "../../lib/external/math";
 
-class Rotator extends Component {
+class Rotator extends PausableComponent {
   static componentName = "simple.Rotator";
   // only use this if you do not need a manager, it only uses the one manager so
   // any other components using the DefaultManager will be in the same manager
   static Manager = DefaultManager;
 
+  private rotation = 0.0;
+
   onUpdate() {
-    const current = this.getRequiredPlugin(Time).getCurrent(),
+    const delta = this.getRequiredPlugin(Time).getDelta(),
       transform2d = this.getRequiredComponent(Transform2D);
 
-    transform2d.setLocalRotation(current);
-
+    this.rotation += delta;
+    transform2d.setLocalRotation(this.rotation);
     return this;
   }
 }
 
 const ARC_HANDLER_VEC2_0 = vec2.create();
 
-class ArcHandler extends Component {
+class ArcHandler extends PausableComponent {
   static componentName = "simple.ArcHandler";
   static Manager = DefaultManager;
 
@@ -148,11 +151,14 @@ const canvas = new Canvas().set(512, 512),
       // Required by many Components and plugins
       new Time(),
       // Handles all input
-      new Input(canvas.getElement())
+      new Input(canvas.getElement()),
+      // Control plugin
+      new Control()
     ),
   loop = new Loop(() => scene.update());
 
 const app = document.getElementById("app"),
+  control = document.getElementById("control"),
   download = document.getElementById("download");
 
 if (app) {
@@ -164,6 +170,19 @@ if (app) {
   app.style.height = `${canvas.getHeight()}px`;
   app.appendChild(element);
   app.appendChild(canvas.getElement());
+}
+if (control) {
+  control.onclick = () => {
+    const pause = scene.getRequiredPlugin(Control);
+
+    if (pause.isPaused()) {
+      control.innerText = "Pause";
+      pause.play();
+    } else {
+      control.innerText = "Play";
+      pause.pause();
+    }
+  };
 }
 if (download) {
   download.onclick = () => window.open(canvas.getImageURI());

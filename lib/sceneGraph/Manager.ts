@@ -27,6 +27,24 @@ export abstract class Manager extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.getManagerPriority();
   }
 
+  getPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>): Option<T> {
+    return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+  }
+  getRequiredPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>) {
+    return this.getPlugin(Plugin).expect(
+      `${this.getManagerName()} required ${(Plugin as any).getPluginName()} Plugin`
+    );
+  }
+
+  getManager<T extends Manager = Manager>(Manager: IConstructor<T>): Option<T> {
+    return this.getScene().flatMap(scene => scene.getManager(Manager));
+  }
+  getRequiredManager<T extends Manager = Manager>(Manager: IConstructor<T>) {
+    return this.getManager(Manager).expect(
+      `${this.getManagerName()} required ${(Manager as any).getManagerName()} Manager`
+    );
+  }
+
   getComponents<T extends Component = Component>() {
     return this.components as T[];
   }
@@ -81,7 +99,9 @@ export abstract class Manager extends EventEmitter {
     return this;
   }
   onUpdate() {
-    this.components.forEach(component => component.onUpdate());
+    this.components.forEach(
+      component => component.shouldUpdate() && component.onUpdate()
+    );
     return this;
   }
 }
@@ -90,5 +110,7 @@ export class DefaultManager extends Manager {
   static managerName = "engine.DefaultManager";
 }
 
+import { IConstructor } from "../utils";
 import { Component } from "./Component";
+import { Plugin } from "./Plugin";
 import { Scene } from "./Scene";

@@ -13,8 +13,12 @@ tape("Camera2D", (assert: tape.Test) => {
 
   scene.update();
 
-  assert.deepEqual(camera.getView(), mat2d.fromValues(1, 0, 0, 1, -1, -1));
-  assert.deepEqual(camera.getProjection(), mat2d.fromValues(1, 0, 0, 1, 0, 0));
+  assert.true(
+    mat2d.equals(camera.getView(), mat2d.fromValues(1, 0, 0, 1, -1, -1))
+  );
+  assert.true(
+    mat2d.equals(camera.getProjection(), mat2d.fromValues(1, 0, 0, 1, 0, 0))
+  );
 
   assert.end();
 });

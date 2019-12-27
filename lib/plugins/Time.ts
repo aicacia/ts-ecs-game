@@ -21,7 +21,7 @@ export class Time extends Plugin {
   private minDelta: number = 0.000001;
   private maxDelta: number = 1.0;
 
-  start() {
+  getStartTime() {
     return this.startTime;
   }
 

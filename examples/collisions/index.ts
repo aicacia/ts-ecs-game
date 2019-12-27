@@ -6,7 +6,7 @@ import {
   Camera2DControl,
   Camera2DManager,
   Canvas,
-  Component,
+  Control,
   CtxRenderer,
   DefaultManager,
   Entity,
@@ -19,29 +19,43 @@ import {
   Transform2D,
   World2D
 } from "../../lib";
-import { PlotBuilder } from "../../lib/components";
+import { PausableComponent, PlotBuilder } from "../../lib/components";
 import { Body, Circle } from "../../lib/external/collide_2d";
+import { Contact } from "../../lib/external/collide_2d/phases/Contact";
 
 const VEC2_0 = vec2.create();
 
-class MouseBall extends Component {
+class MouseBall extends PausableComponent {
   static componentName = "simple.MouseBall";
   // only use this if you do not need a manager, it only uses the one manager so
   // any other components using the DefaultManager will be in the same manager
   static Manager = DefaultManager;
 
+  onCollideStart = (b: Body, c: Contact) => {
+    console.log("collide-start", c.depth);
+  };
+  onColliding = (b: Body, c: Contact) => {
+    console.log("colliding", c.depth);
+  };
+  onCollideEnd = (b: Body, c: Contact) => {
+    console.log("collide-end", c.depth);
+  };
+
   onAdd() {
     this.getRequiredComponent(Body2D)
       .getBody()
-      .on("collide-start", (b, c) => {
-        console.log("collide-start", c.depth);
-      })
-      .on("colliding", (b, c) => {
-        console.log("colliding", c.depth);
-      })
-      .on("collide-end", (b, c) => {
-        console.log("collide-end", c.depth);
-      });
+      .on("collide-start", this.onCollideStart)
+      .on("colliding", this.onColliding)
+      .on("collide-end", this.onCollideEnd);
+    return this;
+  }
+
+  onRemove() {
+    this.getRequiredComponent(Body2D)
+      .getBody()
+      .off("collide-start", this.onCollideStart)
+      .off("colliding", this.onColliding)
+      .off("collide-end", this.onCollideEnd);
     return this;
   }
 
@@ -116,11 +130,14 @@ const canvas = new Canvas().set(512, 512),
       // Handles all input
       new Input(canvas.getElement()),
       // collisions
-      new World2D()
+      new World2D(),
+      // Control
+      new Control()
     ),
   loop = new Loop(() => scene.update());
 
-const app = document.getElementById("app");
+const app = document.getElementById("app"),
+  control = document.getElementById("control");
 
 if (app) {
   app.style.left = "0px";
@@ -130,6 +147,19 @@ if (app) {
   app.style.width = `${canvas.getWidth()}px`;
   app.style.height = `${canvas.getHeight()}px`;
   app.appendChild(canvas.getElement());
+}
+if (control) {
+  control.onclick = () => {
+    const pause = scene.getRequiredPlugin(Control);
+
+    if (pause.isPaused()) {
+      control.innerText = "Pause";
+      pause.play();
+    } else {
+      control.innerText = "Play";
+      pause.pause();
+    }
+  };
 }
 
 loop.start();

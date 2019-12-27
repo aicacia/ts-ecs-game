@@ -8,6 +8,7 @@ export class Axis extends Component {
 
   private xColor: vec4 = vec4.fromValues(0.9, 0, 0, 0.5);
   private yColor: vec4 = vec4.fromValues(0, 0.9, 0, 0.5);
+  private zColor: vec4 = vec4.fromValues(0, 0.0, 0.9, 0.5);
 
   getXColor() {
     return this.xColor;
@@ -22,6 +23,14 @@ export class Axis extends Component {
   }
   setYColor(yColor: vec4) {
     vec4.copy(this.yColor, yColor);
+    return this;
+  }
+
+  getZColor() {
+    return this.zColor;
+  }
+  setZColor(zColor: vec4) {
+    vec4.copy(this.zColor, zColor);
     return this;
   }
 }

@@ -11,7 +11,7 @@ export abstract class Renderer extends Plugin {
     return this.rendererHandlers;
   }
   getRendererHandler<T extends RendererHandler>(
-    RendererHandler: new (...args: any[]) => T
+    RendererHandler: IConstructor<T>
   ) {
     return this.rendererHandlerMap[(RendererHandler as any).getRendererName()];
   }
@@ -95,4 +95,5 @@ export abstract class Renderer extends Plugin {
   }
 }
 
+import { IConstructor } from "../../utils";
 import { RendererHandler } from "./RendererHandler";
