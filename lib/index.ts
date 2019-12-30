@@ -42,6 +42,7 @@ export {
   InputHandler,
   KeyboardInputHandler,
   MouseInputHandler,
+  FullScreenCanvas,
   InputButton,
   World2D
 } from "./plugins";

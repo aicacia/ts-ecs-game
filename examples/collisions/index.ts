@@ -10,6 +10,7 @@ import {
   CtxRenderer,
   DefaultManager,
   Entity,
+  FullScreenCanvas,
   Grid,
   Input,
   Loop,
@@ -110,19 +111,21 @@ const canvas = new Canvas().set(512, 512),
           new Body2D(new Body().addShape(new Circle().setRadius(0.25)))
         ),
       new PlotBuilder({
-        connected: false,
+        connected: true,
         color: vec4.fromValues(1.0, 1.0, 0.0, 1.0)
       })
-        .addPoints([
+        .addPoint(
           { point: vec2.fromValues(0, 0) },
           { point: vec2.fromValues(1, 1) },
           { point: vec2.fromValues(2, 4) },
           { point: vec2.fromValues(3, 9) },
           { point: vec2.fromValues(4, 16) }
-        ])
+        )
         .build()
     )
     .addPlugin(
+      // Full screen canvas
+      new FullScreenCanvas(canvas),
       // Handles all rendering
       new CtxRenderer(canvas),
       // Required by many Components and plugins
@@ -136,30 +139,8 @@ const canvas = new Canvas().set(512, 512),
     ),
   loop = new Loop(() => scene.update());
 
-const app = document.getElementById("app"),
-  control = document.getElementById("control");
-
-if (app) {
-  app.style.left = "0px";
-  app.style.top = "0px";
-  app.style.position = "relative";
-  app.style.overflow = "hidden";
-  app.style.width = `${canvas.getWidth()}px`;
-  app.style.height = `${canvas.getHeight()}px`;
-  app.appendChild(canvas.getElement());
-}
-if (control) {
-  control.onclick = () => {
-    const pause = scene.getRequiredPlugin(Control);
-
-    if (pause.isPaused()) {
-      control.innerText = "Pause";
-      pause.play();
-    } else {
-      control.innerText = "Play";
-      pause.pause();
-    }
-  };
-}
+document.getElementById("app")?.appendChild(canvas.getElement());
 
 loop.start();
+
+(window as any).scene = scene;

@@ -3,8 +3,7 @@ import { Component } from "../../../sceneGraph";
 import { Transform2D } from "../Transform2D";
 import { Camera2DControlManager } from "./Camera2DControlManager";
 
-const VEC2_0 = vec2.create(),
-  VEC2_1 = vec2.create();
+const VEC2_0 = vec2.create();
 
 export class Camera2DControl extends Component {
   static Manager = Camera2DControlManager;
@@ -50,18 +49,14 @@ export class Camera2DControl extends Component {
         transform = this.getRequiredComponent(Transform2D),
         camera = this.getRequiredComponent(Camera2D),
         size = camera.getSize(),
-        worldMouse = camera.toWorld(
+        worldMouse = camera.toRelative(
           VEC2_0,
           vec2.set(VEC2_0, -input.getValue("mouseX"), -input.getValue("mouseY"))
         );
 
       if (this.dragging) {
         vec2.sub(this.offset, worldMouse, this.lastMouse);
-        vec2.scale(
-          this.offset,
-          this.offset,
-          time.getDelta() * this.panSpeed * 30
-        );
+        vec2.scale(this.offset, this.offset, this.panSpeed);
         transform.translate(this.offset);
       }
 

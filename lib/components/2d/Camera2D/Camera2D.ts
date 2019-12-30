@@ -126,6 +126,12 @@ export class Camera2D extends Component {
     return this;
   }
 
+  toRelative(out: vec2, screen: vec2) {
+    this.toWorld(out, screen);
+    vec2.transformMat2d(out, out, this.view);
+    return out;
+  }
+
   toWorld(out: vec2, screen: vec2) {
     const mat = MAT2D_0;
 

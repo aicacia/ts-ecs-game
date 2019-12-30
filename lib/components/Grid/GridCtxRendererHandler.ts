@@ -26,25 +26,27 @@ export class GridCtxRendererHandler extends CtxRendererHandler {
       manager.getComponents<Grid>().forEach(grid =>
         renderer.render(ctx => {
           const size = grid.getSize(),
-            offsetX = position[0] % 1,
-            offsetY = position[1] % 1,
-            startX = -halfWidth - offsetX,
-            endX = halfWidth + offsetX,
-            startY = -halfHeight - offsetY,
-            endY = halfHeight + offsetY;
+            willCrossCenterX = halfWidth % size === 0,
+            willCrossCenterY = halfHeight % size === 0,
+            offsetX = (position[0] % size) + (willCrossCenterX ? 0 : size / 2),
+            offsetY = (position[1] % size) + (willCrossCenterY ? 0 : size / 2),
+            left = -halfWidth - offsetX,
+            right = halfWidth + offsetX,
+            top = -halfHeight - offsetY,
+            bottom = halfHeight + offsetY;
 
           ctx.lineWidth = scale * grid.getLineWidth();
           ctx.strokeStyle = toRgba(grid.getColor());
           ctx.beginPath();
 
-          for (let x = startX; x <= endX; x += size) {
-            ctx.moveTo(x, startY);
-            ctx.lineTo(x, endX);
+          for (let x = left; x <= right; x += size) {
+            ctx.moveTo(x, top);
+            ctx.lineTo(x, bottom);
           }
 
-          for (let y = startY; y <= endY; y += size) {
-            ctx.moveTo(startX, y);
-            ctx.lineTo(endY, y);
+          for (let y = top; y <= bottom; y += size) {
+            ctx.moveTo(left, y);
+            ctx.lineTo(right, y);
           }
 
           ctx.stroke();
