@@ -1,6 +1,7 @@
 import { vec2 } from "gl-matrix";
 import { toRgba } from "../../../external/math";
 import { CtxRenderer, CtxRendererHandler } from "../../../plugins/renderer";
+import { Manager } from "../../../sceneGraph";
 import { Line, LineType } from "./Line";
 import { LineManager } from "./LineManager";
 
@@ -11,7 +12,7 @@ export class LineCtxRendererHandler extends CtxRendererHandler {
   static rendererHandlerName = "engine.LineCtxRendererHandler";
 
   getManager() {
-    return this.getScene().flatMap(scene => scene.getManager(LineManager));
+    return this.getRequiredScene().getManager(LineManager);
   }
 
   onRender() {
@@ -46,6 +47,7 @@ export class LineCtxRendererHandler extends CtxRendererHandler {
         });
       })
     );
+
     return this;
   }
 }

@@ -41,11 +41,9 @@ export class Body2D extends Component {
   }
 
   onUpdate() {
-    const transform2d = this.getRequiredComponent(Transform2D);
-
-    transform2d.setLocalPosition(this.body.getPosition());
-    transform2d.setLocalRotation(this.body.getRotation());
-
+    this.getRequiredComponent(Transform2D)
+      .setLocalPosition(this.body.getPosition())
+      .setLocalRotation(this.body.getRotation());
     return this;
   }
 }

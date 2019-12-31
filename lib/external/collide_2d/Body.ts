@@ -16,9 +16,10 @@ export class Body extends EventEmitter {
   private matrix: mat2d = mat2d.create();
 
   private needsUpdate: boolean = false;
+  private aabbNeedsUpdate: boolean = false;
 
   getAABB() {
-    return this.aabb;
+    return this.updateAABBIfNeeded().aabb;
   }
   getShapes(): ReadonlyArray<Shape> {
     return this.shapes;
@@ -41,15 +42,58 @@ export class Body extends EventEmitter {
   }
 
   setNeedsUpdate(needsUpdate: boolean = true) {
-    this.needsUpdate = needsUpdate;
+    if (needsUpdate !== this.needsUpdate) {
+      this.needsUpdate = needsUpdate;
+      this.setAABBNeedsUpdate(needsUpdate);
+    }
     return this;
+  }
+  getNeedsUpdate() {
+    return this.needsUpdate;
+  }
+
+  setAABBNeedsUpdate(aabbNeedsUpdate: boolean = true) {
+    if (aabbNeedsUpdate !== this.aabbNeedsUpdate) {
+      this.aabbNeedsUpdate = aabbNeedsUpdate;
+      this.shapes.forEach(shape => shape.setNeedsUpdate(aabbNeedsUpdate));
+    }
+    return this;
+  }
+  getAABBNeedsUpdate() {
+    return this.aabbNeedsUpdate;
   }
 
   getMatrix() {
-    if (this.needsUpdate) {
-      this.updateMatrix();
+    return this.updateMatrixIfNeeded().matrix;
+  }
+
+  updateMatrixIfNeeded() {
+    if (this.getNeedsUpdate()) {
+      return this.updateMatrix();
+    } else {
+      return this;
     }
-    return this.matrix;
+  }
+  updateMatrix() {
+    this.needsUpdate = false;
+    composeMat2d(this.matrix, this.position, SCALE2, this.rotation);
+    return this;
+  }
+
+  updateAABBIfNeeded() {
+    if (this.getAABBNeedsUpdate()) {
+      return this.updateAABB();
+    } else {
+      return this;
+    }
+  }
+  updateAABB() {
+    this.aabbNeedsUpdate = false;
+    this.shapes.reduce((aabb, shape) => {
+      AABB2.union(aabb, aabb, shape.getAABB());
+      return aabb;
+    }, AABB2.identity(this.aabb));
+    return this;
   }
 
   addShapes(shapes: Shape[]) {
@@ -60,18 +104,7 @@ export class Body extends EventEmitter {
     return this.addShapes(shapes);
   }
 
-  update() {
-    this.shapes.reduce((aabb, shape) => {
-      shape.update();
-      AABB2.union(aabb, aabb, shape.getAABB());
-      return aabb;
-    }, AABB2.identity(this.aabb));
-    return this;
-  }
-
-  private updateMatrix() {
-    this.setNeedsUpdate(false);
-    composeMat2d(this.matrix, this.position, SCALE2, this.rotation);
+  update(delta: number) {
     return this;
   }
 

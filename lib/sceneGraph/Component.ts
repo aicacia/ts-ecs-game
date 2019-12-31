@@ -70,8 +70,19 @@ export abstract class Component extends EventEmitter {
   getEntity() {
     return this.entity;
   }
+  getRequiredEntity() {
+    return this.getEntity().expect(
+      `${this.getComponentName()} Component requires an Entity`
+    );
+  }
+
   getScene() {
     return this.entity.flatMap(entity => entity.getScene());
+  }
+  getRequiredScene() {
+    return this.getScene().expect(
+      `${this.getComponentName()} Component requires a Scene`
+    );
   }
 
   UNSAFE_setManager<M extends Manager = Manager>(manager: M) {
@@ -84,6 +95,13 @@ export abstract class Component extends EventEmitter {
   }
   getManager<M extends Manager = Manager>() {
     return this.manager as Option<M>;
+  }
+  getRequiredManager<M extends Manager = Manager>() {
+    return this.getManager<M>().expect(
+      `${this.getComponentName()} Component requires ${Object.getPrototypeOf(
+        this
+      ).Manager.getManagerName()} Manager`
+    );
   }
 
   onAdd() {

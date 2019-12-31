@@ -9,6 +9,8 @@ import { NarrowPhase } from "./phases/NarrowPhase";
 
 export class World extends EventEmitter {
   private bodies: Body[] = [];
+  private bodiesToAdd: Body[] = [];
+  private bodiesToRemove: Body[] = [];
   private broadPhase: IBroadPhase = new BroadPhase();
   private narrowPhase: INarrowPhase = new NarrowPhase();
 
@@ -16,7 +18,7 @@ export class World extends EventEmitter {
   private colliding: Map<number, Contact> = new Map();
 
   addBodies(bodies: Body[]) {
-    bodies.forEach(body => this._addBody(body));
+    this.bodiesToAdd.push(...bodies);
     return this;
   }
   addBody(...bodies: Body[]) {
@@ -24,7 +26,7 @@ export class World extends EventEmitter {
   }
 
   removeBodies(bodies: Body[]) {
-    bodies.forEach(body => this._removeBody(body));
+    this.bodiesToRemove.push(...bodies);
     return this;
   }
   removeBody(...bodies: Body[]) {
@@ -35,8 +37,21 @@ export class World extends EventEmitter {
     return this.bodies;
   }
 
-  run() {
-    this.bodies.forEach(body => body.update());
+  maintain() {
+    this.emit("maintain");
+    this.bodiesToAdd.forEach(body => this.addBodyNow(body));
+    this.bodiesToAdd.length = 0;
+    this.bodiesToRemove.forEach(body => this.removeBodyNow(body));
+    this.bodiesToRemove.length = 0;
+    return this;
+  }
+
+  update(delta: number) {
+    this.emit("update", delta);
+
+    this.maintain();
+
+    this.bodies.forEach(body => body.update(delta));
 
     const pairs = this.broadPhase.run(this.bodies),
       contacts = this.narrowPhase.run(pairs);
@@ -76,14 +91,14 @@ export class World extends EventEmitter {
     return this;
   }
 
-  private _addBody<B extends Body>(body: B) {
+  addBodyNow<B extends Body>(body: B) {
     if (this.bodies.indexOf(body) === -1) {
       this.bodies.push(body);
     }
     return this;
   }
 
-  private _removeBody<B extends Body>(body: B) {
+  removeBodyNow<B extends Body>(body: B) {
     const index = this.bodies.indexOf(body);
 
     if (this.bodies.indexOf(body) !== -1) {

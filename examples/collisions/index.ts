@@ -21,10 +21,11 @@ import {
   World2D
 } from "../../lib";
 import { PausableComponent, PlotBuilder } from "../../lib/components";
-import { Body, Circle } from "../../lib/external/collide_2d";
+import { Body, Capsule, Circle } from "../../lib/external/collide_2d";
 import { Contact } from "../../lib/external/collide_2d/phases/Contact";
 
-const VEC2_0 = vec2.create();
+const VEC2_0 = vec2.create(),
+  VEC2_1 = vec2.create();
 
 class MouseBall extends PausableComponent {
   static componentName = "simple.MouseBall";
@@ -62,17 +63,18 @@ class MouseBall extends PausableComponent {
 
   onUpdate() {
     const input = this.getRequiredPlugin(Input),
-      camera = this.getScene()
-        .flatMap(scene => scene.getManager(Camera2DManager))
-        .flatMap(camera2DManager => camera2DManager.getActive())
-        .unwrap(),
+      camera = this.getRequiredScene()
+        .getRequiredManager(Camera2DManager)
+        .getRequiredActive(),
       position = camera.toWorld(
         VEC2_0,
-        vec2.set(VEC2_0, input.getValue("mouseX"), input.getValue("mouseY"))
+        vec2.set(VEC2_1, input.getValue("mouseX"), input.getValue("mouseY"))
       ),
-      body = this.getComponent(Body2D).unwrap();
+      body = this.getRequiredComponent(Body2D);
 
-    body.getBody().setPosition(position);
+    if (!vec2.equals(position, body.getBody().getPosition())) {
+      body.getBody().setPosition(position);
+    }
 
     return this;
   }
@@ -104,11 +106,18 @@ const canvas = new Canvas().set(512, 512),
           new Body2D(new Body().addShape(new Circle().setRadius(0.25)))
         ),
       new Entity()
-        .addTag("body")
+        .addTag("point")
         .addComponent(
           new Transform2D().setLocalPosition(vec2.fromValues(0, 1.0)),
           new Point(),
           new Body2D(new Body().addShape(new Circle().setRadius(0.25)))
+        ),
+      new Entity()
+        .addTag("capsule")
+        .addComponent(
+          new Transform2D().setLocalPosition(vec2.fromValues(0, 4.0)),
+          new Point(),
+          new Body2D(new Body().addShape(new Capsule().setRadius(0.25)))
         ),
       new PlotBuilder({
         connected: true,

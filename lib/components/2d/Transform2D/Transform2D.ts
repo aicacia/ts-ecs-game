@@ -19,6 +19,7 @@ export class Transform2D extends Component {
   private matrix: mat2d = mat2d.create();
 
   private needsUpdate: boolean = true;
+  private localNeedsUpdate: boolean = true;
 
   translate(offset: vec2) {
     vec2.add(this.localPosition, this.localPosition, offset);
@@ -62,10 +63,12 @@ export class Transform2D extends Component {
     return this.updateMatrixIfNeeded().matrix;
   }
   getLocalMatrix() {
-    return this.localMatrix;
+    return this.updateMatrixIfNeeded().localMatrix;
   }
 
   setNeedsUpdate(needsUpdate: boolean = true) {
+    this.setLocalNeedsUpdate(needsUpdate);
+
     if (needsUpdate !== this.needsUpdate) {
       this.needsUpdate = needsUpdate;
       this.getEntity().map(entity =>
@@ -84,16 +87,23 @@ export class Transform2D extends Component {
     return this.needsUpdate;
   }
 
-  updateMatrixIfNeeded() {
-    if (this.needsUpdate) {
-      return this.updateMatrix();
+  setLocalNeedsUpdate(localNeedsUpdate: boolean = true) {
+    this.localNeedsUpdate = localNeedsUpdate;
+    return this;
+  }
+  getLocalNeedsUpdate() {
+    return this.localNeedsUpdate;
+  }
+
+  updateLocalMatrixIfNeeded() {
+    if (this.localNeedsUpdate) {
+      return this.updateLocalMatrix();
     } else {
       return this;
     }
   }
-
-  updateMatrix() {
-    this.needsUpdate = false;
+  updateLocalMatrix() {
+    this.localNeedsUpdate = false;
 
     composeMat2d(
       this.localMatrix,
@@ -101,6 +111,21 @@ export class Transform2D extends Component {
       this.localScale,
       this.localRotation
     );
+
+    return this;
+  }
+
+  updateMatrixIfNeeded() {
+    if (this.needsUpdate) {
+      return this.updateMatrix();
+    } else {
+      return this;
+    }
+  }
+  updateMatrix() {
+    this.needsUpdate = false;
+
+    this.updateLocalMatrix();
 
     this.getEntity()
       .flatMap(entity => getParentTransform2D(entity))

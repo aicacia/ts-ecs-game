@@ -13,6 +13,9 @@ export class Camera2DManager extends Manager {
   getActive() {
     return this.active;
   }
+  getRequiredActive() {
+    return this.getActive().expect(`Expected an Active Camera`);
+  }
 
   addComponent(camera: Camera2D) {
     super.addComponent(camera);

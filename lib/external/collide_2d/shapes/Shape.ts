@@ -2,23 +2,25 @@ import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 import { mat2d, vec2 } from "gl-matrix";
 import { AABB2 } from "../../AABB2";
-import { composeMat2d } from "../../math";
+import { composeMat2d, decomposeMat2d } from "../../math";
 import { Body } from "../Body";
 
-const SCALE = vec2.fromValues(1, 1);
+const VEC2_0 = vec2.fromValues(1, 1),
+  MAT2D_0 = mat2d.create();
 
 export abstract class Shape extends EventEmitter {
-  protected body: Option<Body> = none();
-  protected aabb: AABB2 = AABB2.create();
+  private body: Option<Body> = none();
+  private aabb: AABB2 = AABB2.create();
 
-  protected localPosition: vec2 = vec2.create();
-  protected localRotation: number = 0;
+  private localPosition: vec2 = vec2.create();
+  private localRotation: number = 0;
 
-  protected position: vec2 = vec2.create();
-  protected rotation: number = 0;
+  private position: vec2 = vec2.create();
+  private rotation: number = 0;
 
-  protected needsUpdate = true;
-  protected matrix: mat2d = mat2d.create();
+  private matrix: mat2d = mat2d.create();
+
+  private needsUpdate = true;
 
   UNSAFE_setBody(body: Body) {
     this.body = some(body);
@@ -29,16 +31,16 @@ export abstract class Shape extends EventEmitter {
   }
 
   getAABB() {
-    return this.aabb;
+    return this.updateIfNeeded().aabb;
   }
 
   getPosition() {
-    return this.position;
+    return this.updateIfNeeded().position;
   }
   getLocalPosition() {
     return this.position;
   }
-  setPosition(position: vec2) {
+  setLocalPosition(position: vec2) {
     vec2.copy(this.localPosition, position);
     return this.setNeedsUpdate();
   }
@@ -47,37 +49,50 @@ export abstract class Shape extends EventEmitter {
     return this.localRotation;
   }
   getRotation() {
-    return this.rotation;
+    return this.updateIfNeeded().rotation;
   }
-  setRotation(rotation: number) {
-    this.rotation = rotation;
+  setLocalRotation(localRotation: number) {
+    this.localRotation = localRotation;
     return this.setNeedsUpdate();
   }
 
   setNeedsUpdate(needsUpdate: boolean = true) {
-    this.needsUpdate = needsUpdate;
+    if (needsUpdate !== this.needsUpdate) {
+      this.needsUpdate = needsUpdate;
+      this.body.map(body => body.setAABBNeedsUpdate(needsUpdate));
+    }
     return this;
+  }
+  getNeedsUpdate() {
+    return this.needsUpdate;
   }
 
   getMatrix() {
-    if (this.needsUpdate) {
-      this.updateMatrix();
+    return this.updateIfNeeded().matrix;
+  }
+
+  updateIfNeeded() {
+    if (this.getNeedsUpdate()) {
+      return this.update();
+    } else {
+      return this;
     }
-    return this.matrix;
   }
 
-  update(): ThisType<this> {
-    this.body.map(body => {
-      vec2.add(this.position, body.getPosition(), this.localPosition);
-      this.rotation = body.getRotation() + this.localRotation;
-      this.needsUpdate = true;
-    });
-    return this;
-  }
-
-  updateMatrix() {
+  update() {
     this.needsUpdate = false;
-    composeMat2d(this.matrix, this.position, SCALE, this.rotation);
+
+    const localMatrix = MAT2D_0;
+
+    composeMat2d(localMatrix, this.localPosition, VEC2_0, this.localRotation);
+
+    this.body.mapOrElse(
+      body => mat2d.mul(this.matrix, body.getMatrix(), localMatrix),
+      () => mat2d.copy(this.matrix, localMatrix)
+    );
+
+    this.rotation = decomposeMat2d(this.matrix, this.position, VEC2_0);
+
     return this;
   }
 }

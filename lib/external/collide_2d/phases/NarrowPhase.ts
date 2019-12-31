@@ -1,10 +1,10 @@
+import { Option } from "@aicacia/core";
 import { hash } from "@aicacia/hash";
 import { vec2 } from "gl-matrix";
-import { Circle, Shape } from "../shapes";
+import { IConstructor } from "../../../utils";
+import { Box, Capsule, Circle, Convex, Shape } from "../shapes";
 import { Contact } from "./Contact";
 import { INarrowPhase } from "./INarrowPhase";
-
-type IShapeConstructor = new (...args: any[]) => Shape;
 
 type IHandler = (si: Shape, sj: Shape, contacts: Contact[]) => void;
 
@@ -13,40 +13,48 @@ export class NarrowPhase implements INarrowPhase {
   private handlers: Map<number, IHandler> = new Map();
 
   constructor() {
-    this.setHandler(Circle, Circle, circleToCircleHandler);
+    this.setHandler(Circle, Circle, circleToCircleHandler)
+      .setHandler(Circle, Convex, circleToConvexHandler)
+      .setHandler(Circle, Box, circleToConvexHandler)
+      .setHandler(Circle, Capsule, circleToCapsuleHandler)
+      .setHandler(Capsule, Capsule, capsuleToCapsuleHandler)
+      .setHandler(Capsule, Convex, capsuleToConvexHandler)
+      .setHandler(Capsule, Box, capsuleToConvexHandler);
   }
 
   run(pairs: Array<[Shape, Shape]>): Contact[] {
     this.contacts.length = 0;
 
     for (let i = 0, il = pairs.length; i < il; i++) {
-      const [si, sj] = pairs[i],
-        handler = this.getHandler(si, sj);
+      const [si, sj] = pairs[i];
 
-      if (handler) {
-        handler(si, sj, this.contacts);
-      } else {
-        throw new TypeError(`No Handler for Shapes [${sj}, ${si}]`);
-      }
+      this.getHandler(si, sj)
+        .map(handler => handler(si, sj, this.contacts))
+        .orElse(() =>
+          this.getHandler(sj, si).map(handler => handler(sj, si, this.contacts))
+        )
+        .expect(`no handler for ${si} ${sj}`);
     }
 
     return this.contacts;
   }
 
-  setHandler(a: IShapeConstructor, b: IShapeConstructor, handler: any) {
+  setHandler(a: IConstructor<Shape>, b: IConstructor<Shape>, handler: any) {
     this.handlers.set(this.getHash(a, b), handler);
     return this;
   }
   getHandler(si: Shape, sj: Shape) {
-    return this.handlers.get(
-      this.getHash(
-        Object.getPrototypeOf(si).constructor,
-        Object.getPrototypeOf(sj).constructor
+    return Option.from(
+      this.handlers.get(
+        this.getHash(
+          Object.getPrototypeOf(si).constructor,
+          Object.getPrototypeOf(sj).constructor
+        )
       )
     );
   }
 
-  private getHash(a: IShapeConstructor, b: IShapeConstructor) {
+  private getHash(a: IConstructor<Shape>, b: IConstructor<Shape>) {
     return hash(a) + hash(b);
   }
 }
@@ -80,3 +88,27 @@ export const circleToCircleHandler = (
     contacts.push(new Contact(si, sj, position, normal, depth));
   }
 };
+
+export const circleToConvexHandler = (
+  si: Circle,
+  sj: Convex,
+  contacts: Contact[]
+) => {};
+
+export const circleToCapsuleHandler = (
+  si: Circle,
+  sj: Convex,
+  contacts: Contact[]
+) => {};
+
+export const capsuleToCapsuleHandler = (
+  si: Circle,
+  sj: Convex,
+  contacts: Contact[]
+) => {};
+
+export const capsuleToConvexHandler = (
+  si: Circle,
+  sj: Convex,
+  contacts: Contact[]
+) => {};

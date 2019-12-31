@@ -45,6 +45,9 @@ export class Entity extends EventEmitter {
   getScene(): Option<Scene> {
     return this.scene;
   }
+  getRequiredScene() {
+    return this.getScene().expect(`Entity expected to have a Scene`);
+  }
   UNSAFE_setScene(scene: Scene) {
     this.scene = some(scene);
     return this;
@@ -54,6 +57,16 @@ export class Entity extends EventEmitter {
     return this;
   }
 
+  forEachChild(fn: (entity: Entity) => void, recur: boolean = true) {
+    this.getChildren().forEach(child => {
+      fn(child);
+
+      if (recur) {
+        child.forEachChild(fn, recur);
+      }
+    });
+    return this;
+  }
   find(fn: (entity: Entity) => boolean, recur: boolean = true): Option<Entity> {
     const children = this.getChildren(),
       entity = children.find(fn);
@@ -95,7 +108,7 @@ export class Entity extends EventEmitter {
     Component: IConstructor<T>
   ) {
     return this.getComponent(Component).expect(
-      `Entity expect to have a ${(Component as any).getComponentName()} Component`
+      `Entity expected to have a ${(Component as any).getComponentName()} Component`
     );
   }
 

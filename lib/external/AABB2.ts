@@ -29,6 +29,12 @@ export class AABB2 {
     return out;
   }
 
+  static expandPoint(out: AABB2, aabb: AABB2, v: vec2) {
+    vec2.min(out.min, aabb.min, v);
+    vec2.max(out.max, aabb.max, v);
+    return out;
+  }
+
   static union(out: AABB2, a: AABB2, b: AABB2) {
     vec2.min(out.min, a.min, b.min);
     vec2.max(out.max, a.max, b.max);

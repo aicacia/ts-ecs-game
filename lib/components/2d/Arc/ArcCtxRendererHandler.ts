@@ -8,7 +8,7 @@ export class ArcCtxRendererHandler extends CtxRendererHandler {
   static rendererHandlerName = "engine.ArcCtxRendererHandler";
 
   getManager() {
-    return this.getScene().flatMap(scene => scene.getManager(ArcManager));
+    return this.getRequiredScene().getManager(ArcManager);
   }
 
   onRender() {
@@ -40,6 +40,7 @@ export class ArcCtxRendererHandler extends CtxRendererHandler {
         }, transform2d.getMatrix());
       })
     );
+
     return this;
   }
 }

@@ -107,7 +107,7 @@ export class Camera2D extends Component {
   }
 
   setActive() {
-    this.getManager<Camera2DManager>().map(manager => manager.setActive(this));
+    this.getRequiredManager<Camera2DManager>().setActive(this);
     return this;
   }
   updateProjection() {

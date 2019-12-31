@@ -49,6 +49,11 @@ export abstract class RendererHandler extends EventEmitter {
   getScene() {
     return this.getRenderer().flatMap(renderer => renderer.getScene());
   }
+  getRequiredScene() {
+    return this.getScene().expect(
+      `${this.getRendererHandlerName()} required scene`
+    );
+  }
 
   getPlugin<P extends Plugin>(Plugin: new (...args: any[]) => P) {
     return this.getScene().flatMap(scene => scene.getPlugin(Plugin));

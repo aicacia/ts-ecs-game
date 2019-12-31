@@ -26,10 +26,8 @@ export class GridCtxRendererHandler extends CtxRendererHandler {
       manager.getComponents<Grid>().forEach(grid =>
         renderer.render(ctx => {
           const size = grid.getSize(),
-            willCrossCenterX = halfWidth % size === 0,
-            willCrossCenterY = halfHeight % size === 0,
-            offsetX = (position[0] % size) + (willCrossCenterX ? 0 : size / 2),
-            offsetY = (position[1] % size) + (willCrossCenterY ? 0 : size / 2),
+            offsetX = (position[0] % size) + halfWidth % size,
+            offsetY = (position[1] % size) + halfHeight % size,
             left = -halfWidth - offsetX,
             right = halfWidth + offsetX,
             top = -halfHeight - offsetY,
