@@ -1,22 +1,30 @@
-import { mat2d, vec2, vec3 } from "gl-matrix";
+import { mat4, vec2, vec3 } from "gl-matrix";
+import { EPSILON } from "../../../utils/math";
 import { RenderableComponent } from "../../RenderableComponent";
 
-const MAT2D_0 = mat2d.create();
+const MAT4_0 = mat4.create(),
+  VEC2_0 = vec2.create();
 
-export class Camera2D extends RenderableComponent {
+export class Camera3D extends RenderableComponent {
   static Manager = null as any;
-  static componentName = "engine.Camera2D";
+  static componentName = "engine.Camera3D";
 
   private width: number = 1.0;
   private height: number = 1.0;
   private aspect: number = 1.0;
 
+  private orthographic: boolean = false;
+
   private size: number = 1;
   private minSize = Number.EPSILON;
   private maxSize = Infinity;
 
-  private projection = mat2d.create();
-  private view = mat2d.create();
+  private fov = 16;
+  private near = EPSILON;
+  private far = 1024;
+
+  private projection = mat4.create();
+  private view = mat4.create();
 
   private needsUpdate = true;
   private background: vec3 = vec3.create();
@@ -82,9 +90,32 @@ export class Camera2D extends RenderableComponent {
     return this.setNeedsUpdate();
   }
 
+  getFov() {
+    return this.fov;
+  }
+  setFov(fov: number) {
+    this.fov = fov;
+    return this.setNeedsUpdate();
+  }
+
+  getNear() {
+    return this.near;
+  }
+  setNear(near: number) {
+    this.near = near;
+    return this.setNeedsUpdate();
+  }
+  getFar() {
+    return this.far;
+  }
+  setFar(far: number) {
+    this.far = far;
+    return this.setNeedsUpdate();
+  }
+
   getView() {
-    this.getComponent(Transform2D).map(transform =>
-      mat2d.invert(this.view, transform.getMatrix())
+    this.getComponent(Transform3D).map(transform =>
+      mat4.invert(this.view, transform.getMatrix())
     );
     return this.view;
   }
@@ -107,48 +138,65 @@ export class Camera2D extends RenderableComponent {
   }
 
   setActive() {
-    this.getRequiredManager<Camera2DManager>().setActive(this);
+    this.getRequiredManager<Camera3DManager>().setActive(this);
     return this;
   }
   updateProjection() {
-    const right = this.size * this.aspect,
-      left = -right,
-      top = this.size,
-      bottom = -top,
-      width = right - left,
-      height = top - bottom,
-      x = (right + left) / width,
-      y = (top + bottom) / height;
+    if (this.orthographic) {
+      const right = this.size * this.aspect,
+        left = -right,
+        top = this.size,
+        bottom = -top;
 
-    mat2d.set(this.projection, 2 / width, 0.0, 0.0, 2 / height, -x, -y);
+      mat4.ortho(
+        this.projection,
+        left,
+        right,
+        bottom,
+        top,
+        this.near,
+        this.far
+      );
+    } else {
+      mat4.perspective(
+        this.projection,
+        this.fov,
+        this.aspect,
+        this.near,
+        this.far
+      );
+    }
     this.needsUpdate = false;
 
     return this;
   }
 
-  toRelative(out: vec2, screen: vec2) {
+  toRelative(out: vec3, screen: vec2) {
     this.toWorld(out, screen);
-    vec2.transformMat2d(out, out, this.view);
+    vec3.transformMat4(out, out, this.getView());
     return out;
   }
 
-  toWorld(out: vec2, screen: vec2) {
-    const mat = MAT2D_0;
+  toWorld(out: vec3, screen: vec2) {
+    const mat = MAT4_0;
 
     out[0] = 2.0 * (screen[0] / this.width) - 1.0;
     out[1] = -2.0 * (screen[1] / this.height) + 1.0;
+    out[2] = this.near;
 
-    mat2d.mul(mat, this.projection, this.view);
-    mat2d.invert(mat, mat);
-    vec2.transformMat2d(out, out, mat);
+    mat4.mul(mat, this.projection, this.getView());
+    mat4.invert(mat, mat);
+    vec3.transformMat4(out, out, mat);
 
     return out;
   }
 
-  toScreen(out: vec2, world: vec2) {
-    const mat = mat2d.mul(MAT2D_0, this.projection, this.view);
+  toScreen(out: vec2, world: vec3) {
+    const mat = mat4.mul(MAT4_0, this.getProjection(), this.getView());
 
-    vec2.transformMat2d(out, world, mat);
+    VEC2_0[0] = world[0];
+    VEC2_0[1] = world[1];
+    vec2.transformMat4(out, VEC2_0, mat);
 
     out[0] = (out[0] + 1.0) * 0.5 * this.width;
     out[1] = (1.0 - out[1]) * 0.5 * this.height;
@@ -157,7 +205,7 @@ export class Camera2D extends RenderableComponent {
   }
 }
 
-import { Transform2D } from "../Transform2D";
-import { Camera2DManager } from "./Camera2DManager";
+import { Transform3D } from "../Transform3D";
+import { Camera3DManager } from "./Camera3DManager";
 
-Camera2D.Manager = Camera2DManager;
+Camera3D.Manager = Camera3DManager;

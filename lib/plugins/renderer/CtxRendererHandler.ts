@@ -1,32 +1,21 @@
 import { CtxRenderer } from "./CtxRenderer";
 import { RendererHandler } from "./RendererHandler";
 
-export class CtxRendererHandler extends RendererHandler {
-  static rendererName = "engine.CtxRendererHandler";
-  static rendererPriority = 0;
-
-  private ctx: CanvasRenderingContext2D = null as any;
+export class CtxRendererHandler extends RendererHandler<CtxRenderer> {
+  static rendererHandlerName = "engine.CtxRendererHandler";
+  static rendererHandlerPriority = 0;
 
   getCtx() {
-    return this.ctx;
+    return this.getRequiredRenderer().getCtx();
   }
   getCamera() {
-    return this.getRenderer<CtxRenderer>()
+    return this.getRenderer()
       .map(renderer => renderer.getCamera())
       .unwrap();
   }
   getScale() {
-    return this.getRenderer<CtxRenderer>()
+    return this.getRenderer()
       .map(renderer => renderer.getScale())
       .unwrap();
-  }
-
-  onAdd() {
-    this.ctx = this.getRequiredRenderer<CtxRenderer>().getCtx();
-    return this;
-  }
-  onRemove() {
-    this.ctx = null as any;
-    return this;
   }
 }

@@ -1,22 +1,10 @@
 import { mat2d } from "gl-matrix";
-import {
-  ArcCtxRendererHandler,
-  AxisCtxRendererHandler,
-  Body2DCtxRendererHandler,
-  Camera2DManager,
-  GridCtxRendererHandler,
-  LineCtxRendererHandler,
-  PointCtxRendererHandler
-} from "../../components";
-import { toRgb } from "../../external/math";
-import { Canvas } from "../../utils";
+import { Camera2DManager } from "../../components";
+import { Canvas } from "../../utils/Canvas";
+import { toRgb } from "../../utils/math";
 import { Renderer } from "./Renderer";
 
 const MAT2D_0 = mat2d.create();
-
-interface ICtxRendererOptions {
-  debug?: boolean;
-}
 
 export class CtxRenderer extends Renderer {
   static pluginName = "engine.CtxRenderer";
@@ -25,27 +13,15 @@ export class CtxRenderer extends Renderer {
   private ctx: CanvasRenderingContext2D;
   private lineWidth: number = 1.0;
 
-  constructor(canvas: Canvas, options: ICtxRendererOptions = {}) {
+  constructor(canvas: Canvas) {
     super();
     this.canvas = canvas;
 
     const ctx = canvas.getElement().getContext("2d");
     if (!ctx) {
-      throw new TypeError("Could not get context of canvas element");
+      throw new Error("Could not get context of canvas element");
     }
     this.ctx = ctx;
-
-    this.addRendererHandler(
-      new PointCtxRendererHandler(),
-      new LineCtxRendererHandler(),
-      new ArcCtxRendererHandler(),
-      new GridCtxRendererHandler(),
-      new AxisCtxRendererHandler()
-    );
-
-    if (options.debug !== false) {
-      this.addRendererHandler(new Body2DCtxRendererHandler());
-    }
   }
 
   getCanvas() {
@@ -64,13 +40,9 @@ export class CtxRenderer extends Renderer {
   }
 
   getCamera() {
-    return this.getScene()
-      .flatMap(scene =>
-        scene
-          .getManager(Camera2DManager)
-          .flatMap(manager => manager.getActive())
-      )
-      .expect("Scene should have an active Camera");
+    return this.getRequiredScene()
+      .getRequiredManager(Camera2DManager)
+      .getRequiredActive();
   }
 
   getCanvasSize() {

@@ -10,8 +10,8 @@ export abstract class Renderer extends Plugin {
   getRendererHandlers() {
     return this.rendererHandlers;
   }
-  getRendererHandler<T extends RendererHandler>(
-    RendererHandler: IConstructor<T>
+  getRendererHandler<R extends RendererHandler>(
+    RendererHandler: IConstructor<R>
   ) {
     return this.rendererHandlerMap[(RendererHandler as any).getRendererName()];
   }
@@ -41,19 +41,23 @@ export abstract class Renderer extends Plugin {
 
   onUpdate() {
     this.rendererHandlers.forEach(rendererHandler => {
-      rendererHandler.onBeforeRender();
-      rendererHandler.onRender();
+      if (rendererHandler.getEnabled()) {
+        rendererHandler.onBeforeRender();
+        rendererHandler.onRender();
+      }
     });
     return this;
   }
   onAfterUpdate() {
-    this.rendererHandlers.forEach(rendererHandler =>
-      rendererHandler.onAfterRender()
-    );
+    this.rendererHandlers.forEach(rendererHandler => {
+      if (rendererHandler.getEnabled()) {
+        rendererHandler.onAfterRender();
+      }
+    });
     return this;
   }
 
-  private _addRendererHandler<T extends RendererHandler>(rendererHandler: T) {
+  private _addRendererHandler<R extends RendererHandler>(rendererHandler: R) {
     const rendererHandlerName = rendererHandler.getRendererHandlerName();
 
     if (!this.rendererHandlerMap[rendererHandlerName]) {
@@ -66,8 +70,8 @@ export abstract class Renderer extends Plugin {
 
     return this;
   }
-  private _removeRendererHandler<T extends RendererHandler>(
-    RendererHandler: new () => T
+  private _removeRendererHandler<R extends RendererHandler>(
+    RendererHandler: new () => R
   ) {
     const rendererHandlerName = (RendererHandler as any).getRendererName(),
       rendererHandler = this.rendererHandlerMap[rendererHandlerName];

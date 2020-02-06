@@ -23,8 +23,6 @@ export class Input extends Plugin {
     this.element = element;
 
     this.addInputHandler(new MouseInputHandler(), new KeyboardInputHandler());
-
-    this.addAxis(new InputAxis("mouse", "mouseX", "mouseY"));
   }
 
   getElement() {
@@ -96,7 +94,7 @@ export class Input extends Plugin {
   }
 
   getTime() {
-    return this.getPlugin(Time).expect("Input requires the Time Plugin");
+    return this.getRequiredPlugin(Time);
   }
 
   onUpdate() {
@@ -146,7 +144,7 @@ export class Input extends Plugin {
     );
   }
 
-  private _addInputHandler<T extends InputHandler>(inputHandler: T) {
+  private _addInputHandler<I extends InputHandler>(inputHandler: I) {
     const inputHandlerName = inputHandler.getInputHandlerName();
 
     if (!this.inputHandlerMap[inputHandlerName]) {
@@ -159,8 +157,8 @@ export class Input extends Plugin {
 
     return this;
   }
-  private _removeInputHandler<T extends InputHandler>(
-    InputHandler: new () => T
+  private _removeInputHandler<I extends InputHandler>(
+    InputHandler: new () => I
   ) {
     const inputHandlerName = (InputHandler as any).getInputName(),
       inputHandler = this.inputHandlerMap[inputHandlerName];

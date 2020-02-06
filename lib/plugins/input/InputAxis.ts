@@ -1,4 +1,4 @@
-import { clamp, sign } from "../../external/math";
+import { clamp, sign } from "../../utils/math";
 import { Time } from "../Time";
 
 export class InputAxis {

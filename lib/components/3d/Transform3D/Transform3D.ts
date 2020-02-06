@@ -1,31 +1,26 @@
 import { Option } from "@aicacia/core";
-import { mat2d, mat4, vec2 } from "gl-matrix";
+import { mat2d, mat4, quat, vec3 } from "gl-matrix";
 import { Entity } from "../../../sceneGraph";
-import {
-  composeMat2d,
-  decomposeMat2d,
-  getAngleBetweenPoints,
-  getRotationFromMat2d
-} from "../../../utils/math";
 import { RenderableComponent } from "../../RenderableComponent";
-import { Transform2DManager } from "./Transform2DManager";
+import { Transform3DManager } from "./Transform3DManager";
 
-const MAT2_0 = mat2d.create(),
-  VEC2_0 = vec2.create();
+const MAT4_0 = mat4.create(),
+  VEC3_0 = vec3.create(),
+  VEC3_UP = vec3.fromValues(0.0, 0.0, 1.0);
 
-export class Transform2D extends RenderableComponent {
-  static componentName = "engine.Transform2D";
-  static Manager = Transform2DManager;
+export class Transform3D extends RenderableComponent {
+  static componentName = "engine.Transform3D";
+  static Manager = Transform3DManager;
 
-  private localPosition: vec2 = vec2.create();
-  private localScale: vec2 = vec2.fromValues(1, 1);
-  private localRotation: number = 0.0;
-  private localMatrix: mat2d = mat2d.create();
+  private localPosition: vec3 = vec3.create();
+  private localScale: vec3 = vec3.fromValues(1, 1, 1);
+  private localRotation: quat = quat.identity(quat.create());
+  private localMatrix: mat4 = mat4.create();
 
-  private position: vec2 = vec2.create();
-  private scale: vec2 = vec2.fromValues(1, 1);
-  private rotation: number = 0.0;
-  private matrix: mat2d = mat2d.create();
+  private position: vec3 = vec3.create();
+  private scale: vec3 = vec3.fromValues(1, 1, 1);
+  private rotation: quat = quat.identity(quat.create());
+  private matrix: mat4 = mat4.create();
 
   private needsUpdate: boolean = true;
   private localNeedsUpdate: boolean = true;
@@ -34,13 +29,13 @@ export class Transform2D extends RenderableComponent {
     return this.setNeedsUpdate();
   }
 
-  translate(offset: vec2) {
-    vec2.add(this.localPosition, this.localPosition, offset);
+  translate(offset: vec3) {
+    vec3.add(this.localPosition, this.localPosition, offset);
     return this.setNeedsUpdate();
   }
 
-  setLocalPosition(localPosition: vec2) {
-    vec2.copy(this.localPosition, localPosition);
+  setLocalPosition(localPosition: vec3) {
+    vec3.copy(this.localPosition, localPosition);
     return this.setNeedsUpdate();
   }
   getPosition() {
@@ -50,8 +45,8 @@ export class Transform2D extends RenderableComponent {
     return this.localPosition;
   }
 
-  setLocalScale(localScale: vec2) {
-    vec2.copy(this.localScale, localScale);
+  setLocalScale(localScale: vec3) {
+    vec3.copy(this.localScale, localScale);
     return this.setNeedsUpdate();
   }
   getScale() {
@@ -61,8 +56,8 @@ export class Transform2D extends RenderableComponent {
     return this.localScale;
   }
 
-  setLocalRotation(localRotation: number) {
-    this.localRotation = localRotation;
+  setLocalRotation(localRotation: quat) {
+    quat.copy(this.localRotation, localRotation);
     return this.setNeedsUpdate();
   }
   getRotation() {
@@ -87,11 +82,11 @@ export class Transform2D extends RenderableComponent {
       this.getEntity().map(entity =>
         entity.getChildren().forEach(child => {
           child
-            .getComponent(Transform3D)
-            .map(transform3d => transform3d.setNeedsUpdate(needsUpdate));
-          child
             .getComponent(Transform2D)
             .map(transform2d => transform2d.setNeedsUpdate(needsUpdate));
+          child
+            .getComponent(Transform3D)
+            .map(transform3d => transform3d.setNeedsUpdate(needsUpdate));
         })
       );
     }
@@ -119,11 +114,11 @@ export class Transform2D extends RenderableComponent {
   updateLocalMatrix() {
     this.localNeedsUpdate = false;
 
-    composeMat2d(
+    mat4.fromRotationTranslationScale(
       this.localMatrix,
+      this.localRotation,
       this.localPosition,
-      this.localScale,
-      this.localRotation
+      this.localScale
     );
 
     return this;
@@ -145,84 +140,77 @@ export class Transform2D extends RenderableComponent {
       .flatMap(entity => getParentTransform(entity))
       .mapOrElse(
         parentTransform => {
-          if (parentTransform instanceof Transform2D) {
-            mat2d.mul(
+          if (parentTransform instanceof Transform3D) {
+            mat4.mul(
               this.matrix,
               parentTransform.getMatrix(),
               this.localMatrix
             );
           } else {
-            mat2d.mul(
+            mat4.mul(
               this.matrix,
-              parentTransform.getMatrix2d(MAT2_0),
+              parentTransform.getMatrix4(MAT4_0),
               this.localMatrix
             );
           }
-          this.rotation = decomposeMat2d(
-            this.matrix,
-            this.position,
-            this.scale
-          );
+          mat4.getRotation(this.rotation, this.matrix);
+          mat4.getScaling(this.scale, this.matrix);
+          mat4.getTranslation(this.position, this.matrix);
         },
         () => {
-          mat2d.copy(this.matrix, this.localMatrix);
-          vec2.copy(this.position, this.localPosition);
-          vec2.copy(this.scale, this.localScale);
-          this.rotation = this.localRotation;
+          mat4.copy(this.matrix, this.localMatrix);
+          vec3.copy(this.position, this.localPosition);
+          vec3.copy(this.scale, this.localScale);
+          quat.copy(this.rotation, this.localRotation);
         }
       );
 
     return this;
   }
 
-  getMatrix4(out: mat4) {
+  getMatrix2d(out: mat2d) {
     const matrix = this.getMatrix();
-    return mat4.set(
+    return mat2d.set(
       out,
       matrix[0],
       matrix[1],
-      0.0,
       matrix[4],
-      matrix[2],
-      matrix[3],
-      0.0,
       matrix[5],
-      0.0,
-      0.0,
-      1.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      1.0
+      matrix[13],
+      matrix[14]
     );
   }
 
-  // TODO: this makes no sense, position is global but it works! why?
-  lookAt(position: vec2) {
-    return this.setLocalRotation(
-      getAngleBetweenPoints(this.localPosition, position)
+  lookAt(position: vec3) {
+    let inverseMatrix = mat4.invert(MAT4_0, this.getMatrix());
+    if (inverseMatrix == null) {
+      inverseMatrix = mat4.identity(MAT4_0);
+    }
+    const localPosition = vec3.transformMat4(VEC3_0, position, inverseMatrix);
+    mat4.getRotation(
+      this.localRotation,
+      mat4.lookAt(MAT4_0, this.localPosition, localPosition, VEC3_UP)
     );
+    return this.setNeedsUpdate();
   }
 }
-
-import { Transform3D } from "../../3d/Transform3D";
+import { Transform2D } from "../../2d/Transform2D";
 
 export const getParentTransform = (
   entity: Entity
-): Option<Transform2D | Transform3D> =>
+): Option<Transform3D | Transform2D> =>
   entity.getParent().flatMap(getTransform);
 
 const getTransform = (parent: Entity) => {
-  const parentTransform2D = parent.getComponent(Transform2D);
+  const parentTransform3D = parent.getComponent(Transform3D);
 
-  if (parentTransform2D.isSome()) {
-    return parentTransform2D;
+  if (parentTransform3D.isSome()) {
+    return parentTransform3D;
   } else {
-    const parentTransform3D = parent.getComponent(Transform3D);
+    const parentTransform2D = parent.getComponent(Transform2D);
 
-    if (parentTransform3D.isSome()) {
-      return parentTransform3D;
+    if (parentTransform2D.isSome()) {
+      return parentTransform2D;
     } else {
       return getParentTransform(parent);
     }

@@ -1,35 +1,15 @@
 export {
-  Axis,
-  AxisCtxRendererHandler,
-  AxisManager,
   Transform2D,
   Camera2D,
   Camera2DManager,
   Transform2DManager,
-  Point,
   Camera2DControl,
   Camera2DControlManager,
-  Grid,
-  GridCtxRendererHandler,
-  GridManager,
-  PointType,
-  PointCtxRendererHandler,
-  PointManager,
-  Arc,
-  Direction,
-  ArcManager,
-  ArcCtxRendererHandler,
-  Line,
-  LineType,
-  LineCtxRendererHandler,
-  LineManager,
-  PausableComponent,
-  HTML,
-  HTMLManager,
-  Body2D,
-  Body2DManager,
-  Body2DCtxRendererHandler,
-  PlotBuilder
+  Camera3D,
+  Camera3DManager,
+  Transform3D,
+  Transform3DManager,
+  PausableComponent
 } from "./components";
 export {
   Time,
@@ -37,14 +17,14 @@ export {
   RendererHandler,
   CtxRendererHandler,
   CtxRenderer,
+  CtxTransform2DRendererHandler,
   Input,
   Control,
   InputHandler,
   KeyboardInputHandler,
   MouseInputHandler,
   FullScreenCanvas,
-  InputButton,
-  World2D
+  InputButton
 } from "./plugins";
 export {
   Component,
@@ -55,4 +35,27 @@ export {
   Scene,
   Plugin
 } from "./sceneGraph";
-export * from "./utils";
+export {
+  Canvas,
+  IConstructor,
+  Loop,
+  composeMat2d,
+  decomposeMat2d,
+  degToRad,
+  radToDeg,
+  DEG_TO_RAD,
+  RAD_TO_DEG,
+  EPSILON,
+  toHex,
+  toRgb,
+  toRgba,
+  clamp,
+  getRotationFromMat2d,
+  getAngleBetweenPoints,
+  getAngleFromPoint,
+  getPointFromAngle,
+  getTangentAngle,
+  sign,
+  projectPointOnAxis,
+  equals
+} from "./utils";

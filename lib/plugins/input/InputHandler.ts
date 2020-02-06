@@ -31,8 +31,8 @@ export abstract class InputHandler extends EventEmitter {
     this.input = none();
     return this;
   }
-  getInput<T extends Input = Input>() {
-    return this.input as Option<T>;
+  getInput<I extends Input = Input>() {
+    return this.input as Option<I>;
   }
   getScene() {
     return this.getInput().flatMap(input => input.getScene());

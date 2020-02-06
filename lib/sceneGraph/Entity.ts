@@ -1,7 +1,8 @@
-import { iter, none, Option, some } from "@aicacia/core";
+import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export class Entity extends EventEmitter {
+  private name: string = "";
   private depth: number = 0;
   private scene: Option<Scene> = none();
   private root: Entity = this;
@@ -10,6 +11,14 @@ export class Entity extends EventEmitter {
   private children: Entity[] = [];
   private components: Component[] = [];
   private componentMap: Record<string, Component> = {};
+
+  getName() {
+    return this.name;
+  }
+  setName(name: string) {
+    this.name = name;
+    return this;
+  }
 
   hasTags(tags: string[]) {
     return tags.every(tag => this.tags.has(tag));
@@ -46,7 +55,7 @@ export class Entity extends EventEmitter {
     return this.scene;
   }
   getRequiredScene() {
-    return this.getScene().expect(`Entity expected to have a Scene`);
+    return this.getScene().expect("Entity expected to have a Scene");
   }
   UNSAFE_setScene(scene: Scene) {
     this.scene = some(scene);
@@ -87,25 +96,31 @@ export class Entity extends EventEmitter {
       return some(entity);
     }
   }
+  findWithName(name: string) {
+    return this.find(entity => entity.getName() === name);
+  }
   findWithTag(...tags: string[]) {
     return this.find(entity => entity.hasTags(tags));
   }
   findWithTags(tags: string[]) {
     return this.findWithTag(...tags);
   }
+  findWithComponent<C extends Component>(Component: IConstructor<C>) {
+    return this.find(entity => entity.getComponent(Component).isSome());
+  }
 
   getComponents() {
     return this.components;
   }
-  getComponent<T extends Component = Component>(
-    Component: IConstructor<T>
-  ): Option<T> {
+  getComponent<C extends Component = Component>(
+    Component: IConstructor<C>
+  ): Option<C> {
     return Option.from(
-      this.componentMap[(Component as any).getComponentName()] as T
+      this.componentMap[(Component as any).getComponentName()] as C
     );
   }
-  getRequiredComponent<T extends Component = Component>(
-    Component: IConstructor<T>
+  getRequiredComponent<C extends Component = Component>(
+    Component: IConstructor<C>
   ) {
     return this.getComponent(Component).expect(
       `Entity expected to have a ${(Component as any).getComponentName()} Component`
@@ -132,6 +147,7 @@ export class Entity extends EventEmitter {
     this.parent.map(parent => {
       parent._removeChild(this);
       this.scene.map(scene => scene.addEntity(this));
+      this.getComponents().forEach(component => component.onDetach());
     });
   }
   getChildren() {
@@ -153,7 +169,7 @@ export class Entity extends EventEmitter {
     return this.removeChildren(...children);
   }
 
-  private _addComponent<T extends Component>(component: T) {
+  private _addComponent<C extends Component>(component: C) {
     const componentName = component.getComponentName();
 
     if (!this.componentMap[componentName]) {
@@ -168,7 +184,7 @@ export class Entity extends EventEmitter {
     return this;
   }
 
-  private _removeComponent<T extends Component>(Component: IConstructor<T>) {
+  private _removeComponent<C extends Component>(Component: IConstructor<C>) {
     const componentName = (Component as any).getComponentName(),
       component = this.componentMap[componentName];
 

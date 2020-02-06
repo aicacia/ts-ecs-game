@@ -2,7 +2,8 @@ export {
   Renderer,
   RendererHandler,
   CtxRendererHandler,
-  CtxRenderer
+  CtxRenderer,
+  CtxTransform2DRendererHandler
 } from "./renderer";
 export { Time } from "./Time";
 export { FullScreenCanvas } from "./FullScreenCanvas";
@@ -14,4 +15,3 @@ export {
   MouseInputHandler,
   InputButton
 } from "./input";
-export { World2D } from "./World2D";

@@ -68,9 +68,9 @@ export class Camera2DControl extends Component {
       }
 
       if (input.getValue("mouseWheel") > 0) {
-        camera.setSize(size + 60 * this.zoomSpeed * time.getDelta());
+        camera.setSize(size + this.zoomSpeed);
       } else if (input.getValue("mouseWheel") < 0) {
-        camera.setSize(size - 60 * this.zoomSpeed * time.getDelta());
+        camera.setSize(size - this.zoomSpeed);
       }
 
       vec2.copy(this.lastMouse, worldMouse);

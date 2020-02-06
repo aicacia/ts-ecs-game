@@ -26,19 +26,19 @@ export abstract class Plugin extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.getPluginPriority();
   }
 
-  getPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>): Option<T> {
+  getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>): Option<P> {
     return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
   }
-  getRequiredPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>) {
+  getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).expect(
       `${this.getPluginName()} required ${(Plugin as any).getPluginName()} Plugin`
     );
   }
 
-  getManager<T extends Manager = Manager>(Manager: IConstructor<T>): Option<T> {
+  getManager<M extends Manager = Manager>(Manager: IConstructor<M>): Option<M> {
     return this.getScene().flatMap(scene => scene.getManager(Manager));
   }
-  getRequiredManager<T extends Manager = Manager>(Manager: IConstructor<T>) {
+  getRequiredManager<M extends Manager = Manager>(Manager: IConstructor<M>) {
     return this.getManager(Manager).expect(
       `${this.getPluginName()} required ${(Manager as any).getManagerName()} Manager`
     );
@@ -54,6 +54,9 @@ export abstract class Plugin extends EventEmitter {
   }
   getScene() {
     return this.scene;
+  }
+  getRequiredScene() {
+    return this.getScene().expect(`${this.getPluginName()} required a Scene`);
   }
 
   onAdd() {

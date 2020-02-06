@@ -1,12 +1,12 @@
 import { none, Option, some } from "@aicacia/core";
 import { Manager } from "../../../sceneGraph";
 
-export class Camera2DManager extends Manager<Camera2D> {
-  static managerName = "engine.Camera2DManager";
+export class Camera3DManager extends Manager<Camera3D> {
+  static managerName = "engine.Camera3DManager";
 
-  private active: Option<Camera2D> = none();
+  private active: Option<Camera3D> = none();
 
-  setActive(camera: Camera2D) {
+  setActive(camera: Camera3D) {
     this.active = some(camera);
     return this;
   }
@@ -17,7 +17,7 @@ export class Camera2DManager extends Manager<Camera2D> {
     return this.getActive().expect(`Expected an Active Camera`);
   }
 
-  addComponent(camera: Camera2D) {
+  addComponent(camera: Camera3D) {
     super.addComponent(camera);
 
     if (this.active.isNone()) {
@@ -27,7 +27,7 @@ export class Camera2DManager extends Manager<Camera2D> {
     return this;
   }
 
-  removeComponent(camera: Camera2D) {
+  removeComponent(camera: Camera3D) {
     super.removeComponent(camera);
 
     this.active.map(active => {
@@ -40,4 +40,4 @@ export class Camera2DManager extends Manager<Camera2D> {
   }
 }
 
-import { Camera2D } from "./Camera2D";
+import { Camera3D } from "./Camera3D";

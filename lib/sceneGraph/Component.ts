@@ -40,20 +40,20 @@ export abstract class Component extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.getManagerConstructor();
   }
 
-  getComponent<T extends Component = Component>(Component: IConstructor<T>) {
+  getComponent<C extends Component = Component>(Component: IConstructor<C>) {
     return this.getEntity().flatMap(entity => entity.getComponent(Component));
   }
-  getRequiredComponent<T extends Component = Component>(
-    Component: IConstructor<T>
+  getRequiredComponent<C extends Component = Component>(
+    Component: IConstructor<C>
   ) {
     return this.getComponent(Component).expect(
       `${this.getComponentName()} Component requires ${(Component as any).getComponentName()} Component`
     );
   }
-  getPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>) {
+  getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
   }
-  getRequiredPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>) {
+  getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).expect(
       `${this.getComponentName()} Component requires ${(Plugin as any).getPluginName()} Plugin`
     );
@@ -104,6 +104,9 @@ export abstract class Component extends EventEmitter {
     );
   }
 
+  onDetach() {
+    return this;
+  }
   onAdd() {
     return this;
   }

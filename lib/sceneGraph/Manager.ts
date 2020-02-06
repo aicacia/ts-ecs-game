@@ -1,7 +1,9 @@
 import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
-export abstract class Manager extends EventEmitter {
+export abstract class Manager<
+  C extends Component = Component
+> extends EventEmitter {
   static managerName: string;
   static managerPriority: number = 0;
 
@@ -18,7 +20,7 @@ export abstract class Manager extends EventEmitter {
   }
 
   protected scene: Option<Scene> = none();
-  protected components: Component[] = [];
+  protected components: C[] = [];
 
   getManagerName(): string {
     return Object.getPrototypeOf(this).constructor.getManagerName();
@@ -27,33 +29,33 @@ export abstract class Manager extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.getManagerPriority();
   }
 
-  getPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>): Option<T> {
+  getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>): Option<P> {
     return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
   }
-  getRequiredPlugin<T extends Plugin = Plugin>(Plugin: IConstructor<T>) {
+  getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).expect(
       `${this.getManagerName()} required ${(Plugin as any).getPluginName()} Plugin`
     );
   }
 
-  getManager<T extends Manager = Manager>(Manager: IConstructor<T>): Option<T> {
+  getManager<M extends Manager = Manager>(Manager: IConstructor<M>): Option<M> {
     return this.getScene().flatMap(scene => scene.getManager(Manager));
   }
-  getRequiredManager<T extends Manager = Manager>(Manager: IConstructor<T>) {
+  getRequiredManager<M extends Manager = Manager>(Manager: IConstructor<M>) {
     return this.getManager(Manager).expect(
       `${this.getManagerName()} required ${(Manager as any).getManagerName()} Manager`
     );
   }
 
-  getComponents<T extends Component = Component>() {
-    return this.components as T[];
+  getComponents() {
+    return this.components;
   }
 
-  addComponent(component: Component) {
+  addComponent(component: C) {
     this.components.push(component);
     return this;
   }
-  removeComponent(component: Component) {
+  removeComponent(component: C) {
     const index = this.components.indexOf(component);
 
     if (index !== -1) {
@@ -66,14 +68,14 @@ export abstract class Manager extends EventEmitter {
     return this.components.length === 0;
   }
 
-  sortFunction(a: Component, b: Component) {
+  sortFunction = (a: Component, b: Component) => {
     return a
       .getEntity()
       .flatMap(aEntity =>
         b.getEntity().map(bEntity => aEntity.getDepth() - bEntity.getDepth())
       )
       .unwrapOr(0);
-  }
+  };
 
   sort() {
     this.components.sort(this.sortFunction);

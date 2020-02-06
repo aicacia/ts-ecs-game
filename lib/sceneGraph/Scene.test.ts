@@ -73,7 +73,6 @@ tape("Scene", (assert: tape.Test) => {
   assert.deepEqual(child.getTags(), new Set("child"));
 
   child.detach();
-  scene.maintain();
 
   assert.true(child.isRoot());
   assert.equal(child.getDepth(), 0);

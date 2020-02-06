@@ -1,33 +1,26 @@
 import { vec2, vec3, vec4 } from "gl-matrix";
 import {
-  Arc,
-  Axis,
   Camera2D,
   Camera2DControl,
+  Camera2DManager,
   Canvas,
   Control,
   CtxRenderer,
+  CtxTransform2DRendererHandler,
   DefaultManager,
-  Direction,
   Entity,
-  Grid,
-  HTML,
+  FullScreenCanvas,
   Input,
-  Line,
-  LineType,
   Loop,
   PausableComponent,
-  Point,
-  PointType,
   Scene,
   Time,
   Transform2D
 } from "../../lib";
-import { getPointFromAngle } from "../../lib/external/math";
 
 class Rotator extends PausableComponent {
   static componentName = "simple.Rotator";
-  // only use this if you do not need a manager, it only uses the one manager so
+  // only use this if you do not need a manager, it only uses one manager so
   // any other components using the DefaultManager will be in the same manager
   static Manager = DefaultManager;
 
@@ -43,149 +36,69 @@ class Rotator extends PausableComponent {
   }
 }
 
-const ARC_HANDLER_VEC2_0 = vec2.create();
-
-class ArcHandler extends PausableComponent {
-  static componentName = "simple.ArcHandler";
+class LookAtCamera extends PausableComponent {
+  static componentName = "simple.LookAtCamera";
   static Manager = DefaultManager;
 
   onUpdate() {
-    const line = this.getScene()
-        .flatMap(scene => scene.find(entity => entity.hasTag("rotating-line")))
-        .unwrap()
-        .getRequiredComponent(Transform2D),
-      children = this.getEntity()
-        .map(entity => entity.getChildren())
-        .unwrap(),
-      arc = children[0].getRequiredComponent(Arc),
-      point = children[1].getRequiredComponent(Transform2D),
-      rotation = line.getLocalRotation();
-
-    const rotationVec = getPointFromAngle(ARC_HANDLER_VEC2_0, rotation);
-
-    arc.setEnd(rotationVec);
-    point.setLocalPosition(rotationVec);
-    point.setLocalRotation(rotation + Math.PI * 0.5);
-
+    const cameraPosition = this.getRequiredScene()
+      .getRequiredManager(Camera2DManager)
+      .getRequiredActive()
+      .getRequiredComponent(Transform2D)
+      .getPosition();
+    this.getRequiredComponent(Transform2D).lookAt(cameraPosition);
     return this;
   }
 }
 
-const element = document.createElement("p");
-
-element.textContent = "Hello, world!";
-
 const canvas = new Canvas().set(512, 512),
   scene = new Scene()
     .addEntity(
-      // axis
-      new Entity().addComponent(new Axis()),
-      // grid
-      new Entity().addComponent(new Grid()),
       // Camera setup
       new Entity().addTag("camera").addComponent(
-        new Transform2D(),
+        new Transform2D().setRender(false),
         new Camera2DControl(),
         new Camera2D()
-          .setSize(10)
+          .setSize(8)
           .setMinSize(1)
           .setMaxSize(16)
           .setBackground(vec3.fromValues(0.98, 0.98, 0.98))
       ),
       new Entity()
-        .addTag("static-line")
-        .addComponent(
-          new Transform2D().setLocalRotation(Math.PI / 4),
-          new Line().setType(LineType.Dashed).setLength(9),
-          new Point()
-        )
+        .addComponent(new Transform2D())
         .addChild(
           new Entity().addComponent(
             new Transform2D().setLocalPosition(vec2.fromValues(9, 0)),
-            new Point().setType(PointType.Triangle)
-          ),
-          new Entity()
-            .addTag("rotating-line")
-            .addComponent(
-              new Transform2D(),
-              new Line().setLength(9),
-              new Point(),
-              new Rotator()
-            )
-            .addChild(
-              // Lines arrow
-              new Entity()
-                .addComponent(
-                  new Transform2D().setLocalPosition(vec2.fromValues(9, 0)),
-                  new Point().setType(PointType.Triangle)
-                )
-                // HTML overlay text
-                .addChild(
-                  new Entity().addComponent(
-                    new Transform2D(),
-                    new HTML(element)
-                  )
-                )
-            ),
-          new Entity()
-            .addTag("arc")
-            .addComponent(new ArcHandler())
-            .addChild(
-              new Entity().addComponent(
-                new Transform2D(),
-                new Arc()
-                  .setDirection(Direction.CW)
-                  .setRadius(1)
-                  .setColor(vec4.fromValues(0, 0, 1.0, 1))
-              ),
-              new Entity().addComponent(
-                new Transform2D(),
-                new Point().setType(PointType.Triangle)
-              )
-            )
+            new LookAtCamera()
+          )
+        ),
+      new Entity()
+        .addComponent(new Transform2D(), new Rotator())
+        .addChild(
+          new Entity().addComponent(
+            new Transform2D().setLocalPosition(vec2.fromValues(9, 0))
+          )
         )
     )
     .addPlugin(
-      // Handles all rendering
-      new CtxRenderer(canvas),
+      new CtxRenderer(canvas).addRendererHandler(
+        new CtxTransform2DRendererHandler()
+      ),
       // Required by many Components and plugins
       new Time(),
       // Handles all input
       new Input(canvas.getElement()),
       // Control plugin
-      new Control()
+      new Control(),
+      // forces a fullscreen canvas to stay in sync with the window
+      new FullScreenCanvas(canvas)
     ),
   loop = new Loop(() => scene.update());
 
-const app = document.getElementById("app"),
-  control = document.getElementById("control"),
-  download = document.getElementById("download");
+(window as any).scene = scene;
+(window as any).loop = loop;
 
-if (app) {
-  app.style.left = "0px";
-  app.style.top = "0px";
-  app.style.position = "relative";
-  app.style.overflow = "hidden";
-  app.style.width = `${canvas.getWidth()}px`;
-  app.style.height = `${canvas.getHeight()}px`;
-  app.appendChild(element);
-  app.appendChild(canvas.getElement());
-}
-if (control) {
-  control.onclick = () => {
-    const pause = scene.getRequiredPlugin(Control);
-
-    if (pause.isPaused()) {
-      control.innerText = "Pause";
-      pause.play();
-    } else {
-      control.innerText = "Play";
-      pause.pause();
-    }
-  };
-}
-if (download) {
-  download.onclick = () => window.open(canvas.getImageURI());
-}
-
-loop.start();
+window.addEventListener("load", () => {
+  document.body.appendChild(canvas.getElement());
+  loop.start();
+});

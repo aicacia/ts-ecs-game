@@ -53,4 +53,8 @@ export class Canvas extends EventEmitter {
       .toDataURL("image/png")
       .replace("image/png", "image/octet-stream");
   }
+
+  getStream(fps: number = 60): MediaStream {
+    return (this.canvas as any).captureStream(fps);
+  }
 }
