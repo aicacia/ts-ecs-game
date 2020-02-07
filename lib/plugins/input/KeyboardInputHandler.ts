@@ -19,7 +19,7 @@ export class KeyboardInputHandler extends InputHandler {
   }
 
   onEvent(time: Time, e: KeyboardEvent) {
-    const input = this.getInput().unwrap();
+    const input = this.getRequiredInput();
 
     switch (e.type) {
       case "keydown":

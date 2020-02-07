@@ -1,5 +1,5 @@
 import { mat4, vec2, vec3 } from "gl-matrix";
-import { EPSILON } from "../../../utils/math";
+import { EPSILON } from "../../../math";
 import { RenderableComponent } from "../../RenderableComponent";
 
 const MAT4_0 = mat4.create(),

@@ -1,13 +1,13 @@
 import { Component } from "../sceneGraph";
 
 export class RenderableComponent extends Component {
-  private render: boolean = true;
+  private renderable: boolean = true;
 
-  getRender() {
-    return this.render;
+  getRenderable() {
+    return this.renderable;
   }
-  setRender(render: boolean = true) {
-    this.render = render;
+  setRenderable(renderable: boolean = true) {
+    this.renderable = renderable;
     return this;
   }
 }

@@ -35,10 +35,8 @@ export {
   Scene,
   Plugin
 } from "./sceneGraph";
+export { Canvas, IConstructor, Loop } from "./utils";
 export {
-  Canvas,
-  IConstructor,
-  Loop,
   composeMat2d,
   decomposeMat2d,
   degToRad,
@@ -58,4 +56,4 @@ export {
   sign,
   projectPointOnAxis,
   equals
-} from "./utils";
+} from "./math";

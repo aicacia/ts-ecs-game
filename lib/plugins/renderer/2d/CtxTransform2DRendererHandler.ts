@@ -10,7 +10,7 @@ export class CtxTransform2DRendererHandler extends CtxRendererHandler {
       transform2dManager = this.getRequiredManager(Transform2DManager);
 
     transform2dManager.getComponents().forEach(transform2d => {
-      if (transform2d.getRender()) {
+      if (transform2d.getRenderable()) {
         renderer.render(ctx => {
           ctx.beginPath();
           ctx.strokeStyle = "#0c0";

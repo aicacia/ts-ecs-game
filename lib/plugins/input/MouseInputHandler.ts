@@ -29,7 +29,7 @@ export class MouseInputHandler extends InputHandler {
   }
 
   onEvent(time: Time, e: MouseEvent) {
-    const input = this.getInput().unwrap(),
+    const input = this.getRequiredInput(),
       elementRect = input.getElement().getBoundingClientRect();
 
     switch (e.type) {
@@ -58,8 +58,7 @@ export class MouseInputHandler extends InputHandler {
   }
 
   onAfterUpdate() {
-    this.getInput()
-      .unwrap()
+    this.getRequiredInput()
       .getOrCreateButton("mouseWheel")
       .UNSAFE_setValue(0);
     return this;

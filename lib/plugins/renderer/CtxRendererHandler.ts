@@ -9,13 +9,9 @@ export class CtxRendererHandler extends RendererHandler<CtxRenderer> {
     return this.getRequiredRenderer().getCtx();
   }
   getCamera() {
-    return this.getRenderer()
-      .map(renderer => renderer.getCamera())
-      .unwrap();
+    return this.getRequiredRenderer().getCamera();
   }
   getScale() {
-    return this.getRenderer()
-      .map(renderer => renderer.getScale())
-      .unwrap();
+    return this.getRequiredRenderer().getScale();
   }
 }

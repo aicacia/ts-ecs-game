@@ -1,7 +1,9 @@
 import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
-export abstract class InputHandler extends EventEmitter {
+export abstract class InputHandler<
+  I extends Input = Input
+> extends EventEmitter {
   static inputHandlerName: string;
 
   static getInputHandlerName() {
@@ -16,14 +18,14 @@ export abstract class InputHandler extends EventEmitter {
     return this.inputHandlerName;
   }
 
-  private input: Option<Input> = none();
+  private input: Option<I> = none();
   private events: Event[] = [];
 
   getInputHandlerName(): string {
     return Object.getPrototypeOf(this).constructor.getInputHandlerName();
   }
 
-  UNSAFE_setInput(input: Input) {
+  UNSAFE_setInput(input: I) {
     this.input = some(input);
     return this;
   }
@@ -31,17 +33,27 @@ export abstract class InputHandler extends EventEmitter {
     this.input = none();
     return this;
   }
-  getInput<I extends Input = Input>() {
+  getInput() {
     return this.input as Option<I>;
+  }
+  getRequiredInput() {
+    return this.getInput().expect(
+      `${this.getInputHandlerName()} requires a Input Plugin`
+    );
   }
   getScene() {
     return this.getInput().flatMap(input => input.getScene());
+  }
+  getRequiredScene() {
+    return this.getScene().expect(
+      `${this.getInputHandlerName()} requires a Scene`
+    );
   }
 
   getElement() {
     return this.getInput()
       .map(input => input.getElement())
-      .unwrap();
+      .expect(`${this.getInputHandlerName()} requires an Element`);
   }
 
   getEvents() {

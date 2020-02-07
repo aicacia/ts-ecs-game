@@ -84,28 +84,30 @@ export class Input extends Plugin {
 
   isDown(name: string) {
     return this.getButton(name)
-      .map(button => button.getFrameDown() === this.getTime().getFrame())
+      .map(
+        button =>
+          button.getFrameDown() === this.getRequiredPlugin(Time).getFrame()
+      )
       .unwrapOr(false);
   }
   isUp(name: string) {
     return this.getButton(name)
-      .map(button => button.getFrameUp() === this.getTime().getFrame())
+      .map(
+        button =>
+          button.getFrameUp() === this.getRequiredPlugin(Time).getFrame()
+      )
       .unwrapOr(false);
   }
 
-  getTime() {
-    return this.getRequiredPlugin(Time);
-  }
-
   onUpdate() {
-    const time = this.getTime();
+    const time = this.getRequiredPlugin(Time);
     this.updateAxes(time);
     this.inputHandlers.forEach(inputHandler => inputHandler.onUpdate(time));
     return this;
   }
 
   onAfterUpdate() {
-    const time = this.getTime();
+    const time = this.getRequiredPlugin(Time);
     this.inputHandlers.forEach(inputHandler =>
       inputHandler.onAfterUpdate(time)
     );

@@ -1,17 +1,15 @@
 import { Option } from "@aicacia/core";
 import { mat2d, mat4, vec2 } from "gl-matrix";
-import { Entity } from "../../../sceneGraph";
 import {
   composeMat2d,
   decomposeMat2d,
-  getAngleBetweenPoints,
-  getRotationFromMat2d
-} from "../../../utils/math";
+  getAngleBetweenPoints
+} from "../../../math";
+import { Entity } from "../../../sceneGraph";
 import { RenderableComponent } from "../../RenderableComponent";
 import { Transform2DManager } from "./Transform2DManager";
 
-const MAT2_0 = mat2d.create(),
-  VEC2_0 = vec2.create();
+const MAT2_0 = mat2d.create();
 
 export class Transform2D extends RenderableComponent {
   static componentName = "engine.Transform2D";

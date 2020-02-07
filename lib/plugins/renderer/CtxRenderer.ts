@@ -1,7 +1,7 @@
 import { mat2d } from "gl-matrix";
 import { Camera2DManager } from "../../components";
+import { toRgb } from "../../math";
 import { Canvas } from "../../utils/Canvas";
-import { toRgb } from "../../utils/math";
 import { Renderer } from "./Renderer";
 
 const MAT2D_0 = mat2d.create();

@@ -56,7 +56,7 @@ const canvas = new Canvas().set(512, 512),
     .addEntity(
       // Camera setup
       new Entity().addTag("camera").addComponent(
-        new Transform2D().setRender(false),
+        new Transform2D().setRenderable(false),
         new Camera2DControl(),
         new Camera2D()
           .setSize(8)
@@ -90,7 +90,7 @@ const canvas = new Canvas().set(512, 512),
       new Input(canvas.getElement()),
       // Control plugin
       new Control(),
-      // forces a fullscreen canvas to stay in sync with the window
+      // forces a canvas to stay in sync with the window size
       new FullScreenCanvas(canvas)
     ),
   loop = new Loop(() => scene.update());

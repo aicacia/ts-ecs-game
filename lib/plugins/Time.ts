@@ -1,3 +1,4 @@
+import { EPSILON } from "../math";
 import { Plugin } from "../sceneGraph";
 
 export class Time extends Plugin {
@@ -18,8 +19,8 @@ export class Time extends Plugin {
   private fpsLast: number = 0;
 
   private startTime: number = Date.now() * 0.001;
-  private minDelta: number = 0.000001;
-  private maxDelta: number = 1.0;
+  private minDelta: number = EPSILON;
+  private maxDelta: number = Infinity;
 
   getStartTime() {
     return this.startTime;

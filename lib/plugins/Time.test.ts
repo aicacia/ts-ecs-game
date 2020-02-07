@@ -6,7 +6,7 @@ tape("Time", (assert: tape.Test) => {
 
   scene.update();
 
-  const time = scene.getPlugin(Time).unwrap();
+  const time = scene.getRequiredPlugin(Time);
 
   assert.equal(time.getScale(), 1);
   assert.equal(time.getFrame(), 1);
