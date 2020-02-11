@@ -1,12 +1,11 @@
 import { mat4, vec2, vec3 } from "gl-matrix";
-import { EPSILON } from "../../../math";
-import { RenderableComponent } from "../../RenderableComponent";
+import { EPSILON } from "../../math";
+import { RenderableComponent } from "../RenderableComponent";
 
 const MAT4_0 = mat4.create(),
   VEC2_0 = vec2.create();
 
 export class Camera3D extends RenderableComponent {
-  static Manager = null as any;
   static componentName = "engine.Camera3D";
 
   private width: number = 1.0;

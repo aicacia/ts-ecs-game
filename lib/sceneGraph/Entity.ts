@@ -1,6 +1,18 @@
 import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
+// tslint:disable-next-line: interface-name
+export interface Entity {
+  on(
+    event: "add-component" | "remove-component",
+    listener: (component: Component) => void
+  ): this;
+  on(
+    event: "add-child" | "remove-child",
+    listener: (child: Entity) => void
+  ): this;
+}
+
 export class Entity extends EventEmitter {
   private name: string = "";
   private depth: number = 0;

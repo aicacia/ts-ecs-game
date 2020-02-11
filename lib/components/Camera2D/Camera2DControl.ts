@@ -1,5 +1,5 @@
 import { vec2 } from "gl-matrix";
-import { Component } from "../../../sceneGraph";
+import { Component } from "../../sceneGraph";
 import { Transform2D } from "../Transform2D";
 import { Camera2DControlManager } from "./Camera2DControlManager";
 
@@ -79,5 +79,5 @@ export class Camera2DControl extends Component {
   }
 }
 
-import { Input, Time } from "../../../plugins";
+import { Input, Time } from "../../plugins";
 import { Camera2D } from "./Camera2D";

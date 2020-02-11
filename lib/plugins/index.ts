@@ -7,7 +7,6 @@ export {
 } from "./renderer";
 export { Time } from "./Time";
 export { FullScreenCanvas } from "./FullScreenCanvas";
-export { Control } from "./Control";
 export {
   Input,
   InputHandler,

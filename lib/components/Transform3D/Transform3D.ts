@@ -1,7 +1,7 @@
 import { Option } from "@aicacia/core";
 import { mat2d, mat4, quat, vec3 } from "gl-matrix";
-import { Entity } from "../../../sceneGraph";
-import { RenderableComponent } from "../../RenderableComponent";
+import { Entity } from "../../sceneGraph";
+import { RenderableComponent } from "../RenderableComponent";
 import { Transform3DManager } from "./Transform3DManager";
 
 const MAT4_0 = mat4.create(),
@@ -194,7 +194,7 @@ export class Transform3D extends RenderableComponent {
     return this.setNeedsUpdate();
   }
 }
-import { Transform2D } from "../../2d/Transform2D";
+import { Transform2D } from "../Transform2D";
 
 export const getParentTransform = (
   entity: Entity

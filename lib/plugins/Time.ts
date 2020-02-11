@@ -7,7 +7,6 @@ export class Time extends Plugin {
 
   private scale: number = 1.0;
 
-  private globalFixed: number = 1.0 / 60.0;
   private fixedDelta: number = 1.0 / 60.0;
 
   private frame: number = 0;
@@ -28,6 +27,9 @@ export class Time extends Plugin {
 
   getDelta() {
     return this.delta;
+  }
+  getScaledDelta() {
+    return this.delta * this.scale;
   }
 
   getCurrent() {
@@ -62,16 +64,14 @@ export class Time extends Plugin {
   }
   setScale(scale: number) {
     this.scale = scale;
-    this.fixedDelta = this.globalFixed * scale;
     return this;
   }
 
   getFixedDelta() {
-    return this.fixedDelta;
+    return this.fixedDelta * this.scale;
   }
   setFixedDelta(fixedDelta: number) {
-    this.globalFixed = fixedDelta;
-    this.fixedDelta = this.globalFixed * this.scale;
+    this.fixedDelta = fixedDelta;
     return this;
   }
 

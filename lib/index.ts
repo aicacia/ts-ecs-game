@@ -8,8 +8,7 @@ export {
   Camera3D,
   Camera3DManager,
   Transform3D,
-  Transform3DManager,
-  PausableComponent
+  Transform3DManager
 } from "./components";
 export {
   Time,
@@ -19,7 +18,6 @@ export {
   CtxRenderer,
   CtxTransform2DRendererHandler,
   Input,
-  Control,
   InputHandler,
   KeyboardInputHandler,
   MouseInputHandler,

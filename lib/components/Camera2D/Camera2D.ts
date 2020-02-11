@@ -1,10 +1,9 @@
 import { mat2d, vec2, vec3 } from "gl-matrix";
-import { RenderableComponent } from "../../RenderableComponent";
+import { RenderableComponent } from "../RenderableComponent";
 
 const MAT2D_0 = mat2d.create();
 
 export class Camera2D extends RenderableComponent {
-  static Manager = null as any;
   static componentName = "engine.Camera2D";
 
   private width: number = 1.0;

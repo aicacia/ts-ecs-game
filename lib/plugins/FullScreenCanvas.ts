@@ -1,6 +1,11 @@
 import { Plugin } from "../sceneGraph";
 import { Canvas } from "../utils";
 
+// tslint:disable-next-line: interface-name
+export interface FullScreenCanvas {
+  on(event: "emit", listener: () => void): this;
+}
+
 export class FullScreenCanvas extends Plugin {
   static pluginName = "engine.FullScreenCanvas";
 

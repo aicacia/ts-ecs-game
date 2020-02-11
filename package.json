@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@aicacia/core": "^0.1.2",
+    "@aicacia/json": "^0.1.1",
     "gl-matrix": "^3.1.0",
     "raf": "^3.4.1"
   },

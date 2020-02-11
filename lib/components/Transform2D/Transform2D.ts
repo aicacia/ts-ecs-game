@@ -4,9 +4,9 @@ import {
   composeMat2d,
   decomposeMat2d,
   getAngleBetweenPoints
-} from "../../../math";
-import { Entity } from "../../../sceneGraph";
-import { RenderableComponent } from "../../RenderableComponent";
+} from "../../math";
+import { Entity } from "../../sceneGraph";
+import { RenderableComponent } from "../RenderableComponent";
 import { Transform2DManager } from "./Transform2DManager";
 
 const MAT2_0 = mat2d.create();
@@ -204,7 +204,7 @@ export class Transform2D extends RenderableComponent {
   }
 }
 
-import { Transform3D } from "../../3d/Transform3D";
+import { Transform3D } from "../Transform3D";
 
 export const getParentTransform = (
   entity: Entity

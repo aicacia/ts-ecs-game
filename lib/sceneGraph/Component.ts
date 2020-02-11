@@ -123,5 +123,7 @@ export abstract class Component extends EventEmitter {
 
 import { IConstructor } from "../utils";
 import { Entity } from "./Entity";
-import { Manager } from "./Manager";
+import { DefaultManager, Manager } from "./Manager";
 import { Plugin } from "./Plugin";
+
+Component.Manager = DefaultManager;

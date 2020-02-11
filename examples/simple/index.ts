@@ -4,7 +4,7 @@ import {
   Camera2DControl,
   Camera2DManager,
   Canvas,
-  Control,
+  Component,
   CtxRenderer,
   CtxTransform2DRendererHandler,
   DefaultManager,
@@ -12,13 +12,12 @@ import {
   FullScreenCanvas,
   Input,
   Loop,
-  PausableComponent,
   Scene,
   Time,
   Transform2D
 } from "../../lib";
 
-class Rotator extends PausableComponent {
+class Rotator extends Component {
   static componentName = "simple.Rotator";
   // only use this if you do not need a manager, it only uses one manager so
   // any other components using the DefaultManager will be in the same manager
@@ -36,7 +35,7 @@ class Rotator extends PausableComponent {
   }
 }
 
-class LookAtCamera extends PausableComponent {
+class LookAtCamera extends Component {
   static componentName = "simple.LookAtCamera";
   static Manager = DefaultManager;
 
@@ -88,8 +87,6 @@ const canvas = new Canvas().set(512, 512),
       new Time(),
       // Handles all input
       new Input(canvas.getElement()),
-      // Control plugin
-      new Control(),
       // forces a canvas to stay in sync with the window size
       new FullScreenCanvas(canvas)
     ),

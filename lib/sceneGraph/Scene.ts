@@ -1,6 +1,23 @@
 import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
+// tslint:disable-next-line: interface-name
+export interface Scene {
+  on(event: "maintain" | "update", listener: () => void): this;
+  on(
+    event: "add-component" | "remove-component",
+    listener: (component: Component) => void
+  ): this;
+  on(
+    event: "add-plugin" | "remove-plugin",
+    listener: (entity: Plugin) => void
+  ): this;
+  on(
+    event: "add-entity" | "remove-entity",
+    listener: (entity: Entity) => void
+  ): this;
+}
+
 export class Scene extends EventEmitter {
   private entities: Entity[] = [];
   private entitiesToAdd: Entity[] = [];

@@ -1,6 +1,6 @@
 import { mat4, vec3 } from "gl-matrix";
 import * as tape from "tape";
-import { Camera3D, Entity, Scene, Transform3D } from "../../..";
+import { Camera3D, Entity, Scene, Transform3D } from "../..";
 
 tape("Camera3D", (assert: tape.Test) => {
   const camera = new Camera3D().set(256, 256);
