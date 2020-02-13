@@ -10,5 +10,9 @@
     "lib": ["esnext", "dom"]
   },
   "include": ["lib"],
-  "exclude": ["lib/**/*.test.*"]
+  "exclude": ["lib/**/*.test.*"],
+  "typedocOptions": {
+    "mode": "modules",
+    "out": "docs"
+  }
 }

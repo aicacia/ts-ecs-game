@@ -1,7 +1,7 @@
 {
   "name": "@aicacia/engine",
   "version": "0.1.0",
-  "description": "engine",
+  "description": "an entity component engine",
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/aicacia/libs/ts-engine.git"
@@ -16,6 +16,7 @@
     "coverage": "nyc --reporter=lcov --require ts-node/register tape lib/**/*.test.{ts,tsx} | tap-spec; nyc report ---reporter=text",
     "clean": "rm -rf ./src",
     "format": "prettier-tslint fix '**/*.{ts,tsx}' && prettier --write '**/*.{js,jsx,json}' --ignore-path .gitignore",
+    "doc": "typedoc",
     "lint": "tslint -c tslint.json 'lib/**/*.{ts,tsx}' -e 'lib/**/*.test.*'",
     "simple": "parcel examples/simple/index.html",
     "collisions": "parcel examples/collisions/index.html"
@@ -43,6 +44,7 @@
     "ts-node": "^8.4.1",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
+    "typedoc": "^0.16.9",
     "typescript": "^3.7.5"
   },
   "dependencies": {

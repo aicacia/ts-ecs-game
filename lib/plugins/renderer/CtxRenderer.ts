@@ -73,6 +73,7 @@ export class CtxRenderer extends Renderer {
     );
     fn(this.ctx);
     this.ctx.restore();
+    return this;
   }
 
   onUpdate() {

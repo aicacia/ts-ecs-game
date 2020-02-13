@@ -34,14 +34,13 @@ export {
 } from "./plugins";
 export {
   Component,
-  IBuilder,
   Manager,
   DefaultManager,
   Entity,
   Scene,
   Plugin
 } from "./sceneGraph";
-export { Canvas, IConstructor, Loop } from "./utils";
+export { Canvas, IConstructor, IBuilder, Loop } from "./utils";
 export {
   composeMat2d,
   decomposeMat2d,
