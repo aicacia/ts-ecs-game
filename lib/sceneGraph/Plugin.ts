@@ -59,6 +59,9 @@ export abstract class Plugin extends EventEmitter {
     return this.getScene().expect(`${this.getPluginName()} required a Scene`);
   }
 
+  onInit() {
+    return this;
+  }
   onAdd() {
     return this;
   }

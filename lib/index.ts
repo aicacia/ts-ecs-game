@@ -8,15 +8,23 @@ export {
   Camera3D,
   Camera3DManager,
   Transform3D,
-  Transform3DManager
+  Transform3DManager,
+  Sprite,
+  SpriteManager,
+  SpriteClip
 } from "./components";
 export {
+  Asset,
+  Assets,
+  JSONAsset,
+  ImageAsset,
   Time,
   Renderer,
   RendererHandler,
   CtxRendererHandler,
   CtxRenderer,
   CtxTransform2DRendererHandler,
+  CtxSpriteRendererHandler,
   Input,
   InputHandler,
   KeyboardInputHandler,

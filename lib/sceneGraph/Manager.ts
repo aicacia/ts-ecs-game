@@ -20,7 +20,18 @@ export abstract class Manager<
   }
 
   protected scene: Option<Scene> = none();
-  protected components: C[] = [];
+
+  UNSAFE_setScene(scene: Scene) {
+    this.scene = some(scene);
+    return this;
+  }
+  UNSAFE_removeScene() {
+    this.scene = none();
+    return this;
+  }
+  getScene(): Option<Scene> {
+    return this.scene;
+  }
 
   getManagerName(): string {
     return Object.getPrototypeOf(this).constructor.getManagerName();
@@ -47,69 +58,19 @@ export abstract class Manager<
     );
   }
 
-  getComponents() {
-    return this.components;
-  }
-
-  addComponent(component: C) {
-    this.components.push(component);
-    return this;
-  }
-  removeComponent(component: C) {
-    const index = this.components.indexOf(component);
-
-    if (index !== -1) {
-      this.components.splice(index, 1);
-    }
-
-    return this;
-  }
-  isEmpty() {
-    return this.components.length === 0;
-  }
-
-  sortFunction = (a: Component, b: Component) => {
-    return a
-      .getEntity()
-      .flatMap(aEntity =>
-        b.getEntity().map(bEntity => aEntity.getDepth() - bEntity.getDepth())
-      )
-      .unwrapOr(0);
-  };
-
-  sort() {
-    this.components.sort(this.sortFunction);
-    return this;
-  }
-
-  UNSAFE_setScene(scene: Scene) {
-    this.scene = some(scene);
-    return this;
-  }
-  UNSAFE_removeScene() {
-    this.scene = none();
-    return this;
-  }
-  getScene(): Option<Scene> {
-    return this.scene;
-  }
-
   onAdd() {
     return this;
   }
   onRemove() {
     return this;
   }
-  onUpdate() {
-    this.components.forEach(
-      component => component.shouldUpdate() && component.onUpdate()
-    );
-    return this;
-  }
-}
 
-export class DefaultManager extends Manager {
-  static managerName = "engine.DefaultManager";
+  abstract addComponent(component: C): this;
+  abstract removeComponent(component: C): this;
+  abstract isEmpty(): boolean;
+  abstract sort(): this;
+  abstract onInit(): this;
+  abstract onUpdate(): this;
 }
 
 import { IConstructor } from "../utils";

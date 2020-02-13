@@ -1,12 +1,7 @@
 import * as tape from "tape";
-import { Component, Entity, Manager, Plugin, Scene } from "..";
-
-export class TestManager extends Manager {
-  static managerName = "test.TestManager";
-}
+import { Component, Entity, Plugin, Scene } from ".";
 
 export class Test extends Component {
-  static Manager = TestManager;
   static componentName = "test.Test";
 
   position: number = 0;

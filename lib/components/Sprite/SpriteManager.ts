@@ -5,8 +5,12 @@ export class SpriteManager extends Manager<Sprite> {
 
   private layers: Record<number, Sprite[]> = {};
 
+  isEmpty() {
+    return Object.values(this.layers).length === 0;
+  }
+
   getComponents() {
-    return Object.values(this.layers).flat<Sprite>(0) as Sprite[];
+    return Object.values(this.layers).flat<Sprite>(1) as Sprite[];
   }
 
   addComponent(sprite: Sprite) {
@@ -32,11 +36,26 @@ export class SpriteManager extends Manager<Sprite> {
     return this;
   }
 
+  sortFunction = (a: Sprite, b: Sprite) => {
+    return a
+      .getEntity()
+      .flatMap(aEntity =>
+        b.getEntity().map(bEntity => aEntity.getDepth() - bEntity.getDepth())
+      )
+      .unwrapOr(0);
+  };
+
   sort() {
     Object.values(this.layers).forEach(layer => layer.sort(this.sortFunction));
     return this;
   }
 
+  onInit() {
+    Object.values(this.layers).forEach(layer =>
+      layer.forEach(sprite => sprite.onInit())
+    );
+    return this;
+  }
   onUpdate() {
     Object.values(this.layers).forEach(layer =>
       layer.forEach(sprite => sprite.shouldUpdate() && sprite.onUpdate())

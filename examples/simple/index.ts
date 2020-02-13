@@ -1,21 +1,28 @@
-import { vec2, vec3, vec4 } from "gl-matrix";
+import { vec2, vec3 } from "gl-matrix";
 import {
+  Assets,
   Camera2D,
   Camera2DControl,
   Camera2DManager,
   Canvas,
   Component,
   CtxRenderer,
+  CtxSpriteRendererHandler,
   CtxTransform2DRendererHandler,
   DefaultManager,
   Entity,
   FullScreenCanvas,
+  ImageAsset,
   Input,
   Loop,
   Scene,
+  Sprite,
   Time,
   Transform2D
 } from "../../lib";
+import logoPng from "./logo.png";
+
+const logoAsset = new ImageAsset(logoPng);
 
 class Rotator extends Component {
   static componentName = "simple.Rotator";
@@ -50,7 +57,7 @@ class LookAtCamera extends Component {
   }
 }
 
-const canvas = new Canvas().set(512, 512),
+const canvas = new Canvas().set(256, 256),
   scene = new Scene()
     .addEntity(
       // Camera setup
@@ -67,8 +74,11 @@ const canvas = new Canvas().set(512, 512),
         .addComponent(new Transform2D())
         .addChild(
           new Entity().addComponent(
-            new Transform2D().setLocalPosition(vec2.fromValues(9, 0)),
-            new LookAtCamera()
+            new Transform2D()
+              .setLocalPosition(vec2.fromValues(9, 0))
+              .setRenderable(false),
+            new LookAtCamera(),
+            new Sprite(logoAsset)
           )
         ),
       new Entity()
@@ -81,14 +91,17 @@ const canvas = new Canvas().set(512, 512),
     )
     .addPlugin(
       new CtxRenderer(canvas).addRendererHandler(
-        new CtxTransform2DRendererHandler()
+        new CtxTransform2DRendererHandler(),
+        new CtxSpriteRendererHandler()
       ),
       // Required by many Components and plugins
       new Time(),
       // Handles all input
       new Input(canvas.getElement()),
       // forces a canvas to stay in sync with the window size
-      new FullScreenCanvas(canvas)
+      new FullScreenCanvas(canvas),
+      // assets
+      new Assets().addAsset(logoAsset).loadAssetInBackground(logoAsset)
     ),
   loop = new Loop(() => scene.update());
 

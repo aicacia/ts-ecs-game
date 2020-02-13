@@ -30,6 +30,7 @@ export class Scene extends EventEmitter {
   private pluginsMap: Record<string, Plugin> = {};
 
   private isUpdating: boolean = false;
+  private isInitted: boolean = false;
 
   maintain() {
     this.emit("maintain");
@@ -44,6 +45,10 @@ export class Scene extends EventEmitter {
     this.isUpdating = true;
     this.emit("update");
     this.maintain();
+    if (!this.isInitted) {
+      this.isInitted = true;
+      this.plugins.forEach(plugin => plugin.onInit());
+    }
     this.plugins.forEach(plugin => plugin.onUpdate());
     this.managers.forEach(manager => manager.onUpdate());
     this.plugins.forEach(plugin => plugin.onAfterUpdate());
@@ -263,6 +268,9 @@ export class Scene extends EventEmitter {
       this.plugins.push(plugin);
       this.pluginsMap[plugin.getPluginName()] = plugin;
       plugin.UNSAFE_setScene(this);
+      if (this.isInitted) {
+        plugin.onInit();
+      }
       plugin.onAdd();
       this.sortPlugins();
       this.emit("add-plugin", plugin);

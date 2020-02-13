@@ -104,6 +104,9 @@ export abstract class Component extends EventEmitter {
     );
   }
 
+  onInit() {
+    return this;
+  }
   onDetach() {
     return this;
   }
@@ -122,8 +125,9 @@ export abstract class Component extends EventEmitter {
 }
 
 import { IConstructor } from "../utils";
+import { DefaultManager } from "./DefaultManager";
 import { Entity } from "./Entity";
-import { DefaultManager, Manager } from "./Manager";
+import { Manager } from "./Manager";
 import { Plugin } from "./Plugin";
 
 Component.Manager = DefaultManager;

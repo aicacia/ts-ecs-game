@@ -1,7 +1,7 @@
 import { none, Option, some } from "@aicacia/core";
-import { Manager } from "../../sceneGraph";
+import { DefaultManager } from "../../sceneGraph";
 
-export class Camera3DManager extends Manager<Camera3D> {
+export class Camera3DManager extends DefaultManager<Camera3D> {
   static managerName = "engine.Camera3DManager";
 
   private active: Option<Camera3D> = none();

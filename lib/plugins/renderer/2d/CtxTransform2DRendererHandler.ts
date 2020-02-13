@@ -15,13 +15,13 @@ export class CtxTransform2DRendererHandler extends CtxRendererHandler {
           ctx.beginPath();
           ctx.strokeStyle = "#0c0";
           ctx.moveTo(0, 0);
-          ctx.lineTo(0, 1);
+          ctx.lineTo(0, 0.5);
           ctx.stroke();
 
           ctx.beginPath();
           ctx.strokeStyle = "#00c";
           ctx.moveTo(0, 0);
-          ctx.lineTo(1, 0);
+          ctx.lineTo(0.5, 0);
           ctx.stroke();
 
           ctx.beginPath();
