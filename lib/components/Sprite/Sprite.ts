@@ -118,3 +118,4 @@ import { SpriteClip } from "./SpriteClip";
 import { SpriteManager } from "./SpriteManager";
 
 Sprite.Manager = SpriteManager;
+Sprite.requiredPlugins = [Time];

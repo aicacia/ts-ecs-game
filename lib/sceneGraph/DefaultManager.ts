@@ -48,9 +48,11 @@ export class DefaultManager<C extends Component = Component> extends Manager<
     return this;
   }
   onUpdate() {
-    this.components.forEach(
-      component => component.shouldUpdate() && component.onUpdate()
-    );
+    this.components.forEach(component => component.onUpdate());
+    return this;
+  }
+  onAfterUpdate() {
+    this.components.forEach(component => component.onAfterUpdate());
     return this;
   }
 }

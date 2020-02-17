@@ -63,6 +63,9 @@ export class Entity extends EventEmitter {
     return this.parent;
   }
 
+  hasScene() {
+    return this.scene.isSome();
+  }
   getScene(): Option<Scene> {
     return this.scene;
   }
@@ -89,24 +92,21 @@ export class Entity extends EventEmitter {
     return this;
   }
   find(fn: (entity: Entity) => boolean, recur: boolean = true): Option<Entity> {
-    const children = this.getChildren(),
-      entity = children.find(fn);
+    const children = this.getChildren();
 
-    if (!entity) {
-      if (recur) {
-        for (let i = 0, il = children.length; i < il; i++) {
-          const child = children[i].find(fn);
+    for (const child of children) {
+      if (fn(child)) {
+        return some(child);
+      } else if (recur) {
+        const found = child.find(fn, recur);
 
-          if (child.isSome()) {
-            return child;
-          }
+        if (found.isSome()) {
+          return found;
         }
       }
-
-      return none();
-    } else {
-      return some(entity);
     }
+
+    return none();
   }
   findWithName(name: string) {
     return this.find(entity => entity.getName() === name);
@@ -121,8 +121,48 @@ export class Entity extends EventEmitter {
     return this.find(entity => entity.getComponent(Component).isSome());
   }
 
+  findAll(fn: (entity: Entity) => boolean, recur: boolean = true): Entity[] {
+    const children = this.getChildren(),
+      matching = [];
+
+    for (const child of children) {
+      if (fn(child)) {
+        matching.push(child);
+      } else if (recur) {
+        matching.push(...child.findAll(fn, recur));
+      }
+    }
+
+    return matching;
+  }
+  findAllWithName(name: string) {
+    return this.findAll(entity => entity.getName() === name);
+  }
+  findAllWithTag(...tags: string[]) {
+    return this.findAll(entity => entity.hasTags(tags));
+  }
+  findAllWithTags(tags: string[]) {
+    return this.findAllWithTag(...tags);
+  }
+  findAllWithComponent<C extends Component>(Component: IConstructor<C>) {
+    return this.findAll(entity => entity.getComponent(Component).isSome());
+  }
+
+  findParent(fn: (entity: Entity) => boolean): Option<Entity> {
+    return this.getParent().flatMap(parent => {
+      if (fn(parent)) {
+        return some(parent);
+      } else {
+        return parent.findParent(fn);
+      }
+    });
+  }
+
   getComponents() {
     return this.components;
+  }
+  hasComponent<C extends Component = Component>(Component: IConstructor<C>) {
+    return this.getComponent(Component).isSome();
   }
   getComponent<C extends Component = Component>(
     Component: IConstructor<C>
@@ -137,6 +177,16 @@ export class Entity extends EventEmitter {
     return this.getComponent(Component).expect(
       `Entity expected to have a ${(Component as any).getComponentName()} Component`
     );
+  }
+  getComponentInstanceOf<C extends Component = Component>(
+    Component: IConstructor<C>
+  ) {
+    return Option.from(this.getComponentsInstanceOf(Component)[0]);
+  }
+  getComponentsInstanceOf<C extends Component = Component>(
+    Component: IConstructor<C>
+  ) {
+    return this.components.filter(component => component instanceof Component);
   }
 
   addComponents(components: Component[]) {
@@ -179,6 +229,41 @@ export class Entity extends EventEmitter {
   }
   removeChild(...children: Entity[]) {
     return this.removeChildren(...children);
+  }
+
+  validateRequirements() {
+    const missingComponents = [],
+      missingPlugins = [];
+
+    for (const component of this.components) {
+      for (const RequiredComponent of component.getRequiredComponents()) {
+        if (!this.hasComponent(RequiredComponent)) {
+          missingComponents.push(RequiredComponent);
+        }
+      }
+      for (const RequiredPlugin of component.getRequiredPlugins()) {
+        if (!this.getRequiredScene().hasPlugin(RequiredPlugin)) {
+          missingPlugins.push(RequiredPlugin);
+        }
+      }
+    }
+
+    if (missingComponents.length > 0 || missingPlugins.length > 0) {
+      const componentMessage = missingComponents.map(
+        missingComponent =>
+          `Entity requires ${(missingComponent as any).getComponentName()} Component`
+      );
+      const pluginMessage = missingPlugins.map(
+        missingPlugin =>
+          `Scene Component required ${(missingPlugin as any).getPluginName()} Plugin`
+      );
+      const message =
+        componentMessage.length > 0
+          ? componentMessage.join("\n") + "\n"
+          : "" + pluginMessage.join("\n");
+
+      throw new Error(message);
+    }
   }
 
   private _addComponent<C extends Component>(component: C) {

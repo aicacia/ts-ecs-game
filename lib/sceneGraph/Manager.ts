@@ -71,6 +71,7 @@ export abstract class Manager<
   abstract sort(): this;
   abstract onInit(): this;
   abstract onUpdate(): this;
+  abstract onAfterUpdate(): this;
 }
 
 import { IConstructor } from "../utils";

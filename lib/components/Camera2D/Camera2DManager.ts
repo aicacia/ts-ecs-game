@@ -7,7 +7,18 @@ export class Camera2DManager extends DefaultManager<Camera2D> {
   private active: Option<Camera2D> = none();
 
   setActive(camera: Camera2D) {
-    this.active = some(camera);
+    if (
+      camera
+        .getManager()
+        .map(manager => manager === this)
+        .unwrapOr(false)
+    ) {
+      this.active = some(camera);
+    } else {
+      throw new Error(
+        "Camera2DManager.setActive(camera: Camera2D): cannot set active if camera is not in manager"
+      );
+    }
     return this;
   }
   getActive() {

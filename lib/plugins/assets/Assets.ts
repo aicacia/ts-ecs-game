@@ -1,4 +1,3 @@
-import { err, ok } from "@aicacia/core";
 import { Plugin } from "../../sceneGraph";
 
 export class Assets extends Plugin {
@@ -9,65 +8,105 @@ export class Assets extends Plugin {
   private loadingPromises: Map<Asset, Promise<void>> = new Map();
   private unloadingPromises: Map<Asset, Promise<void>> = new Map();
 
+  find(fn: (asset: Asset) => boolean): Option<Asset> {
+    for (const asset of this.assets) {
+      if (fn(asset)) {
+        return some(asset);
+      }
+    }
+    return none();
+  }
+  findWithName(name: string) {
+    return this.find(asset => asset.getName() === name);
+  }
+
+  findAll(fn: (asset: Asset) => boolean): Asset[] {
+    const assets = [];
+    for (const asset of this.assets) {
+      if (fn(asset)) {
+        assets.push(asset);
+      }
+    }
+    return assets;
+  }
+  findAllWithName(name: string) {
+    return this.findAll(asset => asset.getName() === name);
+  }
+
   isLoading() {
     return this.loadingPromises.size > 0;
   }
 
-  getAssets() {
+  getAssets(): readonly Asset[] {
     return this.assets;
+  }
+
+  getLoadedAssets(): readonly Asset[] {
+    return this.loadedAssets;
   }
   getLoadingAssets() {
     return Array.from(this.loadingPromises.keys());
   }
+
   getUnloadingAssets() {
     return Array.from(this.unloadingPromises.keys());
   }
+  getUnloadedAssets(): ReadonlyArray<Asset> {
+    return this.assets.filter(asset => !asset.isLoaded());
+  }
 
-  addAsset(...assets: Asset[]) {
+  addAsset(...assets: readonly Asset[]) {
     return this.addAssets(assets);
   }
-  addAssets(assets: Asset[]) {
+  addAssets(assets: readonly Asset[]) {
     assets.forEach(asset => this._addAsset(asset));
     return this;
   }
 
-  removeAsset(...assets: Asset[]) {
+  removeAsset(...assets: readonly Asset[]) {
     return this.removeAssets(assets);
   }
-  removeAssets(assets: Asset[]) {
+  removeAssets(assets: readonly Asset[]) {
     assets.forEach(asset => this._removeAsset(asset));
     return this;
   }
 
-  loadAssetInBackground(...assets: Asset[]) {
+  loadAll() {
+    return this.loadAssets(this.getUnloadedAssets());
+  }
+  loadAllInBackground() {
+    return this.loadAssetsInBackground(this.getUnloadedAssets());
+  }
+
+  loadAssetInBackground(...assets: readonly Asset[]) {
     return this.loadAssetsInBackground(assets);
   }
-  loadAssetsInBackground(assets: Asset[]) {
+  loadAssetsInBackground(assets: readonly Asset[]) {
     this.loadAssets(assets);
     return this;
   }
 
-  unloadAssetInBackground(...assets: Asset[]) {
+  unloadAssetInBackground(...assets: readonly Asset[]) {
     return this.unloadAssetsInBackground(assets);
   }
-  unloadAssetsInBackground(assets: Asset[]) {
+  unloadAssetsInBackground(assets: readonly Asset[]) {
     this.unloadAssets(assets);
     return this;
   }
 
-  loadAsset(...assets: Asset[]) {
+  loadAsset(...assets: readonly Asset[]) {
     return this.loadAssets(assets);
   }
-  loadAssets(assets: Asset[]) {
+  loadAssets(assets: readonly Asset[]) {
     return Promise.all(
       assets.map(asset => this._loadAsset(asset))
     ).then(() => {});
   }
 
-  unloadAsset(...assets: Asset[]) {
+  unloadAsset(...assets: readonly Asset[]) {
     return this.unloadAssets(assets);
   }
-  unloadAssets(assets: Asset[]) {
+  unloadAssets(assets: readonly Asset[]) {
     return Promise.all(
       assets.map(asset => this._unloadAsset(asset))
     ).then(() => {});
@@ -143,4 +182,5 @@ export class Assets extends Plugin {
   }
 }
 
+import { none, Option, some } from "@aicacia/core";
 import { Asset } from "./Asset";

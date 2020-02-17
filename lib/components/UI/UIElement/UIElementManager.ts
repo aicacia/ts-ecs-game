@@ -1,23 +1,23 @@
-import { Manager } from "../../sceneGraph";
+import { Manager } from "../../../sceneGraph";
 
-export class SpriteManager extends Manager<Sprite> {
-  static managerName = "engine.SpriteManager";
+export class UIElementManager extends Manager<UIElement> {
+  static managerName = "engine.UIElementManager";
 
-  private layers: Record<number, Sprite[]> = {};
+  private layers: Record<number, UIElement[]> = {};
 
   isEmpty() {
     return Object.values(this.layers).length === 0;
   }
 
   getComponents() {
-    return Object.values(this.layers).flat<Sprite>(1) as Sprite[];
+    return Object.values(this.layers).flat<UIElement>(1) as UIElement[];
   }
 
-  addComponent(sprite: Sprite) {
+  addComponent(sprite: UIElement) {
     this.getOrCreateLayer(sprite.getLayer()).push(sprite);
     return this;
   }
-  removeComponent(sprite: Sprite) {
+  removeComponent(sprite: UIElement) {
     const layerIndex = sprite.getLayer(),
       layer = this.layers[layerIndex];
 
@@ -36,7 +36,7 @@ export class SpriteManager extends Manager<Sprite> {
     return this;
   }
 
-  sortFunction = (a: Sprite, b: Sprite) => {
+  sortFunction = (a: UIElement, b: UIElement) => {
     return a
       .getEntity()
       .flatMap(aEntity =>
@@ -58,13 +58,7 @@ export class SpriteManager extends Manager<Sprite> {
   }
   onUpdate() {
     Object.values(this.layers).forEach(layer =>
-      layer.forEach(sprite => sprite.onUpdate())
-    );
-    return this;
-  }
-  onAfterUpdate() {
-    Object.values(this.layers).forEach(layer =>
-      layer.forEach(sprite => sprite.onAfterUpdate())
+      layer.forEach(sprite => sprite.shouldUpdate() && sprite.onUpdate())
     );
     return this;
   }
@@ -75,11 +69,11 @@ export class SpriteManager extends Manager<Sprite> {
     if (layer) {
       return layer;
     } else {
-      const newLayer: Sprite[] = [];
+      const newLayer: UIElement[] = [];
       this.layers[layerIndex] = newLayer;
       return newLayer;
     }
   }
 }
 
-import { Sprite } from "./Sprite";
+import { UIElement } from "./UIElement";

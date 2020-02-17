@@ -11,7 +11,9 @@ export {
   Transform3DManager,
   Sprite,
   SpriteManager,
-  SpriteClip
+  SpriteClip,
+  TransformComponent,
+  RenderableComponent
 } from "./components";
 export {
   Asset,

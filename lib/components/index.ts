@@ -1,3 +1,5 @@
+export { TransformComponent } from "./TransformComponent";
+export { RenderableComponent } from "./RenderableComponent";
 export {
   Camera2D,
   Camera2DManager,

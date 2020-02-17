@@ -4,6 +4,7 @@ import { EventEmitter } from "events";
 export abstract class Plugin extends EventEmitter {
   static pluginName: string;
   static pluginPriority: number = 0;
+  static requiredPlugins: Array<IConstructor<Plugin>> = [];
 
   static getPluginName() {
     if (!this.pluginName) {
@@ -16,6 +17,9 @@ export abstract class Plugin extends EventEmitter {
   static getPluginPriority() {
     return this.pluginPriority;
   }
+  static getRequiredPlugins(): Array<IConstructor<Plugin>> {
+    return this.requiredPlugins;
+  }
 
   private scene: Option<Scene> = none();
 
@@ -24,6 +28,9 @@ export abstract class Plugin extends EventEmitter {
   }
   getPluginPriority(): number {
     return Object.getPrototypeOf(this).constructor.getPluginPriority();
+  }
+  getRequiredPlugins(): Array<IConstructor<Plugin>> {
+    return Object.getPrototypeOf(this).constructor.requiredPlugins;
   }
 
   getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>): Option<P> {
@@ -42,6 +49,26 @@ export abstract class Plugin extends EventEmitter {
     return this.getManager(Manager).expect(
       `${this.getPluginName()} required ${(Manager as any).getManagerName()} Manager`
     );
+  }
+
+  validateRequirements() {
+    const missingPlugins = [];
+
+    for (const plugin of this.getRequiredScene().getPlugins()) {
+      for (const RequiredPlugin of plugin.getRequiredPlugins()) {
+        if (!this.getRequiredScene().hasPlugin(RequiredPlugin)) {
+          missingPlugins.push(RequiredPlugin);
+        }
+      }
+    }
+
+    if (missingPlugins.length > 0) {
+      const pluginMessage = missingPlugins.map(
+        missingPlugin =>
+          `Scene Component required ${(missingPlugin as any).getPluginName()} Plugin`
+      );
+      throw new Error(pluginMessage.join("\n"));
+    }
   }
 
   UNSAFE_setScene(scene: Scene) {

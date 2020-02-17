@@ -1,14 +1,12 @@
-import { Option } from "@aicacia/core";
 import { mat2d, mat4, quat, vec3 } from "gl-matrix";
-import { Entity } from "../../sceneGraph";
-import { RenderableComponent } from "../RenderableComponent";
+import { TransformComponent } from "../TransformComponent";
 import { Transform3DManager } from "./Transform3DManager";
 
 const MAT4_0 = mat4.create(),
   VEC3_0 = vec3.create(),
   VEC3_UP = vec3.fromValues(0.0, 0.0, 1.0);
 
-export class Transform3D extends RenderableComponent {
+export class Transform3D extends TransformComponent {
   static componentName = "engine.Transform3D";
   static Manager = Transform3DManager;
 
@@ -21,13 +19,6 @@ export class Transform3D extends RenderableComponent {
   private scale: vec3 = vec3.fromValues(1, 1, 1);
   private rotation: quat = quat.identity(quat.create());
   private matrix: mat4 = mat4.create();
-
-  private needsUpdate: boolean = true;
-  private localNeedsUpdate: boolean = true;
-
-  onDetach() {
-    return this.setNeedsUpdate();
-  }
 
   translate(offset: vec3) {
     vec3.add(this.localPosition, this.localPosition, offset);
@@ -74,43 +65,6 @@ export class Transform3D extends RenderableComponent {
     return this.updateMatrixIfNeeded().localMatrix;
   }
 
-  setNeedsUpdate(needsUpdate: boolean = true) {
-    this.setLocalNeedsUpdate(needsUpdate);
-
-    if (needsUpdate !== this.needsUpdate) {
-      this.needsUpdate = needsUpdate;
-      this.getEntity().map(entity =>
-        entity.getChildren().forEach(child => {
-          child
-            .getComponent(Transform2D)
-            .map(transform2d => transform2d.setNeedsUpdate(needsUpdate));
-          child
-            .getComponent(Transform3D)
-            .map(transform3d => transform3d.setNeedsUpdate(needsUpdate));
-        })
-      );
-    }
-    return this;
-  }
-  getNeedsUpdate() {
-    return this.needsUpdate;
-  }
-
-  setLocalNeedsUpdate(localNeedsUpdate: boolean = true) {
-    this.localNeedsUpdate = localNeedsUpdate;
-    return this;
-  }
-  getLocalNeedsUpdate() {
-    return this.localNeedsUpdate;
-  }
-
-  updateLocalMatrixIfNeeded() {
-    if (this.localNeedsUpdate) {
-      return this.updateLocalMatrix();
-    } else {
-      return this;
-    }
-  }
   updateLocalMatrix() {
     this.localNeedsUpdate = false;
 
@@ -124,50 +78,36 @@ export class Transform3D extends RenderableComponent {
     return this;
   }
 
-  updateMatrixIfNeeded() {
-    if (this.needsUpdate) {
-      return this.updateMatrix();
-    } else {
-      return this;
-    }
-  }
   updateMatrix() {
     this.needsUpdate = false;
 
     this.updateLocalMatrix();
 
-    this.getEntity()
-      .flatMap(entity => getParentTransform(entity))
-      .mapOrElse(
-        parentTransform => {
-          if (parentTransform instanceof Transform3D) {
-            mat4.mul(
-              this.matrix,
-              parentTransform.getMatrix(),
-              this.localMatrix
-            );
-          } else {
-            mat4.mul(
-              this.matrix,
-              parentTransform.getMatrix4(MAT4_0),
-              this.localMatrix
-            );
-          }
-          mat4.getRotation(this.rotation, this.matrix);
-          mat4.getScaling(this.scale, this.matrix);
-          mat4.getTranslation(this.position, this.matrix);
-        },
-        () => {
-          mat4.copy(this.matrix, this.localMatrix);
-          vec3.copy(this.position, this.localPosition);
-          vec3.copy(this.scale, this.localScale);
-          quat.copy(this.rotation, this.localRotation);
-        }
-      );
+    this.getParentTransform().mapOrElse(
+      parentTransform => {
+        mat4.mul(
+          this.matrix,
+          parentTransform.getMatrix4(MAT4_0),
+          this.localMatrix
+        );
+        mat4.getRotation(this.rotation, this.matrix);
+        mat4.getScaling(this.scale, this.matrix);
+        mat4.getTranslation(this.position, this.matrix);
+      },
+      () => {
+        mat4.copy(this.matrix, this.localMatrix);
+        vec3.copy(this.position, this.localPosition);
+        vec3.copy(this.scale, this.localScale);
+        quat.copy(this.rotation, this.localRotation);
+      }
+    );
 
     return this;
   }
 
+  getMatrix4(out: mat4) {
+    return mat4.copy(out, this.getMatrix());
+  }
   getMatrix2d(out: mat2d) {
     const matrix = this.getMatrix();
     return mat2d.set(
@@ -194,25 +134,3 @@ export class Transform3D extends RenderableComponent {
     return this.setNeedsUpdate();
   }
 }
-import { Transform2D } from "../Transform2D";
-
-export const getParentTransform = (
-  entity: Entity
-): Option<Transform3D | Transform2D> =>
-  entity.getParent().flatMap(getTransform);
-
-const getTransform = (parent: Entity) => {
-  const parentTransform3D = parent.getComponent(Transform3D);
-
-  if (parentTransform3D.isSome()) {
-    return parentTransform3D;
-  } else {
-    const parentTransform2D = parent.getComponent(Transform2D);
-
-    if (parentTransform2D.isSome()) {
-      return parentTransform2D;
-    } else {
-      return getParentTransform(parent);
-    }
-  }
-};

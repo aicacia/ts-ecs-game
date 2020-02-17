@@ -1,17 +1,15 @@
-import { Option } from "@aicacia/core";
 import { mat2d, mat4, vec2 } from "gl-matrix";
 import {
   composeMat2d,
   decomposeMat2d,
   getAngleBetweenPoints
 } from "../../math";
-import { Entity } from "../../sceneGraph";
-import { RenderableComponent } from "../RenderableComponent";
+import { TransformComponent } from "../TransformComponent";
 import { Transform2DManager } from "./Transform2DManager";
 
 const MAT2_0 = mat2d.create();
 
-export class Transform2D extends RenderableComponent {
+export class Transform2D extends TransformComponent {
   static componentName = "engine.Transform2D";
   static Manager = Transform2DManager;
 
@@ -24,13 +22,6 @@ export class Transform2D extends RenderableComponent {
   private scale: vec2 = vec2.fromValues(1, 1);
   private rotation: number = 0.0;
   private matrix: mat2d = mat2d.create();
-
-  private needsUpdate: boolean = true;
-  private localNeedsUpdate: boolean = true;
-
-  onDetach() {
-    return this.setNeedsUpdate();
-  }
 
   translate(offset: vec2) {
     vec2.add(this.localPosition, this.localPosition, offset);
@@ -77,43 +68,6 @@ export class Transform2D extends RenderableComponent {
     return this.updateMatrixIfNeeded().localMatrix;
   }
 
-  setNeedsUpdate(needsUpdate: boolean = true) {
-    this.setLocalNeedsUpdate(needsUpdate);
-
-    if (needsUpdate !== this.needsUpdate) {
-      this.needsUpdate = needsUpdate;
-      this.getEntity().map(entity =>
-        entity.getChildren().forEach(child => {
-          child
-            .getComponent(Transform3D)
-            .map(transform3d => transform3d.setNeedsUpdate(needsUpdate));
-          child
-            .getComponent(Transform2D)
-            .map(transform2d => transform2d.setNeedsUpdate(needsUpdate));
-        })
-      );
-    }
-    return this;
-  }
-  getNeedsUpdate() {
-    return this.needsUpdate;
-  }
-
-  setLocalNeedsUpdate(localNeedsUpdate: boolean = true) {
-    this.localNeedsUpdate = localNeedsUpdate;
-    return this;
-  }
-  getLocalNeedsUpdate() {
-    return this.localNeedsUpdate;
-  }
-
-  updateLocalMatrixIfNeeded() {
-    if (this.localNeedsUpdate) {
-      return this.updateLocalMatrix();
-    } else {
-      return this;
-    }
-  }
   updateLocalMatrix() {
     this.localNeedsUpdate = false;
 
@@ -127,48 +81,27 @@ export class Transform2D extends RenderableComponent {
     return this;
   }
 
-  updateMatrixIfNeeded() {
-    if (this.needsUpdate) {
-      return this.updateMatrix();
-    } else {
-      return this;
-    }
-  }
   updateMatrix() {
     this.needsUpdate = false;
 
     this.updateLocalMatrix();
 
-    this.getEntity()
-      .flatMap(entity => getParentTransform(entity))
-      .mapOrElse(
-        parentTransform => {
-          if (parentTransform instanceof Transform2D) {
-            mat2d.mul(
-              this.matrix,
-              parentTransform.getMatrix(),
-              this.localMatrix
-            );
-          } else {
-            mat2d.mul(
-              this.matrix,
-              parentTransform.getMatrix2d(MAT2_0),
-              this.localMatrix
-            );
-          }
-          this.rotation = decomposeMat2d(
-            this.matrix,
-            this.position,
-            this.scale
-          );
-        },
-        () => {
-          mat2d.copy(this.matrix, this.localMatrix);
-          vec2.copy(this.position, this.localPosition);
-          vec2.copy(this.scale, this.localScale);
-          this.rotation = this.localRotation;
-        }
-      );
+    this.getParentTransform().mapOrElse(
+      parentTransform => {
+        mat2d.mul(
+          this.matrix,
+          parentTransform.getMatrix2d(MAT2_0),
+          this.localMatrix
+        );
+        this.rotation = decomposeMat2d(this.matrix, this.position, this.scale);
+      },
+      () => {
+        mat2d.copy(this.matrix, this.localMatrix);
+        vec2.copy(this.position, this.localPosition);
+        vec2.copy(this.scale, this.localScale);
+        this.rotation = this.localRotation;
+      }
+    );
 
     return this;
   }
@@ -195,6 +128,9 @@ export class Transform2D extends RenderableComponent {
       1.0
     );
   }
+  getMatrix2d(out: mat2d) {
+    return mat2d.copy(out, this.getMatrix());
+  }
 
   // TODO: this makes no sense, position is global but it works! why?
   lookAt(position: vec2) {
@@ -203,26 +139,3 @@ export class Transform2D extends RenderableComponent {
     );
   }
 }
-
-import { Transform3D } from "../Transform3D";
-
-export const getParentTransform = (
-  entity: Entity
-): Option<Transform2D | Transform3D> =>
-  entity.getParent().flatMap(getTransform);
-
-const getTransform = (parent: Entity) => {
-  const parentTransform2D = parent.getComponent(Transform2D);
-
-  if (parentTransform2D.isSome()) {
-    return parentTransform2D;
-  } else {
-    const parentTransform3D = parent.getComponent(Transform3D);
-
-    if (parentTransform3D.isSome()) {
-      return parentTransform3D;
-    } else {
-      return getParentTransform(parent);
-    }
-  }
-};

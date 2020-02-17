@@ -29,6 +29,8 @@ class Rotator extends Component {
   // only use this if you do not need a manager, it only uses one manager so
   // any other components using the DefaultManager will be in the same manager
   static Manager = DefaultManager;
+  static requiredComponents = [Transform2D];
+  static requiredPlugins = [Time];
 
   private rotation = 0.0;
 
@@ -45,6 +47,7 @@ class Rotator extends Component {
 class LookAtCamera extends Component {
   static componentName = "simple.LookAtCamera";
   static Manager = DefaultManager;
+  static requiredComponents = [Transform2D];
 
   onUpdate() {
     const cameraPosition = this.getRequiredScene()
@@ -101,7 +104,7 @@ const canvas = new Canvas().set(256, 256),
       // forces a canvas to stay in sync with the window size
       new FullScreenCanvas(canvas),
       // assets
-      new Assets().addAsset(logoAsset).loadAssetInBackground(logoAsset)
+      new Assets().addAsset(logoAsset).loadAllInBackground()
     ),
   loop = new Loop(() => scene.update());
 

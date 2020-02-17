@@ -22,8 +22,8 @@ export class Camera3D extends RenderableComponent {
   private near = EPSILON;
   private far = 1024;
 
-  private projection = mat4.create();
-  private view = mat4.create();
+  private projection = mat4.identity(mat4.create());
+  private view = mat4.identity(mat4.create());
 
   private needsUpdate = true;
   private background: vec3 = vec3.create();
@@ -113,8 +113,10 @@ export class Camera3D extends RenderableComponent {
   }
 
   getView() {
-    this.getComponent(Transform3D).map(transform =>
-      mat4.invert(this.view, transform.getMatrix())
+    this.getEntity().ifSome(entity =>
+      TransformComponent.getTransform(entity).ifSome(transform => {
+        mat4.invert(this.view, transform.getMatrix4(MAT4_0));
+      })
     );
     return this.view;
   }
@@ -204,7 +206,7 @@ export class Camera3D extends RenderableComponent {
   }
 }
 
-import { Transform3D } from "../Transform3D";
+import { TransformComponent } from "../TransformComponent";
 import { Camera3DManager } from "./Camera3DManager";
 
 Camera3D.Manager = Camera3DManager;

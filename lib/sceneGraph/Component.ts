@@ -2,8 +2,10 @@ import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class Component extends EventEmitter {
-  static Manager: new () => Manager;
+  static Manager: IConstructor<Manager>;
   static componentName: string;
+  static requiredComponents: Array<IConstructor<Component>> = [];
+  static requiredPlugins: Array<IConstructor<Plugin>> = [];
 
   static getComponentName(): string {
     if (!this.componentName) {
@@ -29,6 +31,12 @@ export abstract class Component extends EventEmitter {
     }
     return this.Manager;
   }
+  static getRequiredComponents(): Array<IConstructor<Component>> {
+    return this.requiredComponents;
+  }
+  static getRequiredPlugins(): Array<IConstructor<Plugin>> {
+    return this.requiredPlugins;
+  }
 
   private entity: Option<Entity> = none();
   private manager: Option<Manager> = none();
@@ -38,6 +46,12 @@ export abstract class Component extends EventEmitter {
   }
   getManagerConstructor<M extends Manager = Manager>(): new () => M {
     return Object.getPrototypeOf(this).constructor.getManagerConstructor();
+  }
+  getRequiredComponents(): Array<IConstructor<Component>> {
+    return Object.getPrototypeOf(this).constructor.requiredComponents;
+  }
+  getRequiredPlugins(): Array<IConstructor<Plugin>> {
+    return Object.getPrototypeOf(this).constructor.requiredPlugins;
   }
 
   getComponent<C extends Component = Component>(Component: IConstructor<C>) {
@@ -116,10 +130,10 @@ export abstract class Component extends EventEmitter {
   onRemove() {
     return this;
   }
-  shouldUpdate() {
-    return true;
-  }
   onUpdate() {
+    return this;
+  }
+  onAfterUpdate() {
     return this;
   }
 }

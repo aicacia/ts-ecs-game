@@ -83,6 +83,30 @@ export class Scene extends EventEmitter {
     return this.find(entity => entity.getName() === name);
   }
 
+  findAll(fn: (entity: Entity) => boolean, recur: boolean = true): Entity[] {
+    const entities = this.getEntities(),
+      matching = [];
+
+    for (const entity of entities) {
+      if (fn(entity)) {
+        matching.push(entity);
+      } else if (recur) {
+        matching.push(...entity.findAll(fn, recur));
+      }
+    }
+
+    return matching;
+  }
+  findAllWithTag(...tags: string[]) {
+    return this.findAll(entity => entity.hasTags(tags));
+  }
+  findAllWithTags(tags: string[]) {
+    return this.findAllWithTag(...tags);
+  }
+  findAllWithName(name: string) {
+    return this.findAll(entity => entity.getName() === name);
+  }
+
   getEntities() {
     return this.entities;
   }
@@ -103,6 +127,9 @@ export class Scene extends EventEmitter {
 
   getPlugins() {
     return this.plugins;
+  }
+  hasPlugin<P extends Plugin>(Plugin: IConstructor<P>) {
+    return this.getPlugin(Plugin).isSome();
   }
   getPlugin<P extends Plugin>(Plugin: IConstructor<P>): Option<P> {
     return Option.from(
@@ -256,6 +283,10 @@ export class Scene extends EventEmitter {
       .forEach(component => this.UNSAFE_addComponent(component));
     entity.getChildren().forEach(child => this._addEntityNow(child, true));
 
+    if (process.env.NODE_ENV !== "production") {
+      entity.validateRequirements();
+    }
+
     this.emit("add-entity", entity);
 
     return this;
@@ -272,6 +303,9 @@ export class Scene extends EventEmitter {
         plugin.onInit();
       }
       plugin.onAdd();
+      if (process.env.NODE_ENV !== "production") {
+        plugin.validateRequirements();
+      }
       this.sortPlugins();
       this.emit("add-plugin", plugin);
     }

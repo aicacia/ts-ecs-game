@@ -14,8 +14,8 @@ export class Camera2D extends RenderableComponent {
   private minSize = Number.EPSILON;
   private maxSize = Infinity;
 
-  private projection = mat2d.create();
-  private view = mat2d.create();
+  private projection = mat2d.identity(mat2d.create());
+  private view = mat2d.identity(mat2d.create());
 
   private needsUpdate = true;
   private background: vec3 = vec3.create();
@@ -82,8 +82,10 @@ export class Camera2D extends RenderableComponent {
   }
 
   getView() {
-    this.getComponent(Transform2D).map(transform =>
-      mat2d.invert(this.view, transform.getMatrix())
+    this.getEntity().ifSome(entity =>
+      TransformComponent.getTransform(entity).ifSome(transform => {
+        mat2d.invert(this.view, transform.getMatrix2d(MAT2D_0));
+      })
     );
     return this.view;
   }
@@ -157,6 +159,7 @@ export class Camera2D extends RenderableComponent {
 }
 
 import { Transform2D } from "../Transform2D";
+import { TransformComponent } from "../TransformComponent";
 import { Camera2DManager } from "./Camera2DManager";
 
 Camera2D.Manager = Camera2DManager;

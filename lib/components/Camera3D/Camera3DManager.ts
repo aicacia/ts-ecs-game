@@ -7,7 +7,18 @@ export class Camera3DManager extends DefaultManager<Camera3D> {
   private active: Option<Camera3D> = none();
 
   setActive(camera: Camera3D) {
-    this.active = some(camera);
+    if (
+      camera
+        .getManager()
+        .map(manager => manager === this)
+        .unwrapOr(false)
+    ) {
+      this.active = some(camera);
+    } else {
+      throw new Error(
+        "Camera3DManager.setActive(camera: Camera3D): cannot set active if camera is not in manager"
+      );
+    }
     return this;
   }
   getActive() {
