@@ -12,6 +12,7 @@ export {
   Sprite,
   SpriteManager,
   SpriteClip,
+  RunOnUpdateComponent,
   TransformComponent,
   RenderableComponent
 } from "./components";
@@ -55,6 +56,7 @@ export {
   toRgb,
   toRgba,
   clamp,
+  angleVec2,
   getRotationFromMat2d,
   getAngleBetweenPoints,
   getAngleFromPoint,

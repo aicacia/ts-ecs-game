@@ -23,6 +23,10 @@ export class Input extends Plugin {
     this.element = element;
 
     this.addInputHandler(new MouseInputHandler(), new KeyboardInputHandler());
+    this.addAxes(
+      new InputAxis("horizontal-keys", "ArrowLeft", "ArrowRight"),
+      new InputAxis("vertical-keys", "ArrowDown", "ArrowUp")
+    );
   }
 
   getElement() {
@@ -35,6 +39,21 @@ export class Input extends Plugin {
   }
   addAxis(...axes: InputAxis[]) {
     return this.addAxes(...axes);
+  }
+  getAxis(name: string) {
+    return Option.from(this.axes[name]);
+  }
+  getAxisValue(name: string) {
+    return this.getAxis(name).map(axis => axis.getValue());
+  }
+
+  getRequiredAxis(name: string) {
+    return this.getAxis(name).expect(`Failed to get Required Axis ${name}`);
+  }
+  getRequiredAxisValue(name: string) {
+    return this.getAxisValue(name).expect(
+      `Failed to get Required Axis value for ${name}`
+    );
   }
 
   removeAxes(...axes: InputAxis[]) {
@@ -141,8 +160,8 @@ export class Input extends Plugin {
     axis.UNSAFE_update(
       time,
       axis.getValue(),
-      posValue !== 0.0,
-      negValue !== 0.0
+      negValue !== 0.0,
+      posValue !== 0.0
     );
   }
 

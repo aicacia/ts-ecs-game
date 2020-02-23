@@ -51,6 +51,7 @@ export class Scene extends EventEmitter {
     }
     this.plugins.forEach(plugin => plugin.onUpdate());
     this.managers.forEach(manager => manager.onUpdate());
+    this.managers.forEach(manager => manager.onAfterUpdate());
     this.plugins.forEach(plugin => plugin.onAfterUpdate());
     this.isUpdating = false;
     return this;
@@ -191,6 +192,10 @@ export class Scene extends EventEmitter {
       );
     }
 
+    entity
+      .getComponents()
+      .forEach(component => this.UNSAFE_removeComponent(component));
+
     if (entity.isRoot()) {
       const index = this.entities.indexOf(entity);
 
@@ -202,11 +207,7 @@ export class Scene extends EventEmitter {
       entity.getParent().map(parent => parent.removeChild(entity));
     }
 
-    entity
-      .getComponents()
-      .forEach(component => this.UNSAFE_removeComponent(component));
     entity.getChildren().forEach(child => this.removeEntityNow(child, true));
-
     this.emit("remove-entity", entity);
 
     return this;

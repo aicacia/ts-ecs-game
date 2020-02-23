@@ -1,5 +1,6 @@
+import { none, Option } from "@aicacia/core";
 import { mat2d } from "gl-matrix";
-import { Camera2DManager } from "../../components";
+import { Camera2D, Camera2DManager } from "../../components";
 import { toRgb } from "../../math";
 import { Canvas } from "../../utils/Canvas";
 import { Renderer } from "./Renderer";
@@ -12,6 +13,8 @@ export class CtxRenderer extends Renderer {
   private canvas: Canvas;
   private ctx: CanvasRenderingContext2D;
   private lineWidth: number = 1.0;
+  private camera: Option<Camera2D> = none();
+  private enabled: boolean = true;
 
   constructor(canvas: Canvas) {
     super();
@@ -31,6 +34,14 @@ export class CtxRenderer extends Renderer {
     return this.ctx;
   }
 
+  getEnabled() {
+    return this.enabled;
+  }
+  setEnabled(enabled: boolean = true) {
+    this.enabled = enabled;
+    return this;
+  }
+
   getLineWidth() {
     return this.lineWidth;
   }
@@ -39,10 +50,21 @@ export class CtxRenderer extends Renderer {
     return this;
   }
 
-  getCamera() {
+  getActiveCamera = () => {
     return this.getRequiredScene()
       .getRequiredManager(Camera2DManager)
       .getRequiredActive();
+  };
+  getCamera() {
+    return this.camera.unwrapOrElse(this.getActiveCamera);
+  }
+  setCamera(camera: Camera2D) {
+    this.camera.replace(camera);
+    return this;
+  }
+  removeCamera() {
+    this.camera.take();
+    return this;
   }
 
   getCanvasSize() {
@@ -77,6 +99,9 @@ export class CtxRenderer extends Renderer {
   }
 
   onUpdate() {
+    if (!this.enabled) {
+      return this;
+    }
     const camera = this.getCamera(),
       width = this.canvas.getWidth(),
       height = this.canvas.getHeight(),
