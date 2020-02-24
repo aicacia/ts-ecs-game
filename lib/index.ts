@@ -57,6 +57,7 @@ export {
   toRgba,
   clamp,
   angleVec2,
+  vec2FromAngle,
   getRotationFromMat2d,
   getAngleBetweenPoints,
   getAngleFromPoint,

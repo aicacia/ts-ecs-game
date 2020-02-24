@@ -28,13 +28,17 @@ export class InputButton {
   }
 
   UNSAFE_up(frame: number) {
+    if (this.value === 1.0) {
+      this.frameUp = frame;
+    }
     this.value = 0.0;
-    this.frameUp = frame;
     return this;
   }
   UNSAFE_down(frame: number) {
+    if (this.value === 0.0) {
+      this.frameDown = frame;
+    }
     this.value = 1.0;
-    this.frameDown = frame;
     return this;
   }
 }

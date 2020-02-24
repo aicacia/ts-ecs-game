@@ -23,10 +23,10 @@ export class KeyboardInputHandler extends InputHandler {
 
     switch (e.type) {
       case "keydown":
-        input.getOrCreateButton(e.key).UNSAFE_down(time.getFrame());
+        input.getOrCreateButton(e.code).UNSAFE_down(time.getFrame());
         break;
       case "keyup":
-        input.getOrCreateButton(e.key).UNSAFE_up(time.getFrame());
+        input.getOrCreateButton(e.code).UNSAFE_up(time.getFrame());
         break;
     }
     return this;

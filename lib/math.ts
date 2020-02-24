@@ -2,6 +2,7 @@ import { mat2d, vec2, vec3, vec4 } from "gl-matrix";
 
 export const DEG_TO_RAD = Math.PI / 180;
 export const RAD_TO_DEG = 180 / Math.PI;
+export const HALF_PI = Math.PI * 0.5;
 export const EPSILON = 0.000001;
 
 export function composeMat2d(
@@ -80,7 +81,14 @@ export function clamp(value: number, min: number, max: number) {
 }
 
 export function angleVec2(out: vec2) {
-  return Math.atan2(out[1], out[0]);
+  return Math.atan2(out[1], out[0]) - HALF_PI;
+}
+
+export function vec2FromAngle(out: vec2, angle: number) {
+  const a = angle + HALF_PI;
+  out[0] = Math.cos(a);
+  out[1] = Math.sin(a);
+  return out;
 }
 
 export function projectPointOnAxis(out: vec2, point: vec2, axis: vec2) {

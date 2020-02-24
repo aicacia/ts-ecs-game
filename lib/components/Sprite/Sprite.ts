@@ -50,8 +50,16 @@ export class Sprite extends RenderableComponent {
   getWidth() {
     return this.width;
   }
+  setWidth(width: number) {
+    this.width = width;
+    return this;
+  }
   getHeight() {
     return this.height;
+  }
+  setHeight(height: number) {
+    this.height = height;
+    return this;
   }
 
   shouldUpdate() {

@@ -205,6 +205,11 @@ export class Entity extends EventEmitter {
     return this.removeComponents(components);
   }
 
+  removeFromScene() {
+    this.scene.map(scene => {
+      scene.removeEntity(this);
+    });
+  }
   detach() {
     this.parent.map(parent => {
       parent._removeChild(this);
