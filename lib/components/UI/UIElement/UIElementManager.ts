@@ -58,7 +58,13 @@ export class UIElementManager extends Manager<UIElement> {
   }
   onUpdate() {
     Object.values(this.layers).forEach(layer =>
-      layer.forEach(sprite => sprite.shouldUpdate() && sprite.onUpdate())
+      layer.forEach(sprite => sprite.onUpdate())
+    );
+    return this;
+  }
+  onAfterUpdate() {
+    Object.values(this.layers).forEach(layer =>
+      layer.forEach(sprite => sprite.onAfterUpdate())
     );
     return this;
   }

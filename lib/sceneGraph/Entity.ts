@@ -135,8 +135,8 @@ export class Entity extends EventEmitter {
 
     return matching;
   }
-  findAllWithName(name: string) {
-    return this.findAll(entity => entity.getName() === name);
+  findAllWithName(name: string, recur: boolean = true) {
+    return this.findAll(entity => entity.getName() === name, recur);
   }
   findAllWithTag(...tags: string[]) {
     return this.findAll(entity => entity.hasTags(tags));
@@ -144,8 +144,14 @@ export class Entity extends EventEmitter {
   findAllWithTags(tags: string[]) {
     return this.findAllWithTag(...tags);
   }
-  findAllWithComponent<C extends Component>(Component: IConstructor<C>) {
-    return this.findAll(entity => entity.getComponent(Component).isSome());
+  findAllWithComponent<C extends Component>(
+    Component: IConstructor<C>,
+    recur: boolean = true
+  ) {
+    return this.findAll(
+      entity => entity.getComponent(Component).isSome(),
+      recur
+    );
   }
 
   findParent(fn: (entity: Entity) => boolean): Option<Entity> {

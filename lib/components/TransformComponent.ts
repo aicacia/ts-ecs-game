@@ -1,5 +1,5 @@
 import { Option } from "@aicacia/core";
-import { mat2d, mat4 } from "gl-matrix";
+import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { Entity } from "../sceneGraph";
 import { RenderableComponent } from "./RenderableComponent";
 
@@ -80,4 +80,22 @@ export abstract class TransformComponent extends RenderableComponent {
   abstract updateMatrix(): this;
   abstract getMatrix2d(out: mat2d): mat2d;
   abstract getMatrix4(out: mat4): mat4;
+
+  abstract getLocalPosition2(out: vec2): vec2;
+  abstract getLocalPosition3(out: vec3): vec3;
+
+  abstract setLocalPosition2(localPosition: vec2): this;
+  abstract setLocalPosition3(localPosition: vec3): this;
+
+  abstract getLocalRotationZ(): number;
+  abstract getLocalRotationQuat(out: quat): quat;
+
+  abstract setLocalRotationZ(localRotation: number): this;
+  abstract setLocalRotationQuat(localRotation: quat): this;
+
+  abstract getLocalScale2(out: vec2): vec2;
+  abstract getLocalScale3(out: vec3): vec3;
+
+  abstract setLocalScale2(localScale: vec2): this;
+  abstract setLocalScale3(localScale: vec3): this;
 }

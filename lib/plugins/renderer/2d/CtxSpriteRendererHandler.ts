@@ -5,37 +5,38 @@ export class CtxSpriteRendererHandler extends CtxRendererHandler {
   static rendererHandlerName = "engine.CtxSpriteRendererHandler";
 
   onRender() {
-    const renderer = this.getRequiredRenderer(),
-      spriteManager = this.getRequiredManager(SpriteManager);
+    this.getManager(SpriteManager).ifSome(spriteManager => {
+      const renderer = this.getRequiredRenderer();
 
-    spriteManager.getComponents().forEach(sprite => {
-      const image = sprite.getImage();
+      spriteManager.getComponents().forEach(sprite => {
+        const image = sprite.getImage();
 
-      if (sprite.getRenderable()) {
-        image.ifSome(img =>
-          sprite.getComponent(Transform2D).ifSome(transform2d =>
-            renderer.render(ctx => {
-              const width = sprite.getWidth(),
-                height = sprite.getHeight(),
-                halfWidth = width * 0.5,
-                halfHeight = height * 0.5;
+        if (sprite.getRenderable()) {
+          image.ifSome(img =>
+            sprite.getComponent(Transform2D).ifSome(transform2d =>
+              renderer.render(ctx => {
+                const width = sprite.getWidth(),
+                  height = sprite.getHeight(),
+                  halfWidth = width * 0.5,
+                  halfHeight = height * 0.5;
 
-              ctx.scale(1, -1);
-              ctx.drawImage(
-                img,
-                sprite.getClipX(),
-                sprite.getClipY(),
-                sprite.getClipWidth(),
-                sprite.getClipHeight(),
-                -halfWidth,
-                -halfHeight,
-                width,
-                height
-              );
-            }, transform2d.getMatrix())
-          )
-        );
-      }
+                ctx.scale(1, -1);
+                ctx.drawImage(
+                  img,
+                  sprite.getClipX(),
+                  sprite.getClipY(),
+                  sprite.getClipWidth(),
+                  sprite.getClipHeight(),
+                  -halfWidth,
+                  -halfHeight,
+                  width,
+                  height
+                );
+              }, transform2d.getMatrix())
+            )
+          );
+        }
+      });
     });
 
     return this;

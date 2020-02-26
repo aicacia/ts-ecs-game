@@ -1,4 +1,4 @@
-import { mat2d, mat4, vec2 } from "gl-matrix";
+import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import {
   composeMat2d,
   decomposeMat2d,
@@ -7,7 +7,8 @@ import {
 import { TransformComponent } from "../TransformComponent";
 import { Transform2DManager } from "./Transform2DManager";
 
-const MAT2_0 = mat2d.create();
+const MAT2_0 = mat2d.create(),
+  VEC3_0 = vec3.create();
 
 export class Transform2D extends TransformComponent {
   static componentName = "engine.Transform2D";
@@ -22,6 +23,58 @@ export class Transform2D extends TransformComponent {
   private scale: vec2 = vec2.fromValues(1, 1);
   private rotation: number = 0.0;
   private matrix: mat2d = mat2d.create();
+
+  getLocalPosition2(out: vec2) {
+    return vec2.copy(out, this.localPosition);
+  }
+  getLocalPosition3(out: vec3) {
+    out[0] = this.localPosition[0];
+    out[1] = this.localPosition[1];
+    return out;
+  }
+
+  setLocalPosition2(localPosition: vec2) {
+    return this.setLocalPosition(localPosition);
+  }
+  setLocalPosition3(localPosition: vec3) {
+    this.localPosition[0] = localPosition[0];
+    this.localPosition[1] = localPosition[1];
+    return this;
+  }
+
+  getLocalRotationZ() {
+    return this.localRotation;
+  }
+  getLocalRotationQuat(out: quat) {
+    return quat.fromEuler(out, 0, 0, this.localRotation);
+  }
+
+  setLocalRotationZ(localRotation: number) {
+    return this.setLocalRotation(localRotation);
+  }
+  setLocalRotationQuat(localRotation: quat) {
+    // TODO: get z rotation from quat
+    this.localRotation = 0.0;
+    return this;
+  }
+
+  getLocalScale2(out: vec2) {
+    return vec2.copy(out, this.localScale);
+  }
+  getLocalScale3(out: vec3) {
+    out[0] = this.localScale[0];
+    out[1] = this.localScale[1];
+    return out;
+  }
+
+  setLocalScale2(localScale: vec2) {
+    return this.setLocalScale(localScale);
+  }
+  setLocalScale3(localScale: vec3) {
+    this.localPosition[0] = localScale[0];
+    this.localPosition[1] = localScale[1];
+    return this;
+  }
 
   translate(offset: vec2) {
     vec2.add(this.localPosition, this.localPosition, offset);

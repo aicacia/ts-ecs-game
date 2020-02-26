@@ -1,4 +1,4 @@
-import { mat2d, mat4, quat, vec3 } from "gl-matrix";
+import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { TransformComponent } from "../TransformComponent";
 import { Transform3DManager } from "./Transform3DManager";
 
@@ -19,6 +19,58 @@ export class Transform3D extends TransformComponent {
   private scale: vec3 = vec3.fromValues(1, 1, 1);
   private rotation: quat = quat.identity(quat.create());
   private matrix: mat4 = mat4.create();
+
+  getLocalPosition3(out: vec3) {
+    return vec3.copy(out, this.localPosition);
+  }
+  getLocalPosition2(out: vec2) {
+    out[0] = this.localPosition[0];
+    out[1] = this.localPosition[1];
+    return out;
+  }
+
+  setLocalPosition2(localPosition: vec2) {
+    this.localPosition[0] = localPosition[0];
+    this.localPosition[1] = localPosition[1];
+    return this;
+  }
+  setLocalPosition3(localPosition: vec3) {
+    return this.setLocalPosition(localPosition);
+  }
+
+  getLocalRotationQuat(out: quat) {
+    return quat.copy(out, this.localRotation);
+  }
+  getLocalRotationZ() {
+    // TODO: get only z roation of quat
+    return 0.0;
+  }
+
+  setLocalRotationZ(localRotation: number) {
+    // TODO: set only z roation of quat
+    return this;
+  }
+  setLocalRotationQuat(localRotation: quat) {
+    return this.setLocalRotation(localRotation);
+  }
+
+  getLocalScale3(out: vec3) {
+    return vec3.copy(out, this.localScale);
+  }
+  getLocalScale2(out: vec2) {
+    out[0] = this.localScale[0];
+    out[1] = this.localScale[1];
+    return out;
+  }
+
+  setLocalScale2(localScale: vec2) {
+    this.localPosition[0] = localScale[0];
+    this.localPosition[1] = localScale[1];
+    return this;
+  }
+  setLocalScale3(localScale: vec3) {
+    return this.setLocalScale(localScale);
+  }
 
   translate(offset: vec3) {
     vec3.add(this.localPosition, this.localPosition, offset);

@@ -44,6 +44,7 @@ export {
   Plugin
 } from "./sceneGraph";
 export { Canvas, IConstructor, IBuilder, Loop } from "./utils";
+export { AABB2 } from "./AABB2";
 export {
   composeMat2d,
   decomposeMat2d,
