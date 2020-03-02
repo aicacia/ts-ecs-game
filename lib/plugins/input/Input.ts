@@ -1,5 +1,6 @@
 import { Option } from "@aicacia/core";
 import { Plugin } from "../../sceneGraph";
+import { IConstructor } from "../../utils";
 import { Time } from "../Time";
 import { InputAxis } from "./InputAxis";
 import { InputButton } from "./InputButton";
@@ -8,12 +9,14 @@ import { KeyboardInputHandler } from "./KeyboardInputHandler";
 import { MouseInputHandler } from "./MouseInputHandler";
 
 export class Input extends Plugin {
-  static pluginName = "engine.Input";
   static pluginPriority = -Infinity;
 
   private element: Element;
   private inputHandlers: InputHandler[] = [];
-  private inputHandlerMap: Record<string, InputHandler> = {};
+  private inputHandlerMap: Map<
+    IConstructor<InputHandler>,
+    InputHandler
+  > = new Map();
   private buttons: { [key: string]: InputButton } = {};
   private axes: { [key: string]: InputAxis } = {};
 
@@ -53,6 +56,19 @@ export class Input extends Plugin {
   getRequiredAxisValue(name: string) {
     return this.getAxisValue(name).expect(
       `Failed to get Required Axis value for ${name}`
+    );
+  }
+
+  getInputHandler<I extends InputHandler = InputHandler>(
+    InputHandler: IConstructor<I>
+  ) {
+    return Option.from(this.inputHandlerMap.get(InputHandler));
+  }
+  getRequiredInputHandler<I extends InputHandler = InputHandler>(
+    InputHandler: IConstructor<I>
+  ) {
+    return this.getInputHandler(InputHandler).expect(
+      `Failed to get Required InputHandler ${InputHandler}`
     );
   }
 
@@ -165,12 +181,14 @@ export class Input extends Plugin {
     );
   }
 
-  private _addInputHandler<I extends InputHandler>(inputHandler: I) {
-    const inputHandlerName = inputHandler.getInputHandlerName();
+  private _addInputHandler<I extends InputHandler = InputHandler>(
+    inputHandler: I
+  ) {
+    const InputHandler = inputHandler.getConstructor();
 
-    if (!this.inputHandlerMap[inputHandlerName]) {
+    if (!this.inputHandlerMap.has(InputHandler)) {
       this.inputHandlers.push(inputHandler);
-      this.inputHandlerMap[inputHandlerName] = inputHandler;
+      this.inputHandlerMap.set(InputHandler, inputHandler);
       inputHandler.UNSAFE_setInput(this);
       inputHandler.onAdd();
       this.emit("add-input_handler", inputHandler);
@@ -178,21 +196,17 @@ export class Input extends Plugin {
 
     return this;
   }
-  private _removeInputHandler<I extends InputHandler>(
-    InputHandler: new () => I
+  private _removeInputHandler<I extends InputHandler = InputHandler>(
+    InputHandler: IConstructor<I>
   ) {
-    const inputHandlerName = (InputHandler as any).getInputName(),
-      inputHandler = this.inputHandlerMap[inputHandlerName];
-
-    if (inputHandler) {
+    this.getInputHandler(InputHandler).ifSome(inputHandler => {
       this.emit("remove-input_handler", inputHandler);
       inputHandler.onRemove();
 
       this.inputHandlers.splice(this.inputHandlers.indexOf(inputHandler), 1);
-      delete this.inputHandlerMap[inputHandlerName];
+      this.inputHandlerMap.delete(InputHandler);
       inputHandler.UNSAFE_removeInput();
-    }
-
+    });
     return this;
   }
 }

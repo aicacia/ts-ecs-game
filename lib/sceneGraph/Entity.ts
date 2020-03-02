@@ -22,7 +22,7 @@ export class Entity extends EventEmitter {
   private tags: Set<string> = new Set();
   private children: Entity[] = [];
   private components: Component[] = [];
-  private componentMap: Record<string, Component> = {};
+  private componentMap: Map<IConstructor<Component>, Component> = new Map();
 
   getName() {
     return this.name;
@@ -173,15 +173,13 @@ export class Entity extends EventEmitter {
   getComponent<C extends Component = Component>(
     Component: IConstructor<C>
   ): Option<C> {
-    return Option.from(
-      this.componentMap[(Component as any).getComponentName()] as C
-    );
+    return Option.from(this.componentMap.get(Component) as C);
   }
   getRequiredComponent<C extends Component = Component>(
     Component: IConstructor<C>
   ) {
     return this.getComponent(Component).expect(
-      `Entity expected to have a ${(Component as any).getComponentName()} Component`
+      `Entity expected to have a ${Component} Component`
     );
   }
   getComponentInstanceOf<C extends Component = Component>(
@@ -261,12 +259,10 @@ export class Entity extends EventEmitter {
 
     if (missingComponents.length > 0 || missingPlugins.length > 0) {
       const componentMessage = missingComponents.map(
-        missingComponent =>
-          `Entity requires ${(missingComponent as any).getComponentName()} Component`
+        missingComponent => `Entity requires ${missingComponent} Component`
       );
       const pluginMessage = missingPlugins.map(
-        missingPlugin =>
-          `Scene Component required ${(missingPlugin as any).getPluginName()} Plugin`
+        missingPlugin => `Scene Component required ${missingPlugin} Plugin`
       );
       const message =
         componentMessage.length > 0
@@ -278,13 +274,13 @@ export class Entity extends EventEmitter {
   }
 
   private _addComponent<C extends Component>(component: C) {
-    const componentName = component.getComponentName();
+    const Component = component.getConstructor();
 
-    if (!this.componentMap[componentName]) {
+    if (!this.componentMap.has(Component)) {
       component.UNSAFE_setEntity(this);
 
       this.components.push(component);
-      this.componentMap[componentName] = component;
+      this.componentMap.set(Component, component);
 
       this.scene.map(scene => scene.UNSAFE_addComponent(component));
       this.emit("add-component", component);
@@ -293,18 +289,17 @@ export class Entity extends EventEmitter {
   }
 
   private _removeComponent<C extends Component>(Component: IConstructor<C>) {
-    const componentName = (Component as any).getComponentName(),
-      component = this.componentMap[componentName];
+    const componentOption = this.getComponent(Component);
 
-    if (component) {
+    componentOption.ifSome(component => {
       this.emit("remove-component", component);
       component.UNSAFE_removeEntity();
 
       this.components.splice(this.components.indexOf(component), 1);
-      delete this.componentMap[component.getComponentName()];
+      this.componentMap.delete(Component);
 
       this.scene.map(scene => scene.UNSAFE_removeComponent(component));
-    }
+    });
     return this;
   }
 

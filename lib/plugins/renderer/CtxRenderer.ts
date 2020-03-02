@@ -8,8 +8,6 @@ import { Renderer } from "./Renderer";
 const MAT2D_0 = mat2d.create();
 
 export class CtxRenderer extends Renderer {
-  static pluginName = "engine.CtxRenderer";
-
   private canvas: Canvas;
   private ctx: CanvasRenderingContext2D;
   private lineWidth: number = 1.0;

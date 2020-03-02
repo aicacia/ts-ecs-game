@@ -6,8 +6,6 @@ const MAT4_0 = mat4.create(),
   VEC2_0 = vec2.create();
 
 export class Camera3D extends RenderableComponent {
-  static componentName = "engine.Camera3D";
-
   private width: number = 1.0;
   private height: number = 1.0;
   private aspect: number = 1.0;

@@ -4,25 +4,11 @@ import { EventEmitter } from "events";
 export abstract class InputHandler<
   I extends Input = Input
 > extends EventEmitter {
-  static inputHandlerName: string;
-
-  static getInputHandlerName() {
-    if (!this.inputHandlerName) {
-      throw new Error(
-        "Invalid inputHandlerName for InputHandler `" +
-          this.inputHandlerName +
-          "` " +
-          this
-      );
-    }
-    return this.inputHandlerName;
-  }
-
   private input: Option<I> = none();
   private events: Event[] = [];
 
-  getInputHandlerName(): string {
-    return Object.getPrototypeOf(this).constructor.getInputHandlerName();
+  getConstructor(): IConstructor<this> {
+    return Object.getPrototypeOf(this).constructor;
   }
 
   UNSAFE_setInput(input: I) {
@@ -38,22 +24,20 @@ export abstract class InputHandler<
   }
   getRequiredInput() {
     return this.getInput().expect(
-      `${this.getInputHandlerName()} requires a Input Plugin`
+      `${this.getConstructor()} requires a Input Plugin`
     );
   }
   getScene() {
     return this.getInput().flatMap(input => input.getScene());
   }
   getRequiredScene() {
-    return this.getScene().expect(
-      `${this.getInputHandlerName()} requires a Scene`
-    );
+    return this.getScene().expect(`${this.getConstructor()} requires a Scene`);
   }
 
   getElement() {
     return this.getInput()
       .map(input => input.getElement())
-      .expect(`${this.getInputHandlerName()} requires an Element`);
+      .expect(`${this.getConstructor()} requires an Element`);
   }
 
   getEvents() {
@@ -83,5 +67,6 @@ export abstract class InputHandler<
   }
 }
 
+import { IConstructor } from "../../utils";
 import { Time } from "../Time";
 import { Input } from "./Input";

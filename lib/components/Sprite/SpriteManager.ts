@@ -1,8 +1,6 @@
 import { Manager } from "../../sceneGraph";
 
 export class SpriteManager extends Manager<Sprite> {
-  static managerName = "engine.SpriteManager";
-
   private layers: Record<number, Sprite[]> = {};
 
   isEmpty() {

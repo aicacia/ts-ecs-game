@@ -2,8 +2,6 @@ import { none, Option, some } from "@aicacia/core";
 import { DefaultManager } from "../../sceneGraph";
 
 export class Camera2DManager extends DefaultManager<Camera2D> {
-  static managerName = "engine.Camera2DManager";
-
   private active: Option<Camera2D> = none();
 
   setActive(camera: Camera2D) {

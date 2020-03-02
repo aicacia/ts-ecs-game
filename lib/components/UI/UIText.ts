@@ -2,8 +2,6 @@ import { getTextHeight, getTextWidth } from "../../utils/getTextDimensions";
 import { UIElement } from "./UIElement";
 
 export class UIText extends UIElement {
-  static componentName = "engine.UIText";
-
   private text: string = "";
   private font: string = "sans-serif";
   private size: string = "16px";

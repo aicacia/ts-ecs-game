@@ -2,8 +2,6 @@ import { Transform2DManager } from "../../../components";
 import { CtxRendererHandler } from "../CtxRendererHandler";
 
 export class CtxTransform2DRendererHandler extends CtxRendererHandler {
-  static rendererHandlerName = "engine.CtxTransform2DRendererHandler";
-
   onRender() {
     this.getManager(Transform2DManager).ifSome(transform2dManager => {
       const renderer = this.getRequiredRenderer(),

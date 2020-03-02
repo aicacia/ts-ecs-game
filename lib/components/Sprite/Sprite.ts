@@ -1,8 +1,6 @@
 import { RenderableComponent } from "../RenderableComponent";
 
 export class Sprite extends RenderableComponent {
-  static componentName = "engine.Sprite";
-
   private layer: number = 0;
   private imageAsset: ImageAsset;
 

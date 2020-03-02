@@ -1,8 +1,6 @@
 import { Plugin } from "../../sceneGraph";
 
 export class Assets extends Plugin {
-  static pluginName = "engine.Assets";
-
   private assets: Asset[] = [];
   private loadedAssets: Asset[] = [];
   private loadingPromises: Map<Asset, Promise<void>> = new Map();

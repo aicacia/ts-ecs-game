@@ -7,7 +7,6 @@ const MAT4_0 = mat4.create(),
   VEC3_UP = vec3.fromValues(0.0, 0.0, 1.0);
 
 export class Transform3D extends TransformComponent {
-  static componentName = "engine.Transform3D";
   static Manager = Transform3DManager;
 
   private localPosition: vec3 = vec3.create();

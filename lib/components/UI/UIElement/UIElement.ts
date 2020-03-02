@@ -6,8 +6,6 @@ const MAT2D_0: mat2d = mat2d.create(),
   VEC2_1: vec2 = vec2.create();
 
 export class UIElement extends RenderableComponent {
-  static componentName = "engine.UIElement";
-
   protected width: number = 0;
   protected height: number = 0;
   private layer: number = 0;

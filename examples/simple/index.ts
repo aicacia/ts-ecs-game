@@ -25,7 +25,6 @@ import logoPng from "./logo.png";
 const logoAsset = new ImageAsset(logoPng);
 
 class Rotator extends Component {
-  static componentName = "simple.Rotator";
   // only use this if you do not need a manager, it only uses one manager so
   // any other components using the DefaultManager will be in the same manager
   static Manager = DefaultManager;
@@ -45,7 +44,6 @@ class Rotator extends Component {
 }
 
 class LookAtCamera extends Component {
-  static componentName = "simple.LookAtCamera";
   static Manager = DefaultManager;
   static requiredComponents = [Transform2D];
 

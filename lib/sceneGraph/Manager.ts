@@ -4,17 +4,8 @@ import { EventEmitter } from "events";
 export abstract class Manager<
   C extends Component = Component
 > extends EventEmitter {
-  static managerName: string;
   static managerPriority: number = 0;
 
-  static getManagerName() {
-    if (!this.managerName) {
-      throw new Error(
-        "Invalid managerName for Manager `" + this.managerName + "` " + this
-      );
-    }
-    return this.managerName;
-  }
   static getManagerPriority() {
     return this.managerPriority;
   }
@@ -33,8 +24,8 @@ export abstract class Manager<
     return this.scene;
   }
 
-  getManagerName(): string {
-    return Object.getPrototypeOf(this).constructor.getManagerName();
+  getConstructor(): IConstructor<this> {
+    return Object.getPrototypeOf(this).constructor;
   }
   getManagerPriority(): number {
     return Object.getPrototypeOf(this).constructor.getManagerPriority();
@@ -45,7 +36,7 @@ export abstract class Manager<
   }
   getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).expect(
-      `${this.getManagerName()} required ${(Plugin as any).getPluginName()} Plugin`
+      `${this.getConstructor()} required ${Plugin} Plugin`
     );
   }
 
@@ -54,7 +45,7 @@ export abstract class Manager<
   }
   getRequiredManager<M extends Manager = Manager>(Manager: IConstructor<M>) {
     return this.getManager(Manager).expect(
-      `${this.getManagerName()} required ${(Manager as any).getManagerName()} Manager`
+      `${this.getConstructor()} required ${Manager} Manager`
     );
   }
 

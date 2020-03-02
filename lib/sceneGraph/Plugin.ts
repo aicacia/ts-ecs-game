@@ -2,18 +2,9 @@ import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class Plugin extends EventEmitter {
-  static pluginName: string;
   static pluginPriority: number = 0;
   static requiredPlugins: Array<IConstructor<Plugin>> = [];
 
-  static getPluginName() {
-    if (!this.pluginName) {
-      throw new Error(
-        "Invalid pluginName for Plugin `" + this.pluginName + "` " + this
-      );
-    }
-    return this.pluginName;
-  }
   static getPluginPriority() {
     return this.pluginPriority;
   }
@@ -23,8 +14,8 @@ export abstract class Plugin extends EventEmitter {
 
   private scene: Option<Scene> = none();
 
-  getPluginName(): string {
-    return Object.getPrototypeOf(this).constructor.getPluginName();
+  getConstructor(): IConstructor<this> {
+    return Object.getPrototypeOf(this).constructor;
   }
   getPluginPriority(): number {
     return Object.getPrototypeOf(this).constructor.getPluginPriority();
@@ -38,7 +29,7 @@ export abstract class Plugin extends EventEmitter {
   }
   getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).expect(
-      `${this.getPluginName()} required ${(Plugin as any).getPluginName()} Plugin`
+      `${this.getConstructor()} required ${Plugin} Plugin`
     );
   }
 
@@ -47,7 +38,7 @@ export abstract class Plugin extends EventEmitter {
   }
   getRequiredManager<M extends Manager = Manager>(Manager: IConstructor<M>) {
     return this.getManager(Manager).expect(
-      `${this.getPluginName()} required ${(Manager as any).getManagerName()} Manager`
+      `${this.getConstructor()} required ${Manager} Manager`
     );
   }
 
@@ -64,8 +55,7 @@ export abstract class Plugin extends EventEmitter {
 
     if (missingPlugins.length > 0) {
       const pluginMessage = missingPlugins.map(
-        missingPlugin =>
-          `Scene Component required ${(missingPlugin as any).getPluginName()} Plugin`
+        missingPlugin => `Scene Component required ${missingPlugin} Plugin`
       );
       throw new Error(pluginMessage.join("\n"));
     }
@@ -83,7 +73,7 @@ export abstract class Plugin extends EventEmitter {
     return this.scene;
   }
   getRequiredScene() {
-    return this.getScene().expect(`${this.getPluginName()} required a Scene`);
+    return this.getScene().expect(`${this.getConstructor()} required a Scene`);
   }
 
   onInit() {

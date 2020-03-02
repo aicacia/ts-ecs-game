@@ -2,8 +2,6 @@ import { SpriteManager, Transform2D } from "../../../components";
 import { CtxRendererHandler } from "../CtxRendererHandler";
 
 export class CtxSpriteRendererHandler extends CtxRendererHandler {
-  static rendererHandlerName = "engine.CtxSpriteRendererHandler";
-
   onRender() {
     this.getManager(SpriteManager).ifSome(spriteManager => {
       const renderer = this.getRequiredRenderer();

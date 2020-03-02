@@ -7,7 +7,6 @@ const VEC2_0 = vec2.create();
 
 export class Camera2DControl extends Component {
   static Manager = Camera2DControlManager;
-  static componentName = "engine.Camera2DControl";
 
   private enabled: boolean = true;
 

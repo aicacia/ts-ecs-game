@@ -2,8 +2,6 @@ import { Time } from "../Time";
 import { InputHandler } from "./InputHandler";
 
 export class MouseInputHandler extends InputHandler {
-  static inputHandlerName = "engine.MouseInputHandler";
-
   onAdd() {
     const element = this.getElement();
 

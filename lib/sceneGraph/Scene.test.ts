@@ -2,8 +2,6 @@ import * as tape from "tape";
 import { Component, Entity, Plugin, Scene } from ".";
 
 export class Test extends Component {
-  static componentName = "test.Test";
-
   position: number = 0;
   globalPosition: number = 0;
 
@@ -28,12 +26,10 @@ export class Test extends Component {
 }
 
 export class Test1Plugin extends Plugin {
-  static pluginName = "test.TestPlugin";
   static pluginPriority = 1;
 }
 
 export class Test2Plugin extends Plugin {
-  static pluginName = "test.TestPlugin";
   static pluginPriority = Infinity;
 }
 

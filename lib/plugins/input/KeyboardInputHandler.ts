@@ -2,8 +2,6 @@ import { Time } from "../Time";
 import { InputHandler } from "./InputHandler";
 
 export class KeyboardInputHandler extends InputHandler {
-  static inputHandlerName = "engine.KeyboardInputHandler";
-
   onAdd() {
     window.addEventListener("keydown", this.queueEvent);
     window.addEventListener("keyup", this.queueEvent);

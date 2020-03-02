@@ -1,11 +1,13 @@
 import { Plugin } from "../../sceneGraph";
 
 export abstract class Renderer extends Plugin {
-  static pluginName = "engine.Renderer";
   static pluginPriority = Infinity;
 
   private rendererHandlers: RendererHandler[] = [];
-  private rendererHandlerMap: Record<string, RendererHandler> = {};
+  private rendererHandlerMap: Map<
+    IConstructor<RendererHandler>,
+    RendererHandler
+  > = new Map();
 
   getRendererHandlers() {
     return this.rendererHandlers;
@@ -13,7 +15,7 @@ export abstract class Renderer extends Plugin {
   getRendererHandler<R extends RendererHandler>(
     RendererHandler: IConstructor<R>
   ) {
-    return this.rendererHandlerMap[(RendererHandler as any).getRendererName()];
+    return Option.from(this.rendererHandlerMap.get(RendererHandler));
   }
 
   addRendererHandlers(...rendererHandlers: RendererHandler[]) {
@@ -57,12 +59,14 @@ export abstract class Renderer extends Plugin {
     return this;
   }
 
-  private _addRendererHandler<R extends RendererHandler>(rendererHandler: R) {
-    const rendererHandlerName = rendererHandler.getRendererHandlerName();
+  private _addRendererHandler<R extends RendererHandler = RendererHandler>(
+    rendererHandler: R
+  ) {
+    const RendererHandler = rendererHandler.getConstructor();
 
-    if (!this.rendererHandlerMap[rendererHandlerName]) {
+    if (!this.rendererHandlerMap.has(RendererHandler)) {
       this.rendererHandlers.push(rendererHandler);
-      this.rendererHandlerMap[rendererHandlerName] = rendererHandler;
+      this.rendererHandlerMap.set(RendererHandler, rendererHandler);
       rendererHandler.UNSAFE_setRenderer(this);
       rendererHandler.onAdd();
       this.emit("add-renderer_handler", rendererHandler);
@@ -70,13 +74,10 @@ export abstract class Renderer extends Plugin {
 
     return this;
   }
-  private _removeRendererHandler<R extends RendererHandler>(
-    RendererHandler: new () => R
+  private _removeRendererHandler<R extends RendererHandler = RendererHandler>(
+    RendererHandler: IConstructor<R>
   ) {
-    const rendererHandlerName = (RendererHandler as any).getRendererName(),
-      rendererHandler = this.rendererHandlerMap[rendererHandlerName];
-
-    if (rendererHandler) {
+    this.getRendererHandler(RendererHandler).ifSome(rendererHandler => {
       this.emit("remove-renderer_handler", rendererHandler);
       rendererHandler.onRemove();
 
@@ -84,9 +85,9 @@ export abstract class Renderer extends Plugin {
         this.rendererHandlers.indexOf(rendererHandler),
         1
       );
-      delete this.rendererHandlerMap[rendererHandlerName];
+      this.rendererHandlerMap.delete(RendererHandler);
       rendererHandler.UNSAFE_removeRenderer();
-    }
+    });
 
     return this;
   }
@@ -99,5 +100,6 @@ export abstract class Renderer extends Plugin {
   }
 }
 
+import { Option } from "@aicacia/core";
 import { IConstructor } from "../../utils";
 import { RendererHandler } from "./RendererHandler";

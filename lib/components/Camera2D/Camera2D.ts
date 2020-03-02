@@ -4,8 +4,6 @@ import { RenderableComponent } from "../RenderableComponent";
 const MAT2D_0 = mat2d.create();
 
 export class Camera2D extends RenderableComponent {
-  static componentName = "engine.Camera2D";
-
   private width: number = 1.0;
   private height: number = 1.0;
   private aspect: number = 1.0;

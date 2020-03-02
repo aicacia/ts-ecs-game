@@ -1,8 +1,7 @@
 import { CtxRenderer } from "./CtxRenderer";
 import { RendererHandler } from "./RendererHandler";
 
-export class CtxRendererHandler extends RendererHandler<CtxRenderer> {
-  static rendererHandlerName = "engine.CtxRendererHandler";
+export abstract class CtxRendererHandler extends RendererHandler<CtxRenderer> {
   static rendererHandlerPriority = 0;
 
   getCtx() {

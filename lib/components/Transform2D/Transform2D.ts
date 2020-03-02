@@ -11,7 +11,6 @@ const MAT2_0 = mat2d.create(),
   VEC3_0 = vec3.create();
 
 export class Transform2D extends TransformComponent {
-  static componentName = "engine.Transform2D";
   static Manager = Transform2DManager;
 
   private localPosition: vec2 = vec2.create();

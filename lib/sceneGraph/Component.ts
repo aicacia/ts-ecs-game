@@ -3,33 +3,14 @@ import { EventEmitter } from "events";
 
 export abstract class Component extends EventEmitter {
   static Manager: IConstructor<Manager>;
-  static componentName: string;
   static requiredComponents: Array<IConstructor<Component>> = [];
   static requiredPlugins: Array<IConstructor<Plugin>> = [];
 
-  static getComponentName(): string {
-    if (!this.componentName) {
-      throw new Error(
-        "Invalid componentName for Component `" +
-          this.componentName +
-          "` " +
-          this
-      );
-    } else {
-      return this.componentName;
-    }
-  }
-  static getManagerConstructor(): new () => Manager {
+  static getManagerConstructor<M extends Manager = Manager>(): IConstructor<M> {
     if (!this.Manager) {
-      throw new Error(
-        this.getComponentName() +
-          " invalid Manager `" +
-          this.Manager +
-          "` " +
-          this
-      );
+      throw new Error(this + " invalid Manager `" + this.Manager + "` " + this);
     }
-    return this.Manager;
+    return this.Manager as IConstructor<M>;
   }
   static getRequiredComponents(): Array<IConstructor<Component>> {
     return this.requiredComponents;
@@ -41,10 +22,10 @@ export abstract class Component extends EventEmitter {
   private entity: Option<Entity> = none();
   private manager: Option<Manager> = none();
 
-  getComponentName(): string {
-    return Object.getPrototypeOf(this).constructor.getComponentName();
+  getConstructor(): IConstructor<this> {
+    return Object.getPrototypeOf(this).constructor;
   }
-  getManagerConstructor<M extends Manager = Manager>(): new () => M {
+  getManagerConstructor<M extends Manager = Manager>(): IConstructor<M> {
     return Object.getPrototypeOf(this).constructor.getManagerConstructor();
   }
   getRequiredComponents(): Array<IConstructor<Component>> {
@@ -54,14 +35,16 @@ export abstract class Component extends EventEmitter {
     return Object.getPrototypeOf(this).constructor.requiredPlugins;
   }
 
-  getComponent<C extends Component = Component>(Component: IConstructor<C>) {
+  getComponent<C extends Component = Component>(
+    Component: IConstructor<C>
+  ): Option<C> {
     return this.getEntity().flatMap(entity => entity.getComponent(Component));
   }
   getRequiredComponent<C extends Component = Component>(
     Component: IConstructor<C>
-  ) {
+  ): C {
     return this.getComponent(Component).expect(
-      `${this.getComponentName()} Component requires ${(Component as any).getComponentName()} Component`
+      `${this.getConstructor()} Component requires ${Component} Component`
     );
   }
   getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
@@ -69,7 +52,7 @@ export abstract class Component extends EventEmitter {
   }
   getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).expect(
-      `${this.getComponentName()} Component requires ${(Plugin as any).getPluginName()} Plugin`
+      `${this.getConstructor()} Component requires ${Plugin} Plugin`
     );
   }
 
@@ -86,7 +69,7 @@ export abstract class Component extends EventEmitter {
   }
   getRequiredEntity() {
     return this.getEntity().expect(
-      `${this.getComponentName()} Component requires an Entity`
+      `${this.getConstructor()} Component requires an Entity`
     );
   }
 
@@ -95,11 +78,11 @@ export abstract class Component extends EventEmitter {
   }
   getRequiredScene() {
     return this.getScene().expect(
-      `${this.getComponentName()} Component requires a Scene`
+      `${this.getConstructor()} Component requires a Scene`
     );
   }
 
-  UNSAFE_setManager<M extends Manager = Manager>(manager: M) {
+  UNSAFE_setManager(manager: Manager) {
     this.manager = some(manager);
     return this;
   }
@@ -112,9 +95,9 @@ export abstract class Component extends EventEmitter {
   }
   getRequiredManager<M extends Manager = Manager>() {
     return this.getManager<M>().expect(
-      `${this.getComponentName()} Component requires ${Object.getPrototypeOf(
+      `${this.getConstructor()} Component requires ${Object.getPrototypeOf(
         this
-      ).Manager.getManagerName()} Manager`
+      ).getManagerConstructor()} Manager`
     );
   }
 

@@ -24,10 +24,10 @@ export class Scene extends EventEmitter {
   private entitiesToRemove: Entity[] = [];
 
   private managers: Manager[] = [];
-  private managerMap: Record<string, Manager> = {};
+  private managerMap: Map<IConstructor<Manager>, Manager> = new Map();
 
   private plugins: Plugin[] = [];
-  private pluginsMap: Record<string, Plugin> = {};
+  private pluginsMap: Map<IConstructor<Plugin>, Plugin> = new Map();
 
   private isUpdating: boolean = false;
   private isInitted: boolean = false;
@@ -116,14 +116,10 @@ export class Scene extends EventEmitter {
     return this.managers;
   }
   getManager<M extends Manager>(Manager: IConstructor<M>): Option<M> {
-    return Option.from(
-      this.managerMap[(Manager as any).getManagerName()]
-    ) as Option<M>;
+    return Option.from(this.managerMap.get(Manager)) as Option<M>;
   }
   getRequiredManager<M extends Manager>(Manager: IConstructor<M>) {
-    return this.getManager(Manager).expect(
-      `Scene required ${(Manager as any).getManagerName()} Manager`
-    );
+    return this.getManager(Manager).expect(`Scene required ${Manager} Manager`);
   }
 
   getPlugins() {
@@ -133,14 +129,10 @@ export class Scene extends EventEmitter {
     return this.getPlugin(Plugin).isSome();
   }
   getPlugin<P extends Plugin>(Plugin: IConstructor<P>): Option<P> {
-    return Option.from(
-      this.pluginsMap[(Plugin as any).getPluginName()]
-    ) as Option<P>;
+    return Option.from(this.pluginsMap.get(Plugin)) as Option<P>;
   }
   getRequiredPlugin<P extends Plugin>(Plugin: IConstructor<P>) {
-    return this.getPlugin(Plugin).expect(
-      `Scene required ${(Plugin as any).getPluginName()} Plugin`
-    );
+    return this.getPlugin(Plugin).expect(`Scene required ${Plugin} Plugin`);
   }
 
   addPlugins(plugins: Plugin[]) {
@@ -214,21 +206,25 @@ export class Scene extends EventEmitter {
   }
 
   UNSAFE_addComponent(component: Component) {
-    const Manager: any = component.getManagerConstructor(),
-      managerName = Manager.getManagerName();
+    const Manager: IConstructor<Manager> = component.getManagerConstructor();
 
-    let manager: Manager = this.managerMap[managerName];
+    const managerOption = this.getManager(Manager);
+    let manager: Manager;
 
-    if (!manager) {
+    if (managerOption.isNone()) {
       manager = new Manager();
+
+      managerOption.replace(manager);
 
       manager.UNSAFE_setScene(this);
 
       this.managers.push(manager);
-      this.managerMap[managerName] = manager;
+      this.managerMap.set(Manager, manager);
       this.sortManagers();
 
       manager.onAdd();
+    } else {
+      manager = managerOption.unwrap();
     }
 
     manager.addComponent(component);
@@ -243,15 +239,13 @@ export class Scene extends EventEmitter {
   }
 
   UNSAFE_removeComponent(component: Component) {
-    const Manager: any = component.getManagerConstructor(),
-      managerName = Manager.managerName;
+    const Manager: IConstructor<Manager> = component.getManagerConstructor();
 
-    const manager: Manager = this.managerMap[managerName],
-      index = this.managers.indexOf(manager);
+    const managerOption = this.getManager(Manager);
 
     this.emit("remove-component", component);
 
-    if (manager) {
+    managerOption.ifSome(manager => {
       component.onRemove();
 
       manager.removeComponent(component);
@@ -260,10 +254,10 @@ export class Scene extends EventEmitter {
       if (manager.isEmpty()) {
         manager.onRemove();
 
-        this.managers.splice(index, 1);
-        delete this.managerMap[managerName];
+        this.managers.splice(this.managers.indexOf(manager), 1);
+        this.managerMap.delete(Manager);
       }
-    }
+    });
 
     return this;
   }
@@ -294,11 +288,12 @@ export class Scene extends EventEmitter {
   }
 
   private _addPlugin<P extends Plugin>(plugin: P) {
-    const index = this.plugins.indexOf(plugin);
+    const Plugin: IConstructor<Plugin> = plugin.getConstructor(),
+      index = this.plugins.indexOf(plugin);
 
     if (index === -1) {
       this.plugins.push(plugin);
-      this.pluginsMap[plugin.getPluginName()] = plugin;
+      this.pluginsMap.set(Plugin, plugin);
       plugin.UNSAFE_setScene(this);
       if (this.isInitted) {
         plugin.onInit();
@@ -313,16 +308,16 @@ export class Scene extends EventEmitter {
     return this;
   }
   private _removePlugin<P extends Plugin>(Plugin: IConstructor<P>) {
-    const pluginName = (Plugin as any).getPluginName(),
-      plugin = this.pluginsMap[pluginName];
+    const pluginOption = this.getPlugin(Plugin);
 
-    if (plugin) {
+    pluginOption.ifSome(plugin => {
       this.emit("remove-plugin", plugin);
       plugin.onRemove();
       plugin.UNSAFE_removeScene();
       this.plugins.splice(this.plugins.indexOf(plugin), 1);
-      delete this.pluginsMap[pluginName];
-    }
+      this.pluginsMap.delete(Plugin);
+    });
+
     return this;
   }
 

@@ -1,8 +1,6 @@
 import { Manager } from "../../../sceneGraph";
 
 export class UIElementManager extends Manager<UIElement> {
-  static managerName = "engine.UIElementManager";
-
   private layers: Record<number, UIElement[]> = {};
 
   isEmpty() {

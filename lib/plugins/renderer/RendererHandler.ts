@@ -4,20 +4,8 @@ import { EventEmitter } from "events";
 export abstract class RendererHandler<
   R extends Renderer = Renderer
 > extends EventEmitter {
-  static rendererHandlerName: string;
   static rendererHandlerPriority: number;
 
-  static getRendererHandlerName() {
-    if (!this.rendererHandlerName) {
-      throw new Error(
-        "Invalid rendererHandlerName for RendererHandler `" +
-          this.rendererHandlerName +
-          "` " +
-          this
-      );
-    }
-    return this.rendererHandlerName;
-  }
   static getRendererHandlerPriority() {
     return this.rendererHandlerPriority;
   }
@@ -33,8 +21,8 @@ export abstract class RendererHandler<
     return this;
   }
 
-  getRendererHandlerName(): string {
-    return Object.getPrototypeOf(this).constructor.getRendererHandlerName();
+  getConstructor(): IConstructor<this> {
+    return Object.getPrototypeOf(this).constructor;
   }
   getRendererHandlerPriority(): number {
     return Object.getPrototypeOf(this).constructor.getRendererHandlerPriority();
@@ -53,7 +41,7 @@ export abstract class RendererHandler<
   }
   getRequiredRenderer() {
     return this.renderer.expect(
-      `${this.getRendererHandlerName()} expected to be added to a Renderer first`
+      `${this.getConstructor()} expected to be added to a Renderer first`
     );
   }
 
@@ -61,9 +49,7 @@ export abstract class RendererHandler<
     return this.getRenderer().flatMap(renderer => renderer.getScene());
   }
   getRequiredScene() {
-    return this.getScene().expect(
-      `${this.getRendererHandlerName()} required scene`
-    );
+    return this.getScene().expect(`${this.getConstructor()} required scene`);
   }
 
   getManager<M extends Manager>(Manager: IConstructor<M>) {
@@ -71,7 +57,7 @@ export abstract class RendererHandler<
   }
   getRequiredManager<M extends Manager>(Manager: IConstructor<M>) {
     return this.getManager(Manager).expect(
-      `${this.getRendererHandlerName()} required ${(Manager as any).getManagerName()} Manager`
+      `${this.getConstructor()} required ${Manager} Manager`
     );
   }
 
@@ -80,7 +66,7 @@ export abstract class RendererHandler<
   }
   getRequiredPlugin<P extends Plugin>(Plugin: new (...args: any[]) => P) {
     return this.getPlugin(Plugin).expect(
-      `${this.getRendererHandlerName()} required ${(Plugin as any).getPluginName()} Plugin`
+      `${this.getConstructor()} required ${Plugin} Plugin`
     );
   }
 

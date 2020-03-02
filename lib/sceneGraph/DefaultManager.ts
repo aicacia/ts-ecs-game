@@ -4,8 +4,6 @@ import { Manager } from "./Manager";
 export class DefaultManager<C extends Component = Component> extends Manager<
   C
 > {
-  static managerName = "engine.DefaultManager";
-
   private components: C[] = [];
 
   getComponents() {
