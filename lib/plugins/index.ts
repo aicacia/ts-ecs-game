@@ -5,7 +5,8 @@ export {
   CtxRendererHandler,
   CtxRenderer,
   CtxTransform2DRendererHandler,
-  CtxSpriteRendererHandler
+  CtxSpriteRendererHandler,
+  CtxUIRendererHandler,
 } from "./renderer";
 export { Time } from "./Time";
 export { FullScreenCanvas } from "./FullScreenCanvas";
@@ -14,5 +15,5 @@ export {
   InputHandler,
   KeyboardInputHandler,
   MouseInputHandler,
-  InputButton
+  InputButton,
 } from "./input";

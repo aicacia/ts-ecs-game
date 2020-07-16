@@ -34,9 +34,11 @@ export class Scene extends EventEmitter {
 
   maintain() {
     this.emit("maintain");
-    this.entitiesToAdd.forEach(entity => this.addEntityNow(entity, true));
+    this.entitiesToAdd.forEach((entity) => this.addEntityNow(entity, true));
     this.entitiesToAdd.length = 0;
-    this.entitiesToRemove.forEach(entity => this.removeEntityNow(entity, true));
+    this.entitiesToRemove.forEach((entity) =>
+      this.removeEntityNow(entity, true)
+    );
     this.entitiesToRemove.length = 0;
     return this;
   }
@@ -47,12 +49,12 @@ export class Scene extends EventEmitter {
     this.maintain();
     if (!this.isInitted) {
       this.isInitted = true;
-      this.plugins.forEach(plugin => plugin.onInit());
+      this.plugins.forEach((plugin) => plugin.onInit());
     }
-    this.plugins.forEach(plugin => plugin.onUpdate());
-    this.managers.forEach(manager => manager.onUpdate());
-    this.managers.forEach(manager => manager.onAfterUpdate());
-    this.plugins.forEach(plugin => plugin.onAfterUpdate());
+    this.plugins.forEach((plugin) => plugin.onUpdate());
+    this.managers.forEach((manager) => manager.onUpdate());
+    this.managers.forEach((manager) => manager.onAfterUpdate());
+    this.plugins.forEach((plugin) => plugin.onAfterUpdate());
     this.isUpdating = false;
     return this;
   }
@@ -75,13 +77,13 @@ export class Scene extends EventEmitter {
     return none();
   }
   findWithTag(...tags: string[]) {
-    return this.find(entity => entity.hasTags(tags));
+    return this.find((entity) => entity.hasTags(tags));
   }
   findWithTags(tags: string[]) {
     return this.findWithTag(...tags);
   }
   findWithName(name: string) {
-    return this.find(entity => entity.getName() === name);
+    return this.find((entity) => entity.getName() === name);
   }
 
   findAll(fn: (entity: Entity) => boolean, recur: boolean = true): Entity[] {
@@ -99,13 +101,13 @@ export class Scene extends EventEmitter {
     return matching;
   }
   findAllWithTag(...tags: string[]) {
-    return this.findAll(entity => entity.hasTags(tags));
+    return this.findAll((entity) => entity.hasTags(tags));
   }
   findAllWithTags(tags: string[]) {
     return this.findAllWithTag(...tags);
   }
   findAllWithName(name: string) {
-    return this.findAll(entity => entity.getName() === name);
+    return this.findAll((entity) => entity.getName() === name);
   }
 
   getEntities() {
@@ -136,7 +138,7 @@ export class Scene extends EventEmitter {
   }
 
   addPlugins(plugins: Plugin[]) {
-    plugins.forEach(plugin => this._addPlugin(plugin));
+    plugins.forEach((plugin) => this._addPlugin(plugin));
     this.sortPlugins();
     return this;
   }
@@ -144,11 +146,11 @@ export class Scene extends EventEmitter {
     return this.addPlugins(plugins);
   }
 
-  removePlugins(plugins: Array<new (...args: any[]) => Plugin>) {
-    plugins.forEach(plugin => this._removePlugin(plugin));
+  removePlugins(plugins: IConstructor<Plugin>[]) {
+    plugins.forEach((plugin) => this._removePlugin(plugin));
     return this;
   }
-  removePlugin(...plugins: Array<new (...args: any[]) => Plugin>) {
+  removePlugin(...plugins: IConstructor<Plugin>[]) {
     return this.removePlugins(plugins);
   }
 
@@ -186,7 +188,7 @@ export class Scene extends EventEmitter {
 
     entity
       .getComponents()
-      .forEach(component => this.UNSAFE_removeComponent(component));
+      .forEach((component) => this.UNSAFE_removeComponent(component));
 
     if (entity.isRoot()) {
       const index = this.entities.indexOf(entity);
@@ -196,10 +198,10 @@ export class Scene extends EventEmitter {
         entity.UNSAFE_removeScene();
       }
     } else {
-      entity.getParent().map(parent => parent.removeChild(entity));
+      entity.getParent().map((parent) => parent.removeChild(entity));
     }
 
-    entity.getChildren().forEach(child => this.removeEntityNow(child, true));
+    entity.getChildren().forEach((child) => this.removeEntityNow(child, true));
     this.emit("remove-entity", entity);
 
     return this;
@@ -245,7 +247,7 @@ export class Scene extends EventEmitter {
 
     this.emit("remove-component", component);
 
-    managerOption.ifSome(manager => {
+    managerOption.ifSome((manager) => {
       component.onRemove();
 
       manager.removeComponent(component);
@@ -262,7 +264,7 @@ export class Scene extends EventEmitter {
     return this;
   }
   private _addEntityNow(entity: Entity, isChild: boolean) {
-    entity.getScene().map(scene => scene.removeEntityNow(entity, true));
+    entity.getScene().map((scene) => scene.removeEntityNow(entity, true));
 
     if (entity.isRoot()) {
       this.entities.push(entity);
@@ -275,8 +277,8 @@ export class Scene extends EventEmitter {
     entity.UNSAFE_setScene(this);
     entity
       .getComponents()
-      .forEach(component => this.UNSAFE_addComponent(component));
-    entity.getChildren().forEach(child => this._addEntityNow(child, true));
+      .forEach((component) => this.UNSAFE_addComponent(component));
+    entity.getChildren().forEach((child) => this._addEntityNow(child, true));
 
     if (process.env.NODE_ENV !== "production") {
       entity.validateRequirements();
@@ -310,7 +312,7 @@ export class Scene extends EventEmitter {
   private _removePlugin<P extends Plugin>(Plugin: IConstructor<P>) {
     const pluginOption = this.getPlugin(Plugin);
 
-    pluginOption.ifSome(plugin => {
+    pluginOption.ifSome((plugin) => {
       this.emit("remove-plugin", plugin);
       plugin.onRemove();
       plugin.UNSAFE_removeScene();

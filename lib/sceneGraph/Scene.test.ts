@@ -9,11 +9,11 @@ export class Test extends Component {
     this.position += 1;
 
     this.getEntity()
-      .flatMap(entity =>
-        entity.getParent().flatMap(parent => parent.getComponent(Test))
+      .flatMap((entity) =>
+        entity.getParent().flatMap((parent) => parent.getComponent(Test))
       )
       .mapOrElse(
-        parentComponent => {
+        (parentComponent) => {
           this.globalPosition = parentComponent.position + this.position;
         },
         () => {

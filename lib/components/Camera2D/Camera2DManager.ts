@@ -8,7 +8,7 @@ export class Camera2DManager extends DefaultManager<Camera2D> {
     if (
       camera
         .getManager()
-        .map(manager => manager === this)
+        .map((manager) => manager === this)
         .unwrapOr(false)
     ) {
       this.active = some(camera);
@@ -39,7 +39,7 @@ export class Camera2DManager extends DefaultManager<Camera2D> {
   removeComponent(camera: Camera2D) {
     super.removeComponent(camera);
 
-    this.active.map(active => {
+    this.active.map((active) => {
       if (active === camera) {
         this.active = none();
       }

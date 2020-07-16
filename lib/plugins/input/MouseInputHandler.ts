@@ -56,9 +56,7 @@ export class MouseInputHandler extends InputHandler {
   }
 
   onAfterUpdate() {
-    this.getRequiredInput()
-      .getOrCreateButton("mouseWheel")
-      .UNSAFE_setValue(0);
+    this.getRequiredInput().getOrCreateButton("mouseWheel").UNSAFE_setValue(0);
     return this;
   }
 }

@@ -16,9 +16,16 @@ export abstract class TransformComponent extends RenderableComponent {
     if (entityTransform.isSome()) {
       return entityTransform;
     } else {
-      return this.getParentTransform(entity);
+      return TransformComponent.getParentTransform(entity);
     }
   }
+
+  static getRequiredTransform(entity: Entity) {
+    return TransformComponent.getTransform(entity).expect(
+      `Entity required a TransformComponent`
+    );
+  }
+
   protected needsUpdate: boolean = true;
   protected localNeedsUpdate: boolean = true;
 
@@ -27,7 +34,7 @@ export abstract class TransformComponent extends RenderableComponent {
   }
 
   getParentTransform() {
-    return this.getEntity().flatMap(entity =>
+    return this.getEntity().flatMap((entity) =>
       TransformComponent.getParentTransform(entity)
     );
   }
@@ -36,11 +43,11 @@ export abstract class TransformComponent extends RenderableComponent {
     if (needsUpdate !== this.needsUpdate) {
       this.setLocalNeedsUpdate(needsUpdate);
       this.needsUpdate = needsUpdate;
-      this.getEntity().map(entity =>
-        entity.forEachChild(child =>
+      this.getEntity().map((entity) =>
+        entity.forEachChild((child) =>
           child
             .getComponentsInstanceOf(TransformComponent as any)
-            .forEach(transform =>
+            .forEach((transform) =>
               (transform as TransformComponent).setNeedsUpdate(needsUpdate)
             )
         )
@@ -98,4 +105,13 @@ export abstract class TransformComponent extends RenderableComponent {
 
   abstract setLocalScale2(localScale: vec2): this;
   abstract setLocalScale3(localScale: vec3): this;
+
+  abstract getPosition2(out: vec2): vec2;
+  abstract getPosition3(out: vec3): vec3;
+
+  abstract getRotationZ(): number;
+  abstract getRotationQuat(out: quat): quat;
+
+  abstract getScale2(out: vec2): vec2;
+  abstract getScale3(out: vec3): vec3;
 }

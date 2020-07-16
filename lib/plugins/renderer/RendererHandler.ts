@@ -46,14 +46,14 @@ export abstract class RendererHandler<
   }
 
   getScene() {
-    return this.getRenderer().flatMap(renderer => renderer.getScene());
+    return this.getRenderer().flatMap((renderer) => renderer.getScene());
   }
   getRequiredScene() {
     return this.getScene().expect(`${this.getConstructor()} required scene`);
   }
 
   getManager<M extends Manager>(Manager: IConstructor<M>) {
-    return this.getScene().flatMap(scene => scene.getManager(Manager));
+    return this.getScene().flatMap((scene) => scene.getManager(Manager));
   }
   getRequiredManager<M extends Manager>(Manager: IConstructor<M>) {
     return this.getManager(Manager).expect(
@@ -62,7 +62,7 @@ export abstract class RendererHandler<
   }
 
   getPlugin<P extends Plugin>(Plugin: new (...args: any[]) => P) {
-    return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+    return this.getScene().flatMap((scene) => scene.getPlugin(Plugin));
   }
   getRequiredPlugin<P extends Plugin>(Plugin: new (...args: any[]) => P) {
     return this.getPlugin(Plugin).expect(

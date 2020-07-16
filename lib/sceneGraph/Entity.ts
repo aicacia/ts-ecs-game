@@ -33,7 +33,7 @@ export class Entity extends EventEmitter {
   }
 
   hasTags(tags: string[]) {
-    return tags.every(tag => this.tags.has(tag));
+    return tags.every((tag) => this.tags.has(tag));
   }
   hasTag(...tags: string[]) {
     return this.hasTags(tags);
@@ -42,7 +42,7 @@ export class Entity extends EventEmitter {
     return this.tags;
   }
   addTags(tags: string[]) {
-    tags.forEach(tag => this.tags.add(tag));
+    tags.forEach((tag) => this.tags.add(tag));
     return this;
   }
   addTag(...tags: string[]) {
@@ -82,7 +82,7 @@ export class Entity extends EventEmitter {
   }
 
   forEachChild(fn: (entity: Entity) => void, recur: boolean = true) {
-    this.getChildren().forEach(child => {
+    this.getChildren().forEach((child) => {
       fn(child);
 
       if (recur) {
@@ -109,16 +109,16 @@ export class Entity extends EventEmitter {
     return none();
   }
   findWithName(name: string) {
-    return this.find(entity => entity.getName() === name);
+    return this.find((entity) => entity.getName() === name);
   }
   findWithTag(...tags: string[]) {
-    return this.find(entity => entity.hasTags(tags));
+    return this.find((entity) => entity.hasTags(tags));
   }
   findWithTags(tags: string[]) {
     return this.findWithTag(...tags);
   }
   findWithComponent<C extends Component>(Component: IConstructor<C>) {
-    return this.find(entity => entity.getComponent(Component).isSome());
+    return this.find((entity) => entity.getComponent(Component).isSome());
   }
 
   findAll(fn: (entity: Entity) => boolean, recur: boolean = true): Entity[] {
@@ -136,10 +136,10 @@ export class Entity extends EventEmitter {
     return matching;
   }
   findAllWithName(name: string, recur: boolean = true) {
-    return this.findAll(entity => entity.getName() === name, recur);
+    return this.findAll((entity) => entity.getName() === name, recur);
   }
   findAllWithTag(...tags: string[]) {
-    return this.findAll(entity => entity.hasTags(tags));
+    return this.findAll((entity) => entity.hasTags(tags));
   }
   findAllWithTags(tags: string[]) {
     return this.findAllWithTag(...tags);
@@ -149,13 +149,13 @@ export class Entity extends EventEmitter {
     recur: boolean = true
   ) {
     return this.findAll(
-      entity => entity.getComponent(Component).isSome(),
+      (entity) => entity.getComponent(Component).isSome(),
       recur
     );
   }
 
   findParent(fn: (entity: Entity) => boolean): Option<Entity> {
-    return this.getParent().flatMap(parent => {
+    return this.getParent().flatMap((parent) => {
       if (fn(parent)) {
         return some(parent);
       } else {
@@ -190,42 +190,44 @@ export class Entity extends EventEmitter {
   getComponentsInstanceOf<C extends Component = Component>(
     Component: IConstructor<C>
   ) {
-    return this.components.filter(component => component instanceof Component);
+    return this.components.filter(
+      (component) => component instanceof Component
+    );
   }
 
   addComponents(components: Component[]) {
-    components.forEach(component => this._addComponent(component));
+    components.forEach((component) => this._addComponent(component));
     return this;
   }
   addComponent(...components: Component[]) {
     return this.addComponents(components);
   }
 
-  removeComponents(components: Array<new (...args: any[]) => Component>) {
-    components.forEach(component => this._removeComponent(component));
+  removeComponents(components: IConstructor<Component>[]) {
+    components.forEach((component) => this._removeComponent(component));
     return this;
   }
-  removeComponent(...components: Array<new (...args: any[]) => Component>) {
+  removeComponent(...components: IConstructor<Component>[]) {
     return this.removeComponents(components);
   }
 
   removeFromScene() {
-    this.scene.map(scene => {
+    this.scene.map((scene) => {
       scene.removeEntity(this);
     });
   }
   detach() {
-    this.parent.map(parent => {
+    this.parent.map((parent) => {
       parent._removeChild(this);
-      this.scene.map(scene => scene.addEntity(this));
-      this.getComponents().forEach(component => component.onDetach());
+      this.scene.map((scene) => scene.addEntity(this));
+      this.getComponents().forEach((component) => component.onDetach());
     });
   }
   getChildren() {
     return this.children;
   }
   addChildren(children: Entity[]) {
-    children.forEach(child => this._addChild(child));
+    children.forEach((child) => this._addChild(child));
     return this;
   }
   addChild(...children: Entity[]) {
@@ -233,7 +235,7 @@ export class Entity extends EventEmitter {
   }
 
   removeChildren(...children: Entity[]) {
-    children.forEach(child => this._removeChild(child));
+    children.forEach((child) => this._removeChild(child));
     return this;
   }
   removeChild(...children: Entity[]) {
@@ -259,10 +261,10 @@ export class Entity extends EventEmitter {
 
     if (missingComponents.length > 0 || missingPlugins.length > 0) {
       const componentMessage = missingComponents.map(
-        missingComponent => `Entity requires ${missingComponent} Component`
+        (missingComponent) => `Entity requires ${missingComponent} Component`
       );
       const pluginMessage = missingPlugins.map(
-        missingPlugin => `Scene Component required ${missingPlugin} Plugin`
+        (missingPlugin) => `Scene Component required ${missingPlugin} Plugin`
       );
       const message =
         componentMessage.length > 0
@@ -282,7 +284,7 @@ export class Entity extends EventEmitter {
       this.components.push(component);
       this.componentMap.set(Component, component);
 
-      this.scene.map(scene => scene.UNSAFE_addComponent(component));
+      this.scene.map((scene) => scene.UNSAFE_addComponent(component));
       this.emit("add-component", component);
     }
     return this;
@@ -291,14 +293,14 @@ export class Entity extends EventEmitter {
   private _removeComponent<C extends Component>(Component: IConstructor<C>) {
     const componentOption = this.getComponent(Component);
 
-    componentOption.ifSome(component => {
+    componentOption.ifSome((component) => {
       this.emit("remove-component", component);
       component.UNSAFE_removeEntity();
 
       this.components.splice(this.components.indexOf(component), 1);
       this.componentMap.delete(Component);
 
-      this.scene.map(scene => scene.UNSAFE_removeComponent(component));
+      this.scene.map((scene) => scene.UNSAFE_removeComponent(component));
     });
     return this;
   }
@@ -306,9 +308,9 @@ export class Entity extends EventEmitter {
   private _addChild(child: Entity) {
     if (this.children.indexOf(child) === -1) {
       if (child.isRoot()) {
-        child.scene.map(scene => scene.removeEntity(child));
+        child.scene.map((scene) => scene.removeEntity(child));
       }
-      child.parent.map(parent => parent._removeChild(child));
+      child.parent.map((parent) => parent._removeChild(child));
 
       this.children.push(child);
 
@@ -338,7 +340,7 @@ export class Entity extends EventEmitter {
 
   private setDepth(depth: number) {
     this.depth = depth;
-    this.children.forEach(child => child.setDepth(depth + 1));
+    this.children.forEach((child) => child.setDepth(depth + 1));
     return this;
   }
 }

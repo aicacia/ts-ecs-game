@@ -12,9 +12,12 @@ export {
   Sprite,
   SpriteManager,
   SpriteClip,
+  UIElement,
+  UIElementManager,
+  UIText,
   RunOnUpdateComponent,
   TransformComponent,
-  RenderableComponent
+  RenderableComponent,
 } from "./components";
 export {
   Asset,
@@ -28,12 +31,13 @@ export {
   CtxRenderer,
   CtxTransform2DRendererHandler,
   CtxSpriteRendererHandler,
+  CtxUIRendererHandler,
   Input,
   InputHandler,
   KeyboardInputHandler,
   MouseInputHandler,
   FullScreenCanvas,
-  InputButton
+  InputButton,
 } from "./plugins";
 export {
   Component,
@@ -41,7 +45,7 @@ export {
   DefaultManager,
   Entity,
   Scene,
-  Plugin
+  Plugin,
 } from "./sceneGraph";
 export { Canvas, IConstructor, IBuilder, Loop } from "./utils";
 export { AABB2 } from "./AABB2";
@@ -66,5 +70,5 @@ export {
   getTangentAngle,
   sign,
   projectPointOnAxis,
-  equals
+  equals,
 } from "./math";

@@ -9,6 +9,7 @@ import {
   CtxRenderer,
   CtxSpriteRendererHandler,
   CtxTransform2DRendererHandler,
+  CtxUIRendererHandler,
   DefaultManager,
   Entity,
   FullScreenCanvas,
@@ -18,7 +19,8 @@ import {
   Scene,
   Sprite,
   Time,
-  Transform2D
+  Transform2D,
+  UIText,
 } from "../../lib";
 import logoPng from "./logo.png";
 
@@ -62,15 +64,20 @@ const canvas = new Canvas().set(256, 256),
   scene = new Scene()
     .addEntity(
       // Camera setup
-      new Entity().addTag("camera").addComponent(
-        new Transform2D().setRenderable(false),
-        new Camera2DControl(),
-        new Camera2D()
-          .setSize(8)
-          .setMinSize(1)
-          .setMaxSize(16)
-          .setBackground(vec3.fromValues(0.98, 0.98, 0.98))
-      ),
+      new Entity()
+        .addTag("camera")
+        .addComponent(
+          new Transform2D().setRenderable(false),
+          new Camera2DControl(),
+          new Camera2D()
+            .setSize(8)
+            .setMinSize(1)
+            .setMaxSize(16)
+            .setBackground(vec3.fromValues(0.98, 0.98, 0.98))
+        )
+        .addChild(
+          new Entity().addComponent(new UIText().setText("Hello, world!"))
+        ),
       new Entity()
         .addComponent(new Transform2D())
         .addChild(
@@ -93,7 +100,8 @@ const canvas = new Canvas().set(256, 256),
     .addPlugin(
       new CtxRenderer(canvas).addRendererHandler(
         new CtxTransform2DRendererHandler(),
-        new CtxSpriteRendererHandler()
+        new CtxSpriteRendererHandler(),
+        new CtxUIRendererHandler()
       ),
       // Required by many Components and plugins
       new Time(),

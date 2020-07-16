@@ -30,8 +30,8 @@ export class DefaultManager<C extends Component = Component> extends Manager<
   sortFunction = (a: C, b: C) => {
     return a
       .getEntity()
-      .flatMap(aEntity =>
-        b.getEntity().map(bEntity => aEntity.getDepth() - bEntity.getDepth())
+      .flatMap((aEntity) =>
+        b.getEntity().map((bEntity) => aEntity.getDepth() - bEntity.getDepth())
       )
       .unwrapOr(0);
   };
@@ -42,15 +42,15 @@ export class DefaultManager<C extends Component = Component> extends Manager<
   }
 
   onInit() {
-    this.components.forEach(component => component.onInit());
+    this.components.forEach((component) => component.onInit());
     return this;
   }
   onUpdate() {
-    this.components.forEach(component => component.onUpdate());
+    this.components.forEach((component) => component.onUpdate());
     return this;
   }
   onAfterUpdate() {
-    this.components.forEach(component => component.onAfterUpdate());
+    this.components.forEach((component) => component.onAfterUpdate());
     return this;
   }
 }

@@ -15,7 +15,7 @@ export class Assets extends Plugin {
     return none();
   }
   findWithName(name: string) {
-    return this.find(asset => asset.getName() === name);
+    return this.find((asset) => asset.getName() === name);
   }
 
   findAll(fn: (asset: Asset) => boolean): Asset[] {
@@ -28,7 +28,7 @@ export class Assets extends Plugin {
     return assets;
   }
   findAllWithName(name: string) {
-    return this.findAll(asset => asset.getName() === name);
+    return this.findAll((asset) => asset.getName() === name);
   }
 
   isLoading() {
@@ -50,14 +50,14 @@ export class Assets extends Plugin {
     return Array.from(this.unloadingPromises.keys());
   }
   getUnloadedAssets(): ReadonlyArray<Asset> {
-    return this.assets.filter(asset => !asset.isLoaded());
+    return this.assets.filter((asset) => !asset.isLoaded());
   }
 
   addAsset(...assets: readonly Asset[]) {
     return this.addAssets(assets);
   }
   addAssets(assets: readonly Asset[]) {
-    assets.forEach(asset => this._addAsset(asset));
+    assets.forEach((asset) => this._addAsset(asset));
     return this;
   }
 
@@ -65,7 +65,7 @@ export class Assets extends Plugin {
     return this.removeAssets(assets);
   }
   removeAssets(assets: readonly Asset[]) {
-    assets.forEach(asset => this._removeAsset(asset));
+    assets.forEach((asset) => this._removeAsset(asset));
     return this;
   }
 
@@ -97,7 +97,7 @@ export class Assets extends Plugin {
   }
   loadAssets(assets: readonly Asset[]) {
     return Promise.all(
-      assets.map(asset => this._loadAsset(asset))
+      assets.map((asset) => this._loadAsset(asset))
     ).then(() => {});
   }
 
@@ -106,7 +106,7 @@ export class Assets extends Plugin {
   }
   unloadAssets(assets: readonly Asset[]) {
     return Promise.all(
-      assets.map(asset => this._unloadAsset(asset))
+      assets.map((asset) => this._unloadAsset(asset))
     ).then(() => {});
   }
 
@@ -125,7 +125,7 @@ export class Assets extends Plugin {
             this.loadingPromises.delete(asset);
             this.loadedAssets.push(asset);
           })
-          .catch(error => {
+          .catch((error) => {
             this.loadingPromises.delete(asset);
             throw error;
           });
@@ -152,7 +152,7 @@ export class Assets extends Plugin {
             this.unloadingPromises.delete(asset);
             this.loadedAssets.splice(this.loadedAssets.indexOf(asset), 1);
           })
-          .catch(error => {
+          .catch((error) => {
             this.unloadingPromises.delete(asset);
             throw error;
           });

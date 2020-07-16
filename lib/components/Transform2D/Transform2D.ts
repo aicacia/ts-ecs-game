@@ -2,13 +2,12 @@ import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import {
   composeMat2d,
   decomposeMat2d,
-  getAngleBetweenPoints
+  getAngleBetweenPoints,
 } from "../../math";
 import { TransformComponent } from "../TransformComponent";
 import { Transform2DManager } from "./Transform2DManager";
 
-const MAT2_0 = mat2d.create(),
-  VEC3_0 = vec3.create();
+const MAT2_0 = mat2d.create();
 
 export class Transform2D extends TransformComponent {
   static Manager = Transform2DManager;
@@ -41,6 +40,16 @@ export class Transform2D extends TransformComponent {
     return this;
   }
 
+  getPosition2(out: vec2) {
+    return vec2.copy(out, this.getPosition());
+  }
+  getPosition3(out: vec3) {
+    const position = this.getPosition();
+    out[0] = position[0];
+    out[1] = position[1];
+    return out;
+  }
+
   getLocalRotationZ() {
     return this.localRotation;
   }
@@ -55,6 +64,13 @@ export class Transform2D extends TransformComponent {
     // TODO: get z rotation from quat
     this.localRotation = 0.0;
     return this;
+  }
+
+  getRotationZ() {
+    return this.getRotation();
+  }
+  getRotationQuat(out: quat) {
+    return quat.fromEuler(out, 0, 0, this.getRotation());
   }
 
   getLocalScale2(out: vec2) {
@@ -73,6 +89,16 @@ export class Transform2D extends TransformComponent {
     this.localPosition[0] = localScale[0];
     this.localPosition[1] = localScale[1];
     return this;
+  }
+
+  getScale2(out: vec2) {
+    return vec2.copy(out, this.getScale());
+  }
+  getScale3(out: vec3) {
+    const scale = this.getScale();
+    out[0] = scale[0];
+    out[1] = scale[1];
+    return out;
   }
 
   translate(offset: vec2) {
@@ -139,7 +165,7 @@ export class Transform2D extends TransformComponent {
     this.updateLocalMatrix();
 
     this.getParentTransform().mapOrElse(
-      parentTransform => {
+      (parentTransform) => {
         mat2d.mul(
           this.matrix,
           parentTransform.getMatrix2d(MAT2_0),

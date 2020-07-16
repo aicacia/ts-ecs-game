@@ -19,8 +19,8 @@ export class JSONAsset extends Asset {
 
   loadAsset(): Promise<void> {
     return fetch(this.src, this.options)
-      .then(response => response.json())
-      .then(json => {
+      .then((response) => response.json())
+      .then((json) => {
         this.json.replace(json);
       });
   }

@@ -80,11 +80,11 @@ export class Camera2D extends RenderableComponent {
   }
 
   getView() {
-    this.getEntity().ifSome(entity =>
-      TransformComponent.getTransform(entity).ifSome(transform => {
-        mat2d.invert(this.view, transform.getMatrix2d(MAT2D_0));
-      })
-    );
+    this.getEntity()
+      .flatMap(TransformComponent.getTransform)
+      .ifSome((transform) =>
+        mat2d.invert(this.view, transform.getMatrix2d(MAT2D_0))
+      );
     return this.view;
   }
 

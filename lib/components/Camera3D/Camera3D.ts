@@ -111,8 +111,8 @@ export class Camera3D extends RenderableComponent {
   }
 
   getView() {
-    this.getEntity().ifSome(entity =>
-      TransformComponent.getTransform(entity).ifSome(transform => {
+    this.getEntity().ifSome((entity) =>
+      TransformComponent.getTransform(entity).ifSome((transform) => {
         mat4.invert(this.view, transform.getMatrix4(MAT4_0));
       })
     );

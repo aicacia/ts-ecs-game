@@ -8,7 +8,7 @@ export class UIElementManager extends Manager<UIElement> {
   }
 
   getComponents() {
-    return Object.values(this.layers).flat<UIElement>(1) as UIElement[];
+    return ([] as UIElement[]).concat(...Object.values(this.layers));
   }
 
   addComponent(sprite: UIElement) {
@@ -37,32 +37,34 @@ export class UIElementManager extends Manager<UIElement> {
   sortFunction = (a: UIElement, b: UIElement) => {
     return a
       .getEntity()
-      .flatMap(aEntity =>
-        b.getEntity().map(bEntity => aEntity.getDepth() - bEntity.getDepth())
+      .flatMap((aEntity) =>
+        b.getEntity().map((bEntity) => aEntity.getDepth() - bEntity.getDepth())
       )
       .unwrapOr(0);
   };
 
   sort() {
-    Object.values(this.layers).forEach(layer => layer.sort(this.sortFunction));
+    Object.values(this.layers).forEach((layer) =>
+      layer.sort(this.sortFunction)
+    );
     return this;
   }
 
   onInit() {
-    Object.values(this.layers).forEach(layer =>
-      layer.forEach(sprite => sprite.onInit())
+    Object.values(this.layers).forEach((layer) =>
+      layer.forEach((sprite) => sprite.onInit())
     );
     return this;
   }
   onUpdate() {
-    Object.values(this.layers).forEach(layer =>
-      layer.forEach(sprite => sprite.onUpdate())
+    Object.values(this.layers).forEach((layer) =>
+      layer.forEach((sprite) => sprite.onUpdate())
     );
     return this;
   }
   onAfterUpdate() {
-    Object.values(this.layers).forEach(layer =>
-      layer.forEach(sprite => sprite.onAfterUpdate())
+    Object.values(this.layers).forEach((layer) =>
+      layer.forEach((sprite) => sprite.onAfterUpdate())
     );
     return this;
   }

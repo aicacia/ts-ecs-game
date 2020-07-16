@@ -8,7 +8,7 @@ export class Camera3DManager extends DefaultManager<Camera3D> {
     if (
       camera
         .getManager()
-        .map(manager => manager === this)
+        .map((manager) => manager === this)
         .unwrapOr(false)
     ) {
       this.active = some(camera);
@@ -39,7 +39,7 @@ export class Camera3DManager extends DefaultManager<Camera3D> {
   removeComponent(camera: Camera3D) {
     super.removeComponent(camera);
 
-    this.active.map(active => {
+    this.active.map((active) => {
       if (active === camera) {
         this.active = none();
       }

@@ -19,7 +19,7 @@ export abstract class Renderer extends Plugin {
   }
 
   addRendererHandlers(...rendererHandlers: RendererHandler[]) {
-    rendererHandlers.forEach(rendererHandler =>
+    rendererHandlers.forEach((rendererHandler) =>
       this._addRendererHandler(rendererHandler)
     );
     return this;
@@ -28,21 +28,19 @@ export abstract class Renderer extends Plugin {
     return this.addRendererHandlers(...rendererHandlers);
   }
 
-  removeRendererHandlers(
-    ...rendererHandlers: Array<new () => RendererHandler>
-  ) {
-    rendererHandlers.forEach(rendererHandler =>
+  removeRendererHandlers(...rendererHandlers: IConstructor<RendererHandler>[]) {
+    rendererHandlers.forEach((rendererHandler) =>
       this._removeRendererHandler(rendererHandler)
     );
     this.sort();
     return this;
   }
-  removeRendererHandler(...rendererHandlers: Array<new () => RendererHandler>) {
+  removeRendererHandler(...rendererHandlers: IConstructor<RendererHandler>[]) {
     return this.removeRendererHandlers(...rendererHandlers);
   }
 
   onUpdate() {
-    this.rendererHandlers.forEach(rendererHandler => {
+    this.rendererHandlers.forEach((rendererHandler) => {
       if (rendererHandler.getEnabled()) {
         rendererHandler.onBeforeRender();
         rendererHandler.onRender();
@@ -51,7 +49,7 @@ export abstract class Renderer extends Plugin {
     return this;
   }
   onAfterUpdate() {
-    this.rendererHandlers.forEach(rendererHandler => {
+    this.rendererHandlers.forEach((rendererHandler) => {
       if (rendererHandler.getEnabled()) {
         rendererHandler.onAfterRender();
       }
@@ -77,7 +75,7 @@ export abstract class Renderer extends Plugin {
   private _removeRendererHandler<R extends RendererHandler = RendererHandler>(
     RendererHandler: IConstructor<R>
   ) {
-    this.getRendererHandler(RendererHandler).ifSome(rendererHandler => {
+    this.getRendererHandler(RendererHandler).ifSome((rendererHandler) => {
       this.emit("remove-renderer_handler", rendererHandler);
       rendererHandler.onRemove();
 

@@ -26,9 +26,9 @@ export class Time extends Plugin {
   }
 
   getDelta() {
-    return this.delta;
+    return this.delta * this.scale;
   }
-  getScaledDelta() {
+  getRealDelta() {
     return this.delta * this.scale;
   }
 

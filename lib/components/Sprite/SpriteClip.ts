@@ -53,7 +53,7 @@ export class SpriteClip {
       x: this.x,
       y: this.y,
       width: this.width,
-      height: this.height
+      height: this.height,
     };
   }
 

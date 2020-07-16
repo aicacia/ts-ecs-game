@@ -37,7 +37,7 @@ export class Input extends Plugin {
   }
 
   addAxes(...axes: InputAxis[]) {
-    axes.forEach(axis => this._addAxis(axis));
+    axes.forEach((axis) => this._addAxis(axis));
     return this;
   }
   addAxis(...axes: InputAxis[]) {
@@ -47,7 +47,7 @@ export class Input extends Plugin {
     return Option.from(this.axes[name]);
   }
   getAxisValue(name: string) {
-    return this.getAxis(name).map(axis => axis.getValue());
+    return this.getAxis(name).map((axis) => axis.getValue());
   }
 
   getRequiredAxis(name: string) {
@@ -73,7 +73,7 @@ export class Input extends Plugin {
   }
 
   removeAxes(...axes: InputAxis[]) {
-    axes.forEach(axis => this._removeAxis(axis));
+    axes.forEach((axis) => this._removeAxis(axis));
     return this;
   }
   removeAxis(...axes: InputAxis[]) {
@@ -81,20 +81,22 @@ export class Input extends Plugin {
   }
 
   addInputHandlers(...inputHandlers: InputHandler[]) {
-    inputHandlers.forEach(inputHandler => this._addInputHandler(inputHandler));
+    inputHandlers.forEach((inputHandler) =>
+      this._addInputHandler(inputHandler)
+    );
     return this;
   }
   addInputHandler(...inputHandlers: InputHandler[]) {
     return this.addInputHandlers(...inputHandlers);
   }
 
-  removeInputHandlers(...inputHandlers: Array<new () => InputHandler>) {
-    inputHandlers.forEach(inputHandler =>
+  removeInputHandlers(...inputHandlers: IConstructor<InputHandler>[]) {
+    inputHandlers.forEach((inputHandler) =>
       this._removeInputHandler(inputHandler)
     );
     return this;
   }
-  removeInputHandler(...inputHandlers: Array<new () => InputHandler>) {
+  removeInputHandler(...inputHandlers: IConstructor<InputHandler>[]) {
     return this.removeInputHandlers(...inputHandlers);
   }
 
@@ -113,14 +115,14 @@ export class Input extends Plugin {
   }
   getValue(name: string) {
     return this.getButton(name)
-      .map(button => button.getValue())
+      .map((button) => button.getValue())
       .unwrapOr(0.0);
   }
 
   isDown(name: string) {
     return this.getButton(name)
       .map(
-        button =>
+        (button) =>
           button.getFrameDown() === this.getRequiredPlugin(Time).getFrame()
       )
       .unwrapOr(false);
@@ -128,7 +130,7 @@ export class Input extends Plugin {
   isUp(name: string) {
     return this.getButton(name)
       .map(
-        button =>
+        (button) =>
           button.getFrameUp() === this.getRequiredPlugin(Time).getFrame()
       )
       .unwrapOr(false);
@@ -137,13 +139,13 @@ export class Input extends Plugin {
   onUpdate() {
     const time = this.getRequiredPlugin(Time);
     this.updateAxes(time);
-    this.inputHandlers.forEach(inputHandler => inputHandler.onUpdate(time));
+    this.inputHandlers.forEach((inputHandler) => inputHandler.onUpdate(time));
     return this;
   }
 
   onAfterUpdate() {
     const time = this.getRequiredPlugin(Time);
-    this.inputHandlers.forEach(inputHandler =>
+    this.inputHandlers.forEach((inputHandler) =>
       inputHandler.onAfterUpdate(time)
     );
     return this;
@@ -164,7 +166,7 @@ export class Input extends Plugin {
   }
 
   private updateAxes(time: Time) {
-    Object.keys(this.axes).forEach(key =>
+    Object.keys(this.axes).forEach((key) =>
       this.updateAxis(this.axes[key], time)
     );
   }
@@ -199,7 +201,7 @@ export class Input extends Plugin {
   private _removeInputHandler<I extends InputHandler = InputHandler>(
     InputHandler: IConstructor<I>
   ) {
-    this.getInputHandler(InputHandler).ifSome(inputHandler => {
+    this.getInputHandler(InputHandler).ifSome((inputHandler) => {
       this.emit("remove-input_handler", inputHandler);
       inputHandler.onRemove();
 

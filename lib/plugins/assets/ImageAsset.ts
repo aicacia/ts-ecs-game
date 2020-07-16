@@ -22,7 +22,7 @@ export class ImageAsset extends Asset {
         this.image.replace(image);
         resolve();
       });
-      image.addEventListener("error", error => reject(error));
+      image.addEventListener("error", (error) => reject(error));
       image.src = this.src;
     });
   }

@@ -3,8 +3,8 @@ import { EventEmitter } from "events";
 
 export abstract class Component extends EventEmitter {
   static Manager: IConstructor<Manager>;
-  static requiredComponents: Array<IConstructor<Component>> = [];
-  static requiredPlugins: Array<IConstructor<Plugin>> = [];
+  static requiredComponents: IConstructor<Component>[] = [];
+  static requiredPlugins: IConstructor<Plugin>[] = [];
 
   static getManagerConstructor<M extends Manager = Manager>(): IConstructor<M> {
     if (!this.Manager) {
@@ -12,10 +12,10 @@ export abstract class Component extends EventEmitter {
     }
     return this.Manager as IConstructor<M>;
   }
-  static getRequiredComponents(): Array<IConstructor<Component>> {
+  static getRequiredComponents(): IConstructor<Component>[] {
     return this.requiredComponents;
   }
-  static getRequiredPlugins(): Array<IConstructor<Plugin>> {
+  static getRequiredPlugins(): IConstructor<Plugin>[] {
     return this.requiredPlugins;
   }
 
@@ -28,17 +28,17 @@ export abstract class Component extends EventEmitter {
   getManagerConstructor<M extends Manager = Manager>(): IConstructor<M> {
     return Object.getPrototypeOf(this).constructor.getManagerConstructor();
   }
-  getRequiredComponents(): Array<IConstructor<Component>> {
+  getRequiredComponents(): IConstructor<Component>[] {
     return Object.getPrototypeOf(this).constructor.requiredComponents;
   }
-  getRequiredPlugins(): Array<IConstructor<Plugin>> {
+  getRequiredPlugins(): IConstructor<Plugin>[] {
     return Object.getPrototypeOf(this).constructor.requiredPlugins;
   }
 
   getComponent<C extends Component = Component>(
     Component: IConstructor<C>
   ): Option<C> {
-    return this.getEntity().flatMap(entity => entity.getComponent(Component));
+    return this.getEntity().flatMap((entity) => entity.getComponent(Component));
   }
   getRequiredComponent<C extends Component = Component>(
     Component: IConstructor<C>
@@ -48,7 +48,7 @@ export abstract class Component extends EventEmitter {
     );
   }
   getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
-    return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+    return this.getScene().flatMap((scene) => scene.getPlugin(Plugin));
   }
   getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).expect(
@@ -74,7 +74,7 @@ export abstract class Component extends EventEmitter {
   }
 
   getScene() {
-    return this.entity.flatMap(entity => entity.getScene());
+    return this.entity.flatMap((entity) => entity.getScene());
   }
   getRequiredScene() {
     return this.getScene().expect(

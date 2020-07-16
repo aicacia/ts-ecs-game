@@ -3,12 +3,12 @@ import { EventEmitter } from "events";
 
 export abstract class Plugin extends EventEmitter {
   static pluginPriority: number = 0;
-  static requiredPlugins: Array<IConstructor<Plugin>> = [];
+  static requiredPlugins: IConstructor<Plugin>[] = [];
 
   static getPluginPriority() {
     return this.pluginPriority;
   }
-  static getRequiredPlugins(): Array<IConstructor<Plugin>> {
+  static getRequiredPlugins(): IConstructor<Plugin>[] {
     return this.requiredPlugins;
   }
 
@@ -20,12 +20,12 @@ export abstract class Plugin extends EventEmitter {
   getPluginPriority(): number {
     return Object.getPrototypeOf(this).constructor.getPluginPriority();
   }
-  getRequiredPlugins(): Array<IConstructor<Plugin>> {
+  getRequiredPlugins(): IConstructor<Plugin>[] {
     return Object.getPrototypeOf(this).constructor.requiredPlugins;
   }
 
   getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>): Option<P> {
-    return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+    return this.getScene().flatMap((scene) => scene.getPlugin(Plugin));
   }
   getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).expect(
@@ -34,7 +34,7 @@ export abstract class Plugin extends EventEmitter {
   }
 
   getManager<M extends Manager = Manager>(Manager: IConstructor<M>): Option<M> {
-    return this.getScene().flatMap(scene => scene.getManager(Manager));
+    return this.getScene().flatMap((scene) => scene.getManager(Manager));
   }
   getRequiredManager<M extends Manager = Manager>(Manager: IConstructor<M>) {
     return this.getManager(Manager).expect(
@@ -55,7 +55,7 @@ export abstract class Plugin extends EventEmitter {
 
     if (missingPlugins.length > 0) {
       const pluginMessage = missingPlugins.map(
-        missingPlugin => `Scene Component required ${missingPlugin} Plugin`
+        (missingPlugin) => `Scene Component required ${missingPlugin} Plugin`
       );
       throw new Error(pluginMessage.join("\n"));
     }

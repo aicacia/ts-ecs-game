@@ -32,7 +32,7 @@ export abstract class Manager<
   }
 
   getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>): Option<P> {
-    return this.getScene().flatMap(scene => scene.getPlugin(Plugin));
+    return this.getScene().flatMap((scene) => scene.getPlugin(Plugin));
   }
   getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).expect(
@@ -41,7 +41,7 @@ export abstract class Manager<
   }
 
   getManager<M extends Manager = Manager>(Manager: IConstructor<M>): Option<M> {
-    return this.getScene().flatMap(scene => scene.getManager(Manager));
+    return this.getScene().flatMap((scene) => scene.getManager(Manager));
   }
   getRequiredManager<M extends Manager = Manager>(Manager: IConstructor<M>) {
     return this.getManager(Manager).expect(

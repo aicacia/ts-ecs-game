@@ -8,7 +8,7 @@ export class SpriteManager extends Manager<Sprite> {
   }
 
   getComponents() {
-    return Object.values(this.layers).flat<Sprite>(1) as Sprite[];
+    return ([] as Sprite[]).concat(...Object.values(this.layers));
   }
 
   addComponent(sprite: Sprite) {
@@ -37,32 +37,34 @@ export class SpriteManager extends Manager<Sprite> {
   sortFunction = (a: Sprite, b: Sprite) => {
     return a
       .getEntity()
-      .flatMap(aEntity =>
-        b.getEntity().map(bEntity => aEntity.getDepth() - bEntity.getDepth())
+      .flatMap((aEntity) =>
+        b.getEntity().map((bEntity) => aEntity.getDepth() - bEntity.getDepth())
       )
       .unwrapOr(0);
   };
 
   sort() {
-    Object.values(this.layers).forEach(layer => layer.sort(this.sortFunction));
+    Object.values(this.layers).forEach((layer) =>
+      layer.sort(this.sortFunction)
+    );
     return this;
   }
 
   onInit() {
-    Object.values(this.layers).forEach(layer =>
-      layer.forEach(sprite => sprite.onInit())
+    Object.values(this.layers).forEach((layer) =>
+      layer.forEach((sprite) => sprite.onInit())
     );
     return this;
   }
   onUpdate() {
-    Object.values(this.layers).forEach(layer =>
-      layer.forEach(sprite => sprite.onUpdate())
+    Object.values(this.layers).forEach((layer) =>
+      layer.forEach((sprite) => sprite.onUpdate())
     );
     return this;
   }
   onAfterUpdate() {
-    Object.values(this.layers).forEach(layer =>
-      layer.forEach(sprite => sprite.onAfterUpdate())
+    Object.values(this.layers).forEach((layer) =>
+      layer.forEach((sprite) => sprite.onAfterUpdate())
     );
     return this;
   }

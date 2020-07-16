@@ -28,7 +28,7 @@ export abstract class InputHandler<
     );
   }
   getScene() {
-    return this.getInput().flatMap(input => input.getScene());
+    return this.getInput().flatMap((input) => input.getScene());
   }
   getRequiredScene() {
     return this.getScene().expect(`${this.getConstructor()} requires a Scene`);
@@ -36,7 +36,7 @@ export abstract class InputHandler<
 
   getElement() {
     return this.getInput()
-      .map(input => input.getElement())
+      .map((input) => input.getElement())
       .expect(`${this.getConstructor()} requires an Element`);
   }
 
@@ -55,7 +55,7 @@ export abstract class InputHandler<
     return this;
   }
   onUpdate(time: Time) {
-    this.events.forEach(event => this.onEvent(time, event));
+    this.events.forEach((event) => this.onEvent(time, event));
     this.events.length = 0;
     return this;
   }

@@ -39,7 +39,7 @@ export abstract class Asset extends EventEmitter {
           this.loaded = true;
           this.emit("load");
         })
-        .catch(error => {
+        .catch((error) => {
           this.loading = true;
           this.emit("load-error", error);
           throw error;
@@ -56,7 +56,7 @@ export abstract class Asset extends EventEmitter {
           this.loaded = false;
           this.emit("unload");
         })
-        .catch(error => {
+        .catch((error) => {
           this.emit("unload-error", error);
           throw error;
         });

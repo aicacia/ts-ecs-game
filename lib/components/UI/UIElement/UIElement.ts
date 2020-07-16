@@ -10,18 +10,10 @@ export class UIElement extends RenderableComponent {
   protected height: number = 0;
   private layer: number = 0;
 
-  getWidth() {
-    return this.width;
-  }
-  setWidth(width: number) {
-    this.width = width;
-    return this;
-  }
-
   getLocalAABB(min: vec2, max: vec2) {
     this.getEntity()
-      .flatMap(entity => TransformComponent.getTransform(entity))
-      .ifSome(transform => {
+      .flatMap(TransformComponent.getTransform)
+      .ifSome((transform) => {
         const matrix = transform.getMatrix2d(MAT2D_0),
           hw = this.width * 0.5,
           hh = this.height * 0.5;
@@ -44,12 +36,20 @@ export class UIElement extends RenderableComponent {
 
     this.getRequiredEntity()
       .findAllWithComponent(UIElement, false)
-      .forEach(element => {
+      .forEach((element) => {
         const childElement = element.getRequiredComponent(UIElement);
         childElement.getAABB(childMin, childMax);
         vec2.min(min, min, childMin);
         vec2.max(max, max, childMax);
       });
+  }
+
+  getWidth() {
+    return this.width;
+  }
+  setWidth(width: number) {
+    this.width = width;
+    return this;
   }
 
   getHeight() {
@@ -64,10 +64,10 @@ export class UIElement extends RenderableComponent {
     return this.layer;
   }
   setLayer(layer: number) {
-    const managerOption = this.getManager();
-    managerOption.map(manager => manager.removeComponent(this));
+    const managerOption = this.getManager<UIElementManager>();
+    managerOption.ifSome((manager) => manager.removeComponent(this));
     this.layer = layer | 0;
-    managerOption.map(manager => manager.addComponent(this));
+    managerOption.ifSome((manager) => manager.addComponent(this));
     return this;
   }
 }

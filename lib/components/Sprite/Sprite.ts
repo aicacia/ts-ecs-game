@@ -69,9 +69,9 @@ export class Sprite extends RenderableComponent {
   }
   setLayer(layer: number) {
     const managerOption = this.getManager();
-    managerOption.map(manager => manager.removeComponent(this));
+    managerOption.map((manager) => manager.removeComponent(this));
     this.layer = layer | 0;
-    managerOption.map(manager => manager.addComponent(this));
+    managerOption.map((manager) => manager.addComponent(this));
     return this;
   }
 
@@ -105,14 +105,14 @@ export class Sprite extends RenderableComponent {
         }
       }
 
-      this.currentTime += this.getRequiredPlugin(Time).getScaledDelta();
+      this.currentTime += this.getRequiredPlugin(Time).getDelta();
     }
 
     return this;
   }
 
   private copyImageClipping() {
-    this.getImage().ifSome(img => {
+    this.getImage().ifSome((img) => {
       this.clipWidth = img.width;
       this.clipHeight = img.height;
     });
