@@ -54,14 +54,14 @@ tape("Scene", (assert: tape.Test) => {
     .expect("failed to find entity with tag 'parent'");
   assert.true(parent.isRoot());
   assert.equal(parent.getDepth(), 0);
-  assert.deepEqual(parent.getTags(), new Set("parent"));
+  assert.deepEqual(parent.getTags(), new Set(["parent"]));
 
   const child = scene
     .findWithTag("child")
     .expect("failed to find entity with tag 'child'");
   assert.false(child.isRoot());
   assert.equal(child.getDepth(), 1);
-  assert.deepEqual(child.getTags(), new Set("child"));
+  assert.deepEqual(child.getTags(), new Set(["child"]));
 
   child.detach();
 

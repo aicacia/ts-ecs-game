@@ -247,12 +247,16 @@ export class Entity extends EventEmitter {
       missingPlugins = [];
 
     for (const component of this.components) {
-      for (const RequiredComponent of component.getRequiredComponents()) {
+      for (const requirementOrEither of component.getRequiredComponents()) {
+        const RequiredComponent = getRequirement(requirementOrEither);
+
         if (!this.hasComponent(RequiredComponent)) {
           missingComponents.push(RequiredComponent);
         }
       }
-      for (const RequiredPlugin of component.getRequiredPlugins()) {
+      for (const requirementOrEither of component.getRequiredPlugins()) {
+        const RequiredPlugin = getRequirement(requirementOrEither);
+
         if (!this.getRequiredScene().hasPlugin(RequiredPlugin)) {
           missingPlugins.push(RequiredPlugin);
         }
@@ -345,6 +349,6 @@ export class Entity extends EventEmitter {
   }
 }
 
-import { IConstructor } from "../utils";
+import { IConstructor, getRequirement } from "../utils";
 import { Component } from "./Component";
 import { Scene } from "./Scene";

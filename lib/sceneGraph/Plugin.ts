@@ -3,12 +3,12 @@ import { EventEmitter } from "events";
 
 export abstract class Plugin extends EventEmitter {
   static pluginPriority: number = 0;
-  static requiredPlugins: IConstructor<Plugin>[] = [];
+  static requiredPlugins: IRequirement<Plugin>[] = [];
 
   static getPluginPriority() {
     return this.pluginPriority;
   }
-  static getRequiredPlugins(): IConstructor<Plugin>[] {
+  static getRequiredPlugins(): IRequirement<Plugin>[] {
     return this.requiredPlugins;
   }
 
@@ -46,7 +46,9 @@ export abstract class Plugin extends EventEmitter {
     const missingPlugins = [];
 
     for (const plugin of this.getRequiredScene().getPlugins()) {
-      for (const RequiredPlugin of plugin.getRequiredPlugins()) {
+      for (const requirementOrEither of plugin.getRequiredPlugins()) {
+        const RequiredPlugin = getRequirement(requirementOrEither);
+
         if (!this.getRequiredScene().hasPlugin(RequiredPlugin)) {
           missingPlugins.push(RequiredPlugin);
         }
@@ -93,6 +95,6 @@ export abstract class Plugin extends EventEmitter {
   }
 }
 
-import { IConstructor } from "../utils";
+import { IConstructor, IRequirement, getRequirement } from "../utils";
 import { Manager } from "./Manager";
 import { Scene } from "./Scene";

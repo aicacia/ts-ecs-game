@@ -3,8 +3,8 @@ import { EventEmitter } from "events";
 
 export abstract class Component extends EventEmitter {
   static Manager: IConstructor<Manager>;
-  static requiredComponents: IConstructor<Component>[] = [];
-  static requiredPlugins: IConstructor<Plugin>[] = [];
+  static requiredComponents: IRequirement<Component>[] = [];
+  static requiredPlugins: IRequirement<Plugin>[] = [];
 
   static getManagerConstructor<M extends Manager = Manager>(): IConstructor<M> {
     if (!this.Manager) {
@@ -12,10 +12,10 @@ export abstract class Component extends EventEmitter {
     }
     return this.Manager as IConstructor<M>;
   }
-  static getRequiredComponents(): IConstructor<Component>[] {
+  static getRequiredComponents(): IRequirement<Component>[] {
     return this.requiredComponents;
   }
-  static getRequiredPlugins(): IConstructor<Plugin>[] {
+  static getRequiredPlugins(): IRequirement<Plugin>[] {
     return this.requiredPlugins;
   }
 
@@ -28,10 +28,10 @@ export abstract class Component extends EventEmitter {
   getManagerConstructor<M extends Manager = Manager>(): IConstructor<M> {
     return Object.getPrototypeOf(this).constructor.getManagerConstructor();
   }
-  getRequiredComponents(): IConstructor<Component>[] {
+  getRequiredComponents(): IRequirement<Component>[] {
     return Object.getPrototypeOf(this).constructor.requiredComponents;
   }
-  getRequiredPlugins(): IConstructor<Plugin>[] {
+  getRequiredPlugins(): IRequirement<Plugin>[] {
     return Object.getPrototypeOf(this).constructor.requiredPlugins;
   }
 
@@ -121,7 +121,7 @@ export abstract class Component extends EventEmitter {
   }
 }
 
-import { IConstructor } from "../utils";
+import { IConstructor, IRequirement } from "../utils";
 import { DefaultManager } from "./DefaultManager";
 import { Entity } from "./Entity";
 import { Manager } from "./Manager";
