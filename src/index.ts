@@ -53,7 +53,7 @@ export {
   IBuilder,
   Loop,
   IRequirement,
-  getRequirement,
+  filterRequirements,
 } from "./utils";
 export { AABB2 } from "./AABB2";
 export {

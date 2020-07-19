@@ -43,7 +43,7 @@ export function decomposeMat2d(
 }
 
 export function getRotationFromMat2d(matrix: mat2d): number {
-  return Math.atan2(matrix[1], matrix[0]);
+  return Math.atan2(matrix[2], matrix[0]);
 }
 
 export function getPointFromAngle(out: vec2, angle: number) {
@@ -53,7 +53,7 @@ export function getPointFromAngle(out: vec2, angle: number) {
 }
 
 export function getAngleFromPoint(out: vec2) {
-  return Math.atan2(out[1], out[0]) - Math.PI * 0.5;
+  return Math.atan2(out[1], out[0]) - HALF_PI;
 }
 
 const getTangentAngle_VEC2_0 = vec2.create();

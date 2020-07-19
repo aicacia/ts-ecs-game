@@ -43,21 +43,22 @@ export abstract class Plugin extends EventEmitter {
   }
 
   validateRequirements() {
-    const missingPlugins = [];
+    const missingPlugins: IConstructor<Plugin>[] = [];
 
     for (const plugin of this.getRequiredScene().getPlugins()) {
-      for (const requirementOrEither of plugin.getRequiredPlugins()) {
-        const RequiredPlugin = getRequirement(requirementOrEither);
-
-        if (!this.getRequiredScene().hasPlugin(RequiredPlugin)) {
-          missingPlugins.push(RequiredPlugin);
-        }
-      }
+      filterRequirements(
+        missingPlugins,
+        plugin.getRequiredPlugins(),
+        (P) => !this.getRequiredScene().hasPlugin(P)
+      );
     }
 
     if (missingPlugins.length > 0) {
       const pluginMessage = missingPlugins.map(
-        (missingPlugin) => `Scene Component required ${missingPlugin} Plugin`
+        (missingRequirement) =>
+          `${this.getConstructor()} Plugin requires ${requirementToString(
+            missingRequirement
+          )} Plugin`
       );
       throw new Error(pluginMessage.join("\n"));
     }
@@ -95,6 +96,7 @@ export abstract class Plugin extends EventEmitter {
   }
 }
 
-import { IConstructor, IRequirement, getRequirement } from "../utils";
+import { IConstructor, IRequirement, filterRequirements } from "../utils";
 import { Manager } from "./Manager";
 import { Scene } from "./Scene";
+import { requirementToString } from "../utils/IRequirement";

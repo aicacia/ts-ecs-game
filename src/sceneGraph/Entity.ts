@@ -1,5 +1,6 @@
 import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
+import { isArray } from "util";
 
 // tslint:disable-next-line: interface-name
 export interface Entity {
@@ -243,32 +244,32 @@ export class Entity extends EventEmitter {
   }
 
   validateRequirements() {
-    const missingComponents = [],
-      missingPlugins = [];
+    const missingComponents: IRequirement<Component>[] = [],
+      missingPlugins: IRequirement<Plugin>[] = [];
 
     for (const component of this.components) {
-      for (const requirementOrEither of component.getRequiredComponents()) {
-        const RequiredComponent = getRequirement(requirementOrEither);
-
-        if (!this.hasComponent(RequiredComponent)) {
-          missingComponents.push(RequiredComponent);
-        }
-      }
-      for (const requirementOrEither of component.getRequiredPlugins()) {
-        const RequiredPlugin = getRequirement(requirementOrEither);
-
-        if (!this.getRequiredScene().hasPlugin(RequiredPlugin)) {
-          missingPlugins.push(RequiredPlugin);
-        }
-      }
+      filterRequirements(
+        missingComponents,
+        component.getRequiredComponents(),
+        (C) => !this.hasComponent(C)
+      );
+      filterRequirements(
+        missingPlugins,
+        component.getRequiredPlugins(),
+        (P) => !this.getRequiredScene().hasPlugin(P)
+      );
     }
 
     if (missingComponents.length > 0 || missingPlugins.length > 0) {
       const componentMessage = missingComponents.map(
-        (missingComponent) => `Entity requires ${missingComponent} Component`
+        (missingRequirement) =>
+          `${this} requires ${requirementToString(
+            missingRequirement
+          )} Component`
       );
       const pluginMessage = missingPlugins.map(
-        (missingPlugin) => `Scene Component required ${missingPlugin} Plugin`
+        (missingRequirement) =>
+          `${this} requires ${requirementToString(missingRequirement)} Plugin`
       );
       const message =
         componentMessage.length > 0
@@ -349,6 +350,8 @@ export class Entity extends EventEmitter {
   }
 }
 
-import { IConstructor, getRequirement } from "../utils";
+import { IConstructor, filterRequirements, IRequirement } from "../utils";
 import { Component } from "./Component";
+import { Plugin } from "./Plugin";
 import { Scene } from "./Scene";
+import { requirementToString } from "../utils/IRequirement";
