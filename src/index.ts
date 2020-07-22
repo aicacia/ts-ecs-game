@@ -71,6 +71,8 @@ export {
   DEG_TO_RAD,
   RAD_TO_DEG,
   EPSILON,
+  TAU,
+  HALF_PI,
   toHex,
   toRgb,
   toRgba,
