@@ -1,5 +1,6 @@
 node_modules
 coverage
+docs
 test
 npm-debug.log
 tsconfig.json

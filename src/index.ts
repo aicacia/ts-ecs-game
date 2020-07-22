@@ -48,6 +48,14 @@ export {
   Plugin,
 } from "./sceneGraph";
 export {
+  getTextHeight,
+  getTextUnitHeight,
+  getTextUnitWidth,
+  getTextWidth,
+  BASE_SIZE,
+  INV_BASE_SIZE,
+  getGlobalCanvas,
+  getGlobalContext,
   Canvas,
   IConstructor,
   IBuilder,
@@ -55,7 +63,6 @@ export {
   IRequirement,
   filterRequirements,
 } from "./utils";
-export { AABB2 } from "./AABB2";
 export {
   composeMat2d,
   decomposeMat2d,

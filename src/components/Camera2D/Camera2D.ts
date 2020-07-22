@@ -1,9 +1,14 @@
+import { Transform2D } from "../Transform2D";
+import { Transform3D } from "../Transform3D";
 import { mat2d, vec2, vec3 } from "gl-matrix";
 import { RenderableComponent } from "../RenderableComponent";
 
-const MAT2D_0 = mat2d.create();
+const MAT2D_0 = mat2d.create(),
+  VEC2_0 = vec2.create();
 
 export class Camera2D extends RenderableComponent {
+  static requiredComponents = [[Transform2D, Transform3D]];
+
   private width: number = 1.0;
   private height: number = 1.0;
   private aspect: number = 1.0;
@@ -110,9 +115,10 @@ export class Camera2D extends RenderableComponent {
     return this;
   }
   updateProjection() {
-    const right = this.size * this.aspect,
+    const size = this.getSize(),
+      right = size * this.aspect,
       left = -right,
-      top = this.size,
+      top = size,
       bottom = -top,
       width = right - left,
       height = top - bottom,
@@ -156,7 +162,6 @@ export class Camera2D extends RenderableComponent {
   }
 }
 
-import { Transform2D } from "../Transform2D";
 import { TransformComponent } from "../TransformComponent";
 import { Camera2DManager } from "./Camera2DManager";
 

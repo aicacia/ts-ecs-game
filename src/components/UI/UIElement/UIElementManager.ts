@@ -1,14 +1,22 @@
 import { Manager } from "../../../sceneGraph";
 
 export class UIElementManager extends Manager<UIElement> {
-  private layers: Record<number, UIElement[]> = {};
+  private layers: Map<number, UIElement[]> = new Map();
 
   isEmpty() {
-    return Object.values(this.layers).length === 0;
+    return this.layers.size === 0;
+  }
+
+  getLayers() {
+    return Array.from(this.layers.entries()).sort(
+      ([aLayer, aElements], [bLayer, bElements]) => aLayer - bLayer
+    );
   }
 
   getComponents() {
-    return ([] as UIElement[]).concat(...Object.values(this.layers));
+    return ([] as UIElement[]).concat(
+      ...this.getLayers().map(([layer, elements]) => elements)
+    );
   }
 
   addComponent(sprite: UIElement) {
@@ -17,7 +25,7 @@ export class UIElementManager extends Manager<UIElement> {
   }
   removeComponent(sprite: UIElement) {
     const layerIndex = sprite.getLayer(),
-      layer = this.layers[layerIndex];
+      layer = this.layers.get(layerIndex);
 
     if (layer) {
       const index = layer.indexOf(sprite);
@@ -26,7 +34,7 @@ export class UIElementManager extends Manager<UIElement> {
         layer.splice(index, 1);
 
         if (layer.length === 0) {
-          delete this.layers[layerIndex];
+          this.layers.delete(layerIndex);
         }
       }
     }
@@ -44,39 +52,39 @@ export class UIElementManager extends Manager<UIElement> {
   };
 
   sort() {
-    Object.values(this.layers).forEach((layer) =>
-      layer.sort(this.sortFunction)
-    );
+    for (let layer of this.layers.values()) {
+      layer.sort(this.sortFunction);
+    }
     return this;
   }
 
   onInit() {
-    Object.values(this.layers).forEach((layer) =>
-      layer.forEach((sprite) => sprite.onInit())
-    );
+    for (let layer of this.layers.values()) {
+      layer.forEach((sprite) => sprite.onInit());
+    }
     return this;
   }
   onUpdate() {
-    Object.values(this.layers).forEach((layer) =>
-      layer.forEach((sprite) => sprite.onUpdate())
-    );
+    for (let layer of this.layers.values()) {
+      layer.forEach((sprite) => sprite.onUpdate());
+    }
     return this;
   }
   onAfterUpdate() {
-    Object.values(this.layers).forEach((layer) =>
-      layer.forEach((sprite) => sprite.onAfterUpdate())
-    );
+    for (let layer of this.layers.values()) {
+      layer.forEach((sprite) => sprite.onAfterUpdate());
+    }
     return this;
   }
 
   private getOrCreateLayer(layerIndex: number) {
-    const layer = this.layers[layerIndex];
+    const layer = this.layers.get(layerIndex);
 
     if (layer) {
       return layer;
     } else {
       const newLayer: UIElement[] = [];
-      this.layers[layerIndex] = newLayer;
+      this.layers.set(layerIndex, newLayer);
       return newLayer;
     }
   }

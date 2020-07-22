@@ -3,6 +3,9 @@ import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { Entity } from "../sceneGraph";
 import { RenderableComponent } from "./RenderableComponent";
 
+const VEC2_0 = vec2.create(),
+  VEC3_0 = vec3.create();
+
 export abstract class TransformComponent extends RenderableComponent {
   static getParentTransform(entity: Entity): Option<TransformComponent> {
     return entity.getParent().flatMap(this.getTransform);
@@ -81,6 +84,28 @@ export abstract class TransformComponent extends RenderableComponent {
     } else {
       return this;
     }
+  }
+
+  translate2(position: vec2): this {
+    const current = this.getLocalPosition2(VEC2_0);
+    vec2.add(current, current, position);
+    return this.setLocalPosition2(current);
+  }
+  translate3(position: vec3): this {
+    const current = this.getLocalPosition3(VEC3_0);
+    vec3.add(current, current, position);
+    return this.setLocalPosition3(current);
+  }
+
+  scale2(scale: vec2): this {
+    const current = this.getLocalScale2(VEC2_0);
+    vec2.mul(current, current, scale);
+    return this.setLocalPosition2(current);
+  }
+  scale3(scale: vec3): this {
+    const current = this.getLocalScale3(VEC3_0);
+    vec3.mul(current, current, scale);
+    return this.setLocalPosition3(current);
   }
 
   abstract updateLocalMatrix(): this;

@@ -4,7 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./lib",
+    "outDir": "lib",
     "strict": true,
     "downlevelIteration": true,
     "lib": ["esnext", "dom"]
@@ -12,7 +12,7 @@
   "include": ["src"],
   "exclude": ["src/**/*.test.*"],
   "typedocOptions": {
-    "mode": "modules",
+    "mode": "library",
     "out": "docs"
   }
 }

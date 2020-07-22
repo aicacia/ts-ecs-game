@@ -1,5 +1,10 @@
-import { getTextHeight, getTextWidth } from "../../utils/getTextDimensions";
 import { UIElement } from "./UIElement";
+import {
+  getTextHeight,
+  getTextWidth,
+  BASE_SIZE,
+} from "../../utils/getTextDimensions";
+import { vec2 } from "gl-matrix";
 
 export enum TextAlign {
   Start = "start",
@@ -26,7 +31,7 @@ export enum TextDirection {
 export class UIText extends UIElement {
   private text: string = "";
   private font: string = "sans-serif";
-  private size: number = 16;
+  private size: number = 1;
   private align: TextAlign = TextAlign.Center;
   private baseline: TextBaseline = TextBaseline.Middle;
   private direction: TextDirection = TextDirection.Inherit;
@@ -79,18 +84,17 @@ export class UIText extends UIElement {
     return this.forceResize();
   }
 
-  getCtxFontStyle(scale: number) {
-    return `${this.size * scale}em ${this.font}`;
+  getCtxFontStyle(scale: number = 1) {
+    return `${this.size * scale}px ${this.font}`;
   }
 
   getHTMLFontStyle() {
-    return `${this.size}px ${this.font}`;
+    return `${this.size * BASE_SIZE}px ${this.font}`;
   }
 
   forceResize() {
-    const fontStyle = this.getHTMLFontStyle();
-    this.width = getTextWidth(fontStyle, this.text);
-    this.height = getTextHeight(fontStyle);
+    this.width = getTextWidth(this.font, this.size, this.text);
+    this.height = getTextHeight(this.font, this.size);
     return this;
   }
 }

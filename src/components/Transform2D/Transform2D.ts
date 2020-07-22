@@ -7,7 +7,9 @@ import {
 import { TransformComponent } from "../TransformComponent";
 import { Transform2DManager } from "./Transform2DManager";
 
-const MAT2_0 = mat2d.create();
+const VEC2_0 = vec2.create(),
+  VEC3_UP = vec3.fromValues(0, 0, 1),
+  MAT2_0 = mat2d.create();
 
 export class Transform2D extends TransformComponent {
   static Manager = Transform2DManager;
@@ -23,11 +25,12 @@ export class Transform2D extends TransformComponent {
   private matrix: mat2d = mat2d.create();
 
   getLocalPosition2(out: vec2) {
-    return vec2.copy(out, this.localPosition);
+    return vec2.copy(out, this.getLocalPosition());
   }
   getLocalPosition3(out: vec3) {
-    out[0] = this.localPosition[0];
-    out[1] = this.localPosition[1];
+    const localPosition = this.getLocalPosition();
+    out[0] = localPosition[0];
+    out[1] = localPosition[1];
     return out;
   }
 
@@ -35,9 +38,9 @@ export class Transform2D extends TransformComponent {
     return this.setLocalPosition(localPosition);
   }
   setLocalPosition3(localPosition: vec3) {
-    this.localPosition[0] = localPosition[0];
-    this.localPosition[1] = localPosition[1];
-    return this;
+    return this.setLocalPosition(
+      vec2.set(VEC2_0, localPosition[0], localPosition[1])
+    );
   }
 
   getPosition2(out: vec2) {
@@ -51,19 +54,17 @@ export class Transform2D extends TransformComponent {
   }
 
   getLocalRotationZ() {
-    return this.localRotation;
+    return this.getLocalRotation();
   }
   getLocalRotationQuat(out: quat) {
-    return quat.fromEuler(out, 0, 0, this.localRotation);
+    return quat.fromEuler(out, 0, 0, this.getLocalRotation());
   }
 
   setLocalRotationZ(localRotation: number) {
     return this.setLocalRotation(localRotation);
   }
   setLocalRotationQuat(localRotation: quat) {
-    // TODO: get z rotation from quat
-    this.localRotation = 0.0;
-    return this;
+    return this.setLocalRotation(quat.getAxisAngle(VEC3_UP, localRotation));
   }
 
   getRotationZ() {
@@ -74,11 +75,12 @@ export class Transform2D extends TransformComponent {
   }
 
   getLocalScale2(out: vec2) {
-    return vec2.copy(out, this.localScale);
+    return vec2.copy(out, this.getLocalScale());
   }
   getLocalScale3(out: vec3) {
-    out[0] = this.localScale[0];
-    out[1] = this.localScale[1];
+    const localScale = this.getLocalScale();
+    out[0] = localScale[0];
+    out[1] = localScale[1];
     return out;
   }
 
@@ -86,9 +88,7 @@ export class Transform2D extends TransformComponent {
     return this.setLocalScale(localScale);
   }
   setLocalScale3(localScale: vec3) {
-    this.localPosition[0] = localScale[0];
-    this.localPosition[1] = localScale[1];
-    return this;
+    return this.setLocalScale(vec2.set(VEC2_0, localScale[0], localScale[1]));
   }
 
   getScale2(out: vec2) {
@@ -99,11 +99,6 @@ export class Transform2D extends TransformComponent {
     out[0] = scale[0];
     out[1] = scale[1];
     return out;
-  }
-
-  translate(offset: vec2) {
-    vec2.add(this.localPosition, this.localPosition, offset);
-    return this.setNeedsUpdate();
   }
 
   setLocalPosition(localPosition: vec2) {
@@ -143,7 +138,7 @@ export class Transform2D extends TransformComponent {
     return this.updateMatrixIfNeeded().matrix;
   }
   getLocalMatrix() {
-    return this.updateMatrixIfNeeded().localMatrix;
+    return this.updateLocalMatrixIfNeeded().localMatrix;
   }
 
   updateLocalMatrix() {
@@ -162,7 +157,7 @@ export class Transform2D extends TransformComponent {
   updateMatrix() {
     this.needsUpdate = false;
 
-    this.updateLocalMatrix();
+    this.updateLocalMatrixIfNeeded();
 
     this.getParentTransform().mapOrElse(
       (parentTransform) => {

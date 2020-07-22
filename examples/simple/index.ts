@@ -21,7 +21,7 @@ import {
   Time,
   Transform2D,
   UIText,
-} from "../../lib";
+} from "../../src";
 import logoPng from "./logo.png";
 
 const logoAsset = new ImageAsset(logoPng);
@@ -70,14 +70,15 @@ const canvas = new Canvas().set(256, 256),
           new Transform2D().setRenderable(false),
           new Camera2DControl(),
           new Camera2D()
-            .setSize(8)
+            .setSize(10)
             .setMinSize(1)
             .setMaxSize(16)
             .setBackground(vec3.fromValues(0.98, 0.98, 0.98))
-        )
-        .addChild(
-          new Entity().addComponent(new UIText().setText("Hello, world!"))
         ),
+      new Entity().addComponent(
+        new Transform2D(),
+        new UIText().setText("Hello, world!")
+      ),
       new Entity()
         .addComponent(new Transform2D())
         .addChild(

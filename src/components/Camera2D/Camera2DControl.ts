@@ -1,12 +1,19 @@
 import { vec2 } from "gl-matrix";
+import { Input } from "../../plugins";
+import { Camera2D } from "./Camera2D";
+import { TransformComponent } from "../TransformComponent";
 import { Component } from "../../sceneGraph";
 import { Transform2D } from "../Transform2D";
+import { Transform3D } from "../Transform3D";
 import { Camera2DControlManager } from "./Camera2DControlManager";
 
-const VEC2_0 = vec2.create();
+const VEC2_0 = vec2.create(),
+  VEC2_1 = vec2.create();
 
 export class Camera2DControl extends Component {
   static Manager = Camera2DControlManager;
+  static requiredComponents = [[Transform2D, Transform3D]];
+  static requiredPlugins = [Input];
 
   private enabled: boolean = true;
 
@@ -44,10 +51,10 @@ export class Camera2DControl extends Component {
   onUpdate() {
     if (this.enabled) {
       const input = this.getRequiredPlugin(Input),
-        time = this.getRequiredPlugin(Time),
-        transform = this.getRequiredComponent(Transform2D),
+        transform = TransformComponent.getRequiredTransform(
+          this.getRequiredEntity()
+        ),
         camera = this.getRequiredComponent(Camera2D),
-        size = camera.getSize(),
         worldMouse = camera.toRelative(
           VEC2_0,
           vec2.set(VEC2_0, -input.getValue("mouseX"), -input.getValue("mouseY"))
@@ -56,7 +63,8 @@ export class Camera2DControl extends Component {
       if (this.dragging) {
         vec2.sub(this.offset, worldMouse, this.lastMouse);
         vec2.scale(this.offset, this.offset, this.panSpeed);
-        transform.translate(this.offset);
+        vec2.mul(this.offset, this.offset, transform.getLocalScale2(VEC2_1));
+        transform.translate2(this.offset);
       }
 
       if (input.isDown("mouse1")) {
@@ -66,10 +74,12 @@ export class Camera2DControl extends Component {
         this.dragging = false;
       }
 
-      if (input.getValue("mouseWheel") > 0) {
-        camera.setSize(size + this.zoomSpeed);
-      } else if (input.getValue("mouseWheel") < 0) {
-        camera.setSize(size - this.zoomSpeed);
+      const mouseWheel = input.getValue("mouseWheel");
+
+      if (mouseWheel > 0) {
+        camera.setSize(camera.getSize() + this.zoomSpeed);
+      } else if (mouseWheel < 0) {
+        camera.setSize(camera.getSize() - this.zoomSpeed);
       }
 
       vec2.copy(this.lastMouse, worldMouse);
@@ -77,6 +87,3 @@ export class Camera2DControl extends Component {
     return this;
   }
 }
-
-import { Input, Time } from "../../plugins";
-import { Camera2D } from "./Camera2D";

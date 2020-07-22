@@ -2,15 +2,14 @@ import { UIElementManager, UIText } from "../../../components";
 import { TransformComponent } from "../../../components/TransformComponent";
 import { CtxRendererHandler } from "../CtxRendererHandler";
 import { mat2d } from "gl-matrix";
+import { INV_BASE_SIZE } from "../../../utils/getTextDimensions";
 
-const MAT2_0 = mat2d.create(),
-  ONE_SIXTEENTH = 1 / 16;
+const MAT2_0 = mat2d.create();
 
 export class CtxUIRendererHandler extends CtxRendererHandler {
   onRender() {
     this.getManager(UIElementManager).ifSome((uiElementManager) => {
-      const renderer = this.getRequiredRenderer(),
-        scale = renderer.getScale();
+      const renderer = this.getRequiredRenderer();
 
       uiElementManager.getComponents().forEach((uiElement) => {
         if (uiElement.getRenderable()) {
@@ -21,8 +20,8 @@ export class CtxUIRendererHandler extends CtxRendererHandler {
               renderer.render((ctx) => {
                 if (uiElement instanceof UIText) {
                   const uiText = uiElement;
-                  ctx.scale(ONE_SIXTEENTH, -ONE_SIXTEENTH);
-                  ctx.font = uiText.getCtxFontStyle(scale);
+                  ctx.scale(INV_BASE_SIZE, -INV_BASE_SIZE);
+                  ctx.font = uiText.getCtxFontStyle();
                   ctx.textBaseline = uiText.getBaseline();
                   ctx.textAlign = uiText.getAlign();
                   ctx.direction = uiText.getDirection();

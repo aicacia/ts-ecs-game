@@ -3,6 +3,7 @@ import { TransformComponent } from "../TransformComponent";
 import { Transform3DManager } from "./Transform3DManager";
 
 const MAT4_0 = mat4.create(),
+  QUAT_0 = quat.create(),
   VEC3_0 = vec3.create(),
   VEC3_UP = vec3.fromValues(0.0, 0.0, 1.0);
 
@@ -20,18 +21,24 @@ export class Transform3D extends TransformComponent {
   private matrix: mat4 = mat4.create();
 
   getLocalPosition3(out: vec3) {
-    return vec3.copy(out, this.localPosition);
+    return vec3.copy(out, this.getLocalPosition());
   }
   getLocalPosition2(out: vec2) {
-    out[0] = this.localPosition[0];
-    out[1] = this.localPosition[1];
+    const localPosition = this.getLocalPosition();
+    out[0] = localPosition[0];
+    out[1] = localPosition[1];
     return out;
   }
 
   setLocalPosition2(localPosition: vec2) {
-    this.localPosition[0] = localPosition[0];
-    this.localPosition[1] = localPosition[1];
-    return this;
+    return this.setLocalPosition(
+      vec3.set(
+        VEC3_0,
+        localPosition[0],
+        localPosition[1],
+        this.localPosition[2]
+      )
+    );
   }
   setLocalPosition3(localPosition: vec3) {
     return this.setLocalPosition(localPosition);
@@ -55,8 +62,9 @@ export class Transform3D extends TransformComponent {
   }
 
   setLocalRotationZ(localRotation: number) {
-    quat.rotateZ(this.localRotation, this.localRotation, localRotation);
-    return this;
+    const localRotationQuat = quat.copy(QUAT_0, this.getLocalRotation());
+    quat.rotateZ(localRotationQuat, localRotationQuat, localRotation);
+    return this.setLocalRotation(localRotationQuat);
   }
   setLocalRotationQuat(localRotation: quat) {
     return this.setLocalRotation(localRotation);
@@ -70,18 +78,19 @@ export class Transform3D extends TransformComponent {
   }
 
   getLocalScale3(out: vec3) {
-    return vec3.copy(out, this.localScale);
+    return vec3.copy(out, this.getLocalScale());
   }
   getLocalScale2(out: vec2) {
-    out[0] = this.localScale[0];
-    out[1] = this.localScale[1];
+    const localScale = this.getLocalScale();
+    out[0] = localScale[0];
+    out[1] = localScale[1];
     return out;
   }
 
   setLocalScale2(localScale: vec2) {
-    this.localPosition[0] = localScale[0];
-    this.localPosition[1] = localScale[1];
-    return this;
+    return this.setLocalScale(
+      vec3.set(VEC3_0, localScale[0], localScale[1], this.localScale[2])
+    );
   }
   setLocalScale3(localScale: vec3) {
     return this.setLocalScale(localScale);
@@ -95,11 +104,6 @@ export class Transform3D extends TransformComponent {
     out[0] = scale[0];
     out[1] = scale[1];
     return out;
-  }
-
-  translate(offset: vec3) {
-    vec3.add(this.localPosition, this.localPosition, offset);
-    return this.setNeedsUpdate();
   }
 
   setLocalPosition(localPosition: vec3) {
@@ -139,7 +143,7 @@ export class Transform3D extends TransformComponent {
     return this.updateMatrixIfNeeded().matrix;
   }
   getLocalMatrix() {
-    return this.updateMatrixIfNeeded().localMatrix;
+    return this.updateLocalMatrixIfNeeded().localMatrix;
   }
 
   updateLocalMatrix() {
@@ -158,7 +162,7 @@ export class Transform3D extends TransformComponent {
   updateMatrix() {
     this.needsUpdate = false;
 
-    this.updateLocalMatrix();
+    this.updateLocalMatrixIfNeeded();
 
     this.getParentTransform().mapOrElse(
       (parentTransform) => {

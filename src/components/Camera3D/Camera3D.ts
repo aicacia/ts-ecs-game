@@ -1,11 +1,16 @@
 import { mat4, vec2, vec3 } from "gl-matrix";
+import { Transform2D } from "../Transform2D";
+import { Transform3D } from "../Transform3D";
 import { EPSILON } from "../../math";
 import { RenderableComponent } from "../RenderableComponent";
 
 const MAT4_0 = mat4.create(),
-  VEC2_0 = vec2.create();
+  VEC2_0 = vec2.create(),
+  VEC3_0 = vec3.create();
 
 export class Camera3D extends RenderableComponent {
+  static requiredComponents = [[Transform2D, Transform3D]];
+
   private width: number = 1.0;
   private height: number = 1.0;
   private aspect: number = 1.0;
