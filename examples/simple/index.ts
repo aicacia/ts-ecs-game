@@ -24,8 +24,6 @@ import {
 } from "../../src";
 import logoPng from "./logo.png";
 
-const logoAsset = new ImageAsset(logoPng);
-
 class Rotator extends Component {
   // only use this if you do not need a manager, it only uses one manager so
   // any other components using the DefaultManager will be in the same manager
@@ -60,65 +58,68 @@ class LookAtCamera extends Component {
   }
 }
 
-const canvas = new Canvas().set(256, 256),
-  scene = new Scene()
-    .addEntity(
-      // Camera setup
-      new Entity()
-        .addTag("camera")
-        .addComponent(
-          new Transform2D().setRenderable(false),
-          new Camera2DControl(),
-          new Camera2D()
-            .setSize(10)
-            .setMinSize(1)
-            .setMaxSize(16)
-            .setBackground(vec3.fromValues(0.98, 0.98, 0.98))
+function onLoad() {
+  const logoAsset = new ImageAsset(logoPng),
+    canvas = new Canvas().set(256, 256),
+    scene = new Scene()
+      .addEntity(
+        // Camera setup
+        new Entity()
+          .addTag("camera")
+          .addComponent(
+            new Transform2D().setRenderable(false),
+            new Camera2DControl(),
+            new Camera2D()
+              .setSize(10)
+              .setMinSize(1)
+              .setMaxSize(16)
+              .setBackground(vec3.fromValues(0.98, 0.98, 0.98))
+          ),
+        new Entity().addComponent(
+          new Transform2D(),
+          new UIText().setText("Hello, world!")
         ),
-      new Entity().addComponent(
-        new Transform2D(),
-        new UIText().setText("Hello, world!")
-      ),
-      new Entity()
-        .addComponent(new Transform2D())
-        .addChild(
-          new Entity().addComponent(
-            new Transform2D()
-              .setLocalPosition(vec2.fromValues(9, 0))
-              .setRenderable(false),
-            new LookAtCamera(),
-            new Sprite(logoAsset)
+        new Entity()
+          .addComponent(new Transform2D())
+          .addChild(
+            new Entity().addComponent(
+              new Transform2D()
+                .setLocalPosition(vec2.fromValues(9, 0))
+                .setRenderable(false),
+              new LookAtCamera(),
+              new Sprite(logoAsset)
+            )
+          ),
+        new Entity()
+          .addComponent(new Transform2D(), new Rotator())
+          .addChild(
+            new Entity().addComponent(
+              new Transform2D().setLocalPosition(vec2.fromValues(9, 0))
+            )
           )
+      )
+      .addPlugin(
+        new CtxRenderer(canvas).addRendererHandler(
+          new CtxTransform2DRendererHandler(),
+          new CtxSpriteRendererHandler(),
+          new CtxUIRendererHandler()
         ),
-      new Entity()
-        .addComponent(new Transform2D(), new Rotator())
-        .addChild(
-          new Entity().addComponent(
-            new Transform2D().setLocalPosition(vec2.fromValues(9, 0))
-          )
-        )
-    )
-    .addPlugin(
-      new CtxRenderer(canvas).addRendererHandler(
-        new CtxTransform2DRendererHandler(),
-        new CtxSpriteRendererHandler(),
-        new CtxUIRendererHandler()
+        // Required by many Components and plugins
+        new Time(),
+        // Handles all input
+        new Input(canvas.getElement()),
+        // forces a canvas to stay in sync with the window size
+        new FullScreenCanvas(canvas),
+        // assets
+        new Assets().addAsset(logoAsset).loadAllInBackground()
       ),
-      // Required by many Components and plugins
-      new Time(),
-      // Handles all input
-      new Input(canvas.getElement()),
-      // forces a canvas to stay in sync with the window size
-      new FullScreenCanvas(canvas),
-      // assets
-      new Assets().addAsset(logoAsset).loadAllInBackground()
-    ),
-  loop = new Loop(() => scene.update());
+    loop = new Loop(() => scene.update());
 
-(window as any).scene = scene;
-(window as any).loop = loop;
+  (window as any).scene = scene;
+  (window as any).loop = loop;
 
-window.addEventListener("load", () => {
   document.body.appendChild(canvas.getElement());
   loop.start();
-});
+}
+
+window.addEventListener("load", onLoad);

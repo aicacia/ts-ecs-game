@@ -186,14 +186,16 @@ export class Entity extends EventEmitter {
   getComponentInstanceOf<C extends Component = Component>(
     Component: IConstructor<C>
   ) {
-    return Option.from(this.getComponentsInstanceOf(Component)[0]);
+    return Option.from(
+      this.components.find((component) => component instanceof Component) as C
+    );
   }
   getComponentsInstanceOf<C extends Component = Component>(
     Component: IConstructor<C>
   ) {
     return this.components.filter(
       (component) => component instanceof Component
-    );
+    ) as C[];
   }
 
   addComponents(components: Component[]) {

@@ -2,13 +2,14 @@ import { Option } from "@aicacia/core";
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { Entity } from "../sceneGraph";
 import { RenderableComponent } from "./RenderableComponent";
+import { IConstructor } from "../utils";
 
 const VEC2_0 = vec2.create(),
   VEC3_0 = vec3.create();
 
 export abstract class TransformComponent extends RenderableComponent {
   static getParentTransform(entity: Entity): Option<TransformComponent> {
-    return entity.getParent().flatMap(this.getTransform);
+    return entity.getParent().flatMap(TransformComponent.getTransform);
   }
 
   static getTransform(entity: Entity) {
@@ -37,14 +38,13 @@ export abstract class TransformComponent extends RenderableComponent {
   }
 
   getParentTransform() {
-    return this.getEntity().flatMap((entity) =>
-      TransformComponent.getParentTransform(entity)
-    );
+    return this.getEntity().flatMap(TransformComponent.getParentTransform);
   }
 
   setNeedsUpdate(needsUpdate: boolean = true) {
+    this.setLocalNeedsUpdate(needsUpdate);
+
     if (needsUpdate !== this.needsUpdate) {
-      this.setLocalNeedsUpdate(needsUpdate);
       this.needsUpdate = needsUpdate;
       this.getEntity().map((entity) =>
         entity.forEachChild((child) =>

@@ -4,7 +4,6 @@ import {
   getTextWidth,
   BASE_SIZE,
 } from "../../utils/getTextDimensions";
-import { vec2 } from "gl-matrix";
 
 export enum TextAlign {
   Start = "start",
