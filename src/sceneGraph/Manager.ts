@@ -4,7 +4,7 @@ import { EventEmitter } from "events";
 export abstract class Manager<
   C extends Component = Component
 > extends EventEmitter {
-  static managerPriority: number = 0;
+  static managerPriority = 0;
 
   static getManagerPriority() {
     return this.managerPriority;

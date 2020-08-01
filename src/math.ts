@@ -27,19 +27,23 @@ export function composeMat2d(
   return out;
 }
 
-const decomposeMat2d_VEC2_0 = vec2.create();
+const extractScale_VEC2_0 = vec2.create();
+
+export function extractScale(out: vec2, matrix: mat2d): vec2 {
+  return vec2.set(
+    out,
+    vec2.len(vec2.set(extractScale_VEC2_0, matrix[0], matrix[1])),
+    vec2.len(vec2.set(extractScale_VEC2_0, matrix[2], matrix[3]))
+  );
+}
 
 export function decomposeMat2d(
   matrix: mat2d,
   position: vec2,
   scale: vec2
 ): number {
-  const sx = vec2.len(vec2.set(decomposeMat2d_VEC2_0, matrix[0], matrix[1])),
-    sy = vec2.len(vec2.set(decomposeMat2d_VEC2_0, matrix[2], matrix[3]));
-
   vec2.set(position, matrix[4], matrix[5]);
-  vec2.set(scale, sx, sy);
-
+  extractScale(scale, matrix);
   return getRotationFromMat2d(matrix);
 }
 

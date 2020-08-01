@@ -7,12 +7,12 @@ export class InputAxis {
   private negButton: string;
   private posButton: string;
 
-  private gravity: number = 3;
-  private sensitivity: number = 3;
+  private gravity = 3;
+  private sensitivity = 3;
 
-  private dead: number = 0.001;
+  private dead = 0.001;
 
-  private value: number = 0.0;
+  private value = 0.0;
 
   constructor(name: string, negButton: string, posButton: string) {
     this.name = name;

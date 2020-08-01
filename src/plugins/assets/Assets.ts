@@ -96,18 +96,14 @@ export class Assets extends Plugin {
     return this.loadAssets(assets);
   }
   loadAssets(assets: readonly Asset[]) {
-    return Promise.all(
-      assets.map((asset) => this._loadAsset(asset))
-    ).then(() => {});
+    return Promise.all(assets.map((asset) => this._loadAsset(asset)));
   }
 
   unloadAsset(...assets: readonly Asset[]) {
     return this.unloadAssets(assets);
   }
   unloadAssets(assets: readonly Asset[]) {
-    return Promise.all(
-      assets.map((asset) => this._unloadAsset(asset))
-    ).then(() => {});
+    return Promise.all(assets.map((asset) => this._unloadAsset(asset)));
   }
 
   private _loadAsset(asset: Asset): Promise<void> {

@@ -1,8 +1,8 @@
 export class InputButton {
   private name: string;
-  private value: number = 0.0;
-  private frameDown: number = 0;
-  private frameUp: number = 0;
+  private value = 0.0;
+  private frameDown = 0;
+  private frameUp = 0;
 
   constructor(name: string) {
     this.name = name;

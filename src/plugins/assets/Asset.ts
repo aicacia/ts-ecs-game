@@ -10,9 +10,9 @@ export interface Asset {
 }
 
 export abstract class Asset extends EventEmitter {
-  private name: string = "";
-  private loaded: boolean = false;
-  private loading: boolean = false;
+  private name = "";
+  private loaded = false;
+  private loading = false;
 
   getName() {
     return this.name;

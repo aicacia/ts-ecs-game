@@ -6,9 +6,9 @@ const MAT2D_0: mat2d = mat2d.create(),
   VEC2_1: vec2 = vec2.create();
 
 export class UIElement extends RenderableComponent {
-  protected width: number = 0;
-  protected height: number = 0;
-  private layer: number = 0;
+  protected width = 0;
+  protected height = 0;
+  private layer = 0;
 
   getLocalAABB(min: vec2, max: vec2) {
     this.getEntity()

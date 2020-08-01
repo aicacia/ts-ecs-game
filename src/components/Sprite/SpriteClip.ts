@@ -1,11 +1,11 @@
 import { IJSONObject } from "@aicacia/json";
 
 export class SpriteClip {
-  private duration: number = 1.0;
-  private x: number = 0;
-  private y: number = 0;
-  private width: number = 1;
-  private height: number = 1;
+  private duration = 1.0;
+  private x = 0;
+  private y = 0;
+  private width = 1;
+  private height = 1;
 
   getDuration() {
     return this.duration;

@@ -5,19 +5,18 @@ import { EPSILON } from "../../math";
 import { RenderableComponent } from "../RenderableComponent";
 
 const MAT4_0 = mat4.create(),
-  VEC2_0 = vec2.create(),
-  VEC3_0 = vec3.create();
+  VEC2_0 = vec2.create();
 
 export class Camera3D extends RenderableComponent {
   static requiredComponents = [[Transform2D, Transform3D]];
 
-  private width: number = 1.0;
-  private height: number = 1.0;
-  private aspect: number = 1.0;
+  private width = 1.0;
+  private height = 1.0;
+  private aspect = 1.0;
 
-  private orthographic: boolean = false;
+  private orthographic = false;
 
-  private size: number = 1;
+  private size = 1;
   private minSize = Number.EPSILON;
   private maxSize = Infinity;
 
@@ -128,7 +127,7 @@ export class Camera3D extends RenderableComponent {
     return this.updateProjectionIfNeeded().projection;
   }
 
-  setNeedsUpdate(needsUpdate: boolean = true) {
+  setNeedsUpdate(needsUpdate = true) {
     this.needsUpdate = needsUpdate;
     return this;
   }

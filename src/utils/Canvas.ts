@@ -6,8 +6,8 @@ export interface ICanvasOptions {
 
 export class Canvas extends EventEmitter {
   private canvas: HTMLCanvasElement;
-  private width: number = 1;
-  private height: number = 1;
+  private width = 1;
+  private height = 1;
 
   constructor(options: ICanvasOptions = {}) {
     super();
@@ -54,7 +54,7 @@ export class Canvas extends EventEmitter {
       .replace("image/png", "image/octet-stream");
   }
 
-  getStream(fps: number = 60): MediaStream {
+  getStream(fps = 60): MediaStream {
     return (this.canvas as any).captureStream(fps);
   }
 }

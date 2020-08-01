@@ -28,9 +28,9 @@ export enum TextDirection {
 }
 
 export class UIText extends UIElement {
-  private text: string = "";
-  private font: string = "sans-serif";
-  private size: number = 1;
+  private text = "";
+  private font = "sans-serif";
+  private size = 1;
   private align: TextAlign = TextAlign.Center;
   private baseline: TextBaseline = TextBaseline.Middle;
   private direction: TextDirection = TextDirection.Inherit;
@@ -83,7 +83,7 @@ export class UIText extends UIElement {
     return this.forceResize();
   }
 
-  getCtxFontStyle(scale: number = 1) {
+  getCtxFontStyle(scale = 1) {
     return `${this.size * scale}px ${this.font}`;
   }
 

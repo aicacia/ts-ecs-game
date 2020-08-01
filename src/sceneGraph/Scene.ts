@@ -29,8 +29,8 @@ export class Scene extends EventEmitter {
   private plugins: Plugin[] = [];
   private pluginsMap: Map<IConstructor<Plugin>, Plugin> = new Map();
 
-  private isUpdating: boolean = false;
-  private isInitted: boolean = false;
+  private isUpdating = false;
+  private isInitted = false;
 
   maintain() {
     this.emit("maintain");
@@ -59,7 +59,7 @@ export class Scene extends EventEmitter {
     return this;
   }
 
-  find(fn: (entity: Entity) => boolean, recur: boolean = true): Option<Entity> {
+  find(fn: (entity: Entity) => boolean, recur = true): Option<Entity> {
     const entities = this.getEntities();
 
     for (const entity of entities) {
@@ -86,7 +86,7 @@ export class Scene extends EventEmitter {
     return this.find((entity) => entity.getName() === name);
   }
 
-  findAll(fn: (entity: Entity) => boolean, recur: boolean = true): Entity[] {
+  findAll(fn: (entity: Entity) => boolean, recur = true): Entity[] {
     const entities = this.getEntities(),
       matching = [];
 
@@ -170,7 +170,7 @@ export class Scene extends EventEmitter {
     return this.removeEntities(entities);
   }
 
-  addEntityNow(entity: Entity, force: boolean = false) {
+  addEntityNow(entity: Entity, force = false) {
     if (this.isUpdating && !force) {
       throw new Error(
         "Scene.addEntityNow called while updating, use force to suppress this Error"
@@ -179,7 +179,7 @@ export class Scene extends EventEmitter {
     return this._addEntityNow(entity, false);
   }
 
-  removeEntityNow(entity: Entity, force: boolean = false) {
+  removeEntityNow(entity: Entity, force = false) {
     if (this.isUpdating && !force) {
       throw new Error(
         "Scene.removeEntityNow called while updating, use force to suppress this Error"

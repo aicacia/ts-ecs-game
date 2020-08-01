@@ -59,10 +59,10 @@ export abstract class InputHandler<
     this.events.length = 0;
     return this;
   }
-  onAfterUpdate(time: Time) {
+  onAfterUpdate(_time: Time) {
     return this;
   }
-  onEvent(time: Time, event: Event) {
+  onEvent(_time: Time, _event: Event) {
     return this;
   }
 }

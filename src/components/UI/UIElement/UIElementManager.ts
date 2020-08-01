@@ -9,13 +9,13 @@ export class UIElementManager extends Manager<UIElement> {
 
   getLayers() {
     return Array.from(this.layers.entries()).sort(
-      ([aLayer, aElements], [bLayer, bElements]) => aLayer - bLayer
+      ([aLayer, _aElements], [bLayer, _bElements]) => aLayer - bLayer
     );
   }
 
   getComponents() {
     return ([] as UIElement[]).concat(
-      ...this.getLayers().map(([layer, elements]) => elements)
+      ...this.getLayers().map(([_layer, elements]) => elements)
     );
   }
 
@@ -52,26 +52,26 @@ export class UIElementManager extends Manager<UIElement> {
   };
 
   sort() {
-    for (let layer of this.layers.values()) {
+    for (const layer of this.layers.values()) {
       layer.sort(this.sortFunction);
     }
     return this;
   }
 
   onInit() {
-    for (let layer of this.layers.values()) {
+    for (const layer of this.layers.values()) {
       layer.forEach((sprite) => sprite.onInit());
     }
     return this;
   }
   onUpdate() {
-    for (let layer of this.layers.values()) {
+    for (const layer of this.layers.values()) {
       layer.forEach((sprite) => sprite.onUpdate());
     }
     return this;
   }
   onAfterUpdate() {
-    for (let layer of this.layers.values()) {
+    for (const layer of this.layers.values()) {
       layer.forEach((sprite) => sprite.onAfterUpdate());
     }
     return this;

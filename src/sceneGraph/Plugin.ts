@@ -2,7 +2,7 @@ import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class Plugin extends EventEmitter {
-  static pluginPriority: number = 0;
+  static pluginPriority = 0;
   static requiredPlugins: IRequirement<Plugin>[] = [];
 
   static getPluginPriority() {

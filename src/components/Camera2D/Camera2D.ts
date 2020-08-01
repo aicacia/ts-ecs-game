@@ -9,11 +9,11 @@ const MAT2D_0 = mat2d.create(),
 export class Camera2D extends RenderableComponent {
   static requiredComponents = [[Transform2D, Transform3D]];
 
-  private width: number = 1.0;
-  private height: number = 1.0;
-  private aspect: number = 1.0;
+  private width = 1.0;
+  private height = 1.0;
+  private aspect = 1.0;
 
-  private size: number = 1;
+  private size = 1;
   private minSize = Number.EPSILON;
   private maxSize = Infinity;
 
@@ -84,6 +84,15 @@ export class Camera2D extends RenderableComponent {
     return this.setNeedsUpdate();
   }
 
+  getScale() {
+    return this.getEntity()
+      .flatMap(TransformComponent.getTransform)
+      .map((transform) =>
+        vec2.len(extractScale(VEC2_0, transform.getMatrix2d(MAT2D_0)))
+      )
+      .unwrapOr(1);
+  }
+
   getView() {
     this.getEntity()
       .flatMap(TransformComponent.getTransform)
@@ -97,7 +106,7 @@ export class Camera2D extends RenderableComponent {
     return this.updateProjectionIfNeeded().projection;
   }
 
-  setNeedsUpdate(needsUpdate: boolean = true) {
+  setNeedsUpdate(needsUpdate = true) {
     this.needsUpdate = needsUpdate;
     return this;
   }
@@ -164,5 +173,6 @@ export class Camera2D extends RenderableComponent {
 
 import { TransformComponent } from "../TransformComponent";
 import { Camera2DManager } from "./Camera2DManager";
+import { extractScale } from "../../math";
 
 Camera2D.Manager = Camera2DManager;

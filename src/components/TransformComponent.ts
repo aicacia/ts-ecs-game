@@ -2,7 +2,6 @@ import { Option } from "@aicacia/core";
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { Entity } from "../sceneGraph";
 import { RenderableComponent } from "./RenderableComponent";
-import { IConstructor } from "../utils";
 
 const VEC2_0 = vec2.create(),
   VEC3_0 = vec3.create();
@@ -30,8 +29,8 @@ export abstract class TransformComponent extends RenderableComponent {
     );
   }
 
-  protected needsUpdate: boolean = true;
-  protected localNeedsUpdate: boolean = true;
+  protected needsUpdate = true;
+  protected localNeedsUpdate = true;
 
   onDetach() {
     return this.setNeedsUpdate();
@@ -41,7 +40,7 @@ export abstract class TransformComponent extends RenderableComponent {
     return this.getEntity().flatMap(TransformComponent.getParentTransform);
   }
 
-  setNeedsUpdate(needsUpdate: boolean = true) {
+  setNeedsUpdate(needsUpdate = true) {
     this.setLocalNeedsUpdate(needsUpdate);
 
     if (needsUpdate !== this.needsUpdate) {
@@ -62,7 +61,7 @@ export abstract class TransformComponent extends RenderableComponent {
     return this.needsUpdate;
   }
 
-  setLocalNeedsUpdate(localNeedsUpdate: boolean = true) {
+  setLocalNeedsUpdate(localNeedsUpdate = true) {
     this.localNeedsUpdate = localNeedsUpdate;
     return this;
   }

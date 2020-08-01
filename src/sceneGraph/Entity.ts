@@ -1,6 +1,5 @@
 import { none, Option, some } from "@aicacia/core";
 import { EventEmitter } from "events";
-import { isArray } from "util";
 
 // tslint:disable-next-line: interface-name
 export interface Entity {
@@ -15,8 +14,8 @@ export interface Entity {
 }
 
 export class Entity extends EventEmitter {
-  private name: string = "";
-  private depth: number = 0;
+  private name = "";
+  private depth = 0;
   private scene: Option<Scene> = none();
   private root: Entity = this;
   private parent: Option<Entity> = none();
@@ -82,7 +81,7 @@ export class Entity extends EventEmitter {
     return this;
   }
 
-  forEachChild(fn: (entity: Entity) => void, recur: boolean = true) {
+  forEachChild(fn: (entity: Entity) => void, recur = true) {
     this.getChildren().forEach((child) => {
       fn(child);
 
@@ -92,7 +91,7 @@ export class Entity extends EventEmitter {
     });
     return this;
   }
-  find(fn: (entity: Entity) => boolean, recur: boolean = true): Option<Entity> {
+  find(fn: (entity: Entity) => boolean, recur = true): Option<Entity> {
     const children = this.getChildren();
 
     for (const child of children) {
@@ -122,7 +121,7 @@ export class Entity extends EventEmitter {
     return this.find((entity) => entity.getComponent(Component).isSome());
   }
 
-  findAll(fn: (entity: Entity) => boolean, recur: boolean = true): Entity[] {
+  findAll(fn: (entity: Entity) => boolean, recur = true): Entity[] {
     const children = this.getChildren(),
       matching = [];
 
@@ -136,7 +135,7 @@ export class Entity extends EventEmitter {
 
     return matching;
   }
-  findAllWithName(name: string, recur: boolean = true) {
+  findAllWithName(name: string, recur = true) {
     return this.findAll((entity) => entity.getName() === name, recur);
   }
   findAllWithTag(...tags: string[]) {
@@ -147,7 +146,7 @@ export class Entity extends EventEmitter {
   }
   findAllWithComponent<C extends Component>(
     Component: IConstructor<C>,
-    recur: boolean = true
+    recur = true
   ) {
     return this.findAll(
       (entity) => entity.getComponent(Component).isSome(),

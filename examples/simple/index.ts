@@ -70,7 +70,7 @@ function onLoad() {
             new Transform2D().setRenderable(false),
             new Camera2DControl(),
             new Camera2D()
-              .setSize(10)
+              .setSize(1)
               .setMinSize(1)
               .setMaxSize(16)
               .setBackground(vec3.fromValues(0.98, 0.98, 0.98))
@@ -99,7 +99,7 @@ function onLoad() {
           )
       )
       .addPlugin(
-        new CtxRenderer(canvas).addRendererHandler(
+        new CtxRenderer(canvas.getElement()).addRendererHandler(
           new CtxTransform2DRendererHandler(),
           new CtxSpriteRendererHandler(),
           new CtxUIRendererHandler()

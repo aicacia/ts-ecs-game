@@ -5,21 +5,21 @@ export class Time extends Plugin {
   static pluginName = "engine.Time";
   static pluginPriority = -Infinity;
 
-  private scale: number = 1.0;
+  private scale = 1.0;
 
   private fixedDelta: number = 1.0 / 60.0;
 
-  private frame: number = 0;
+  private frame = 0;
   private last: number = -(1.0 / 60.0);
-  private current: number = 0.0;
+  private current = 0.0;
   private delta: number = 1.0 / 60.0;
-  private fps: number = 60.0;
-  private fpsFrame: number = 0;
-  private fpsLast: number = 0;
+  private fps = 60.0;
+  private fpsFrame = 0;
+  private fpsLast = 0;
 
   private startTime: number = Date.now() * 0.001;
   private minDelta: number = EPSILON;
-  private maxDelta: number = Infinity;
+  private maxDelta = Infinity;
 
   getStartTime() {
     return this.startTime;

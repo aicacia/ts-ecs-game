@@ -1,17 +1,17 @@
 import { RenderableComponent } from "../RenderableComponent";
 
 export class Sprite extends RenderableComponent {
-  private layer: number = 0;
+  private layer = 0;
   private imageAsset: ImageAsset;
 
-  private currentTime: number = 0;
-  private currentFrame: number = 0;
-  private clipX: number = 0;
-  private clipY: number = 0;
-  private clipWidth: number = 1;
-  private clipHeight: number = 1;
-  private width: number = 1;
-  private height: number = 1;
+  private currentTime = 0;
+  private currentFrame = 0;
+  private clipX = 0;
+  private clipY = 0;
+  private clipWidth = 1;
+  private clipHeight = 1;
+  private width = 1;
+  private height = 1;
   private clips: SpriteClip[] = [];
 
   constructor(imageAsset: ImageAsset) {

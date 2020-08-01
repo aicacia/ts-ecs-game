@@ -1,4 +1,4 @@
-import { mat4, quat, vec3 } from "gl-matrix";
+import { mat4, vec3 } from "gl-matrix";
 import * as tape from "tape";
 import { Entity, Scene } from "../../sceneGraph";
 import { Transform3D } from "./Transform3D";

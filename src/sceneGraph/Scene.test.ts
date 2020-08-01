@@ -2,8 +2,8 @@ import * as tape from "tape";
 import { Component, Entity, Plugin, Scene } from ".";
 
 export class Test extends Component {
-  position: number = 0;
-  globalPosition: number = 0;
+  position = 0;
+  globalPosition = 0;
 
   onUpdate() {
     this.position += 1;

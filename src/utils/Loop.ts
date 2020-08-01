@@ -2,7 +2,7 @@ import raf = require("raf");
 
 export class Loop {
   private id: number | null = null;
-  private running: boolean = false;
+  private running = false;
   private handler: (ms: number) => void;
 
   constructor(handler: (ms: number) => void) {

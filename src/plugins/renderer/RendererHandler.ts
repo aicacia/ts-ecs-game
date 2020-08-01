@@ -11,12 +11,12 @@ export abstract class RendererHandler<
   }
 
   private renderer: Option<R> = none();
-  private enabled: boolean = true;
+  private enabled = true;
 
   getEnabled() {
     return this.enabled;
   }
-  setEnabled(enabled: boolean = true) {
+  setEnabled(enabled = true) {
     this.enabled = enabled;
     return this;
   }

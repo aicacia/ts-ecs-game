@@ -8,26 +8,28 @@ import { Transform3D } from "../Transform3D";
 import { Camera2DControlManager } from "./Camera2DControlManager";
 
 const VEC2_0 = vec2.create(),
-  VEC2_1 = vec2.create();
+  VEC2_1 = vec2.create(),
+  VEC2_2 = vec2.create(),
+  MIN_SCALE = vec2.fromValues(1, 1);
 
 export class Camera2DControl extends Component {
   static Manager = Camera2DControlManager;
   static requiredComponents = [[Transform2D, Transform3D]];
   static requiredPlugins = [Input];
 
-  private enabled: boolean = true;
+  private enabled = true;
 
-  private panSpeed: number = 1.0;
-  private zoomSpeed: number = 1.0;
+  private panSpeed = 1.0;
+  private zoomSpeed = 1.0;
 
-  private dragging: boolean = false;
+  private dragging = false;
   private lastMouse: vec2 = vec2.create();
   private offset: vec2 = vec2.create();
 
   getEnabled() {
     return this.enabled;
   }
-  setEnabled(enabled: boolean = true) {
+  setEnabled(enabled = true) {
     this.enabled = enabled;
     return this;
   }
@@ -54,6 +56,7 @@ export class Camera2DControl extends Component {
         transform = TransformComponent.getRequiredTransform(
           this.getRequiredEntity()
         ),
+        scale = transform.getLocalScale2(VEC2_1),
         camera = this.getRequiredComponent(Camera2D),
         worldMouse = camera.toRelative(
           VEC2_0,
@@ -63,7 +66,7 @@ export class Camera2DControl extends Component {
       if (this.dragging) {
         vec2.sub(this.offset, worldMouse, this.lastMouse);
         vec2.scale(this.offset, this.offset, this.panSpeed);
-        vec2.mul(this.offset, this.offset, transform.getLocalScale2(VEC2_1));
+        vec2.mul(this.offset, this.offset, scale);
         transform.translate2(this.offset);
       }
 
@@ -74,14 +77,17 @@ export class Camera2DControl extends Component {
         this.dragging = false;
       }
 
-      const mouseWheel = input.getValue("mouseWheel");
+      const mouseWheel = input.getValue("mouseWheel"),
+        zoomSpeed = vec2.set(VEC2_2, this.zoomSpeed, this.zoomSpeed);
 
       if (mouseWheel > 0) {
-        camera.setSize(camera.getSize() + this.zoomSpeed);
+        vec2.add(scale, scale, zoomSpeed);
       } else if (mouseWheel < 0) {
-        camera.setSize(camera.getSize() - this.zoomSpeed);
+        vec2.sub(scale, scale, zoomSpeed);
+        vec2.max(scale, MIN_SCALE, scale);
       }
 
+      transform.setLocalScale2(scale);
       vec2.copy(this.lastMouse, worldMouse);
     }
     return this;

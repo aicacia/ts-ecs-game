@@ -2,23 +2,22 @@ import { none, Option } from "@aicacia/core";
 import { mat2d } from "gl-matrix";
 import { Camera2D, Camera2DManager } from "../../components";
 import { toRgb } from "../../math";
-import { Canvas } from "../../utils/Canvas";
 import { Renderer } from "./Renderer";
 
 const MAT2D_0 = mat2d.create();
 
 export class CtxRenderer extends Renderer {
-  private canvas: Canvas;
+  private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
-  private lineWidth: number = 1.0;
+  private lineWidth = 1.0;
   private camera: Option<Camera2D> = none();
-  private enabled: boolean = true;
+  private enabled = true;
 
-  constructor(canvas: Canvas) {
+  constructor(canvas: HTMLCanvasElement) {
     super();
     this.canvas = canvas;
 
-    const ctx = canvas.getElement().getContext("2d");
+    const ctx = canvas.getContext("2d");
     if (!ctx) {
       throw new Error("Could not get context of canvas element");
     }
@@ -35,7 +34,7 @@ export class CtxRenderer extends Renderer {
   getEnabled() {
     return this.enabled;
   }
-  setEnabled(enabled: boolean = true) {
+  setEnabled(enabled = true) {
     this.enabled = enabled;
     return this;
   }
@@ -66,13 +65,13 @@ export class CtxRenderer extends Renderer {
   }
 
   getCanvasSize() {
-    const width = this.canvas.getWidth(),
-      height = this.canvas.getHeight();
+    const width = this.canvas.width,
+      height = this.canvas.height;
 
     return (width > height ? height : width) * 0.5;
   }
   getScale() {
-    return (1.0 / this.getCanvasSize()) * this.getCamera().getSize();
+    return (1.0 / this.getCanvasSize()) * this.getCamera().getScale();
   }
 
   render(fn: (ctx: CanvasRenderingContext2D) => void, model?: mat2d) {
@@ -101,8 +100,8 @@ export class CtxRenderer extends Renderer {
       return this;
     }
     const camera = this.getCamera(),
-      width = this.canvas.getWidth(),
-      height = this.canvas.getHeight(),
+      width = this.canvas.width,
+      height = this.canvas.height,
       halfWidth = width * 0.5,
       halfHeight = height * 0.5;
 

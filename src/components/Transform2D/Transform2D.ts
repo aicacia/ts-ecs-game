@@ -16,12 +16,12 @@ export class Transform2D extends TransformComponent {
 
   private localPosition: vec2 = vec2.create();
   private localScale: vec2 = vec2.fromValues(1, 1);
-  private localRotation: number = 0.0;
+  private localRotation = 0.0;
   private localMatrix: mat2d = mat2d.create();
 
   private position: vec2 = vec2.create();
   private scale: vec2 = vec2.fromValues(1, 1);
-  private rotation: number = 0.0;
+  private rotation = 0.0;
   private matrix: mat2d = mat2d.create();
 
   getLocalPosition2(out: vec2) {
