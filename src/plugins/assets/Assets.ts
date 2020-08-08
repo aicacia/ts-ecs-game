@@ -7,25 +7,14 @@ export class Assets extends Plugin {
   private unloadingPromises: Map<Asset, Promise<void>> = new Map();
 
   find(fn: (asset: Asset) => boolean): Option<Asset> {
-    for (const asset of this.assets) {
-      if (fn(asset)) {
-        return some(asset);
-      }
-    }
-    return none();
+    return iter(this.assets).find(fn);
   }
   findWithName(name: string) {
     return this.find((asset) => asset.getName() === name);
   }
 
   findAll(fn: (asset: Asset) => boolean): Asset[] {
-    const assets = [];
-    for (const asset of this.assets) {
-      if (fn(asset)) {
-        assets.push(asset);
-      }
-    }
-    return assets;
+    return iter(this.assets).filter(fn).toArray();
   }
   findAllWithName(name: string) {
     return this.findAll((asset) => asset.getName() === name);
@@ -176,5 +165,5 @@ export class Assets extends Plugin {
   }
 }
 
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some, iter } from "@aicacia/core";
 import { Asset } from "./Asset";

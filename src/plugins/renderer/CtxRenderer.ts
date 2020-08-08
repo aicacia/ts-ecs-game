@@ -11,6 +11,9 @@ export class CtxRenderer extends Renderer {
   private ctx: CanvasRenderingContext2D;
   private lineWidth = 1.0;
   private camera: Option<Camera2D> = none();
+  private cameraView: mat2d = mat2d.create();
+  private cameraProjection: mat2d = mat2d.create();
+  private cameraViewProjection: mat2d = mat2d.create();
   private enabled = true;
 
   constructor(canvas: HTMLCanvasElement) {
@@ -24,6 +27,15 @@ export class CtxRenderer extends Renderer {
     this.ctx = ctx;
   }
 
+  getCameraView() {
+    return this.cameraView;
+  }
+  getCameraProjection() {
+    return this.cameraProjection;
+  }
+  getCameraViewProjection() {
+    return this.cameraViewProjection;
+  }
   getCanvas() {
     return this.canvas;
   }
@@ -75,21 +87,15 @@ export class CtxRenderer extends Renderer {
   }
 
   render(fn: (ctx: CanvasRenderingContext2D) => void, model?: mat2d) {
-    const camera = this.getCamera();
+    const mvp = MAT2D_0;
 
-    this.ctx.save();
-    mat2d.mul(MAT2D_0, camera.getProjection(), camera.getView());
     if (model) {
-      mat2d.mul(MAT2D_0, MAT2D_0, model);
+      mat2d.mul(mvp, this.cameraViewProjection, model);
+    } else {
+      mat2d.copy(mvp, this.cameraViewProjection);
     }
-    this.ctx.transform(
-      MAT2D_0[0],
-      MAT2D_0[1],
-      MAT2D_0[2],
-      MAT2D_0[3],
-      MAT2D_0[4],
-      MAT2D_0[5]
-    );
+    this.ctx.save();
+    this.ctx.transform(mvp[0], mvp[1], mvp[2], mvp[3], mvp[4], mvp[5]);
     fn(this.ctx);
     this.ctx.restore();
     return this;
@@ -106,6 +112,13 @@ export class CtxRenderer extends Renderer {
       halfHeight = height * 0.5;
 
     camera.set(width, height);
+    mat2d.copy(this.cameraView, camera.getView());
+    mat2d.copy(this.cameraProjection, camera.getProjection());
+    mat2d.mul(
+      this.cameraViewProjection,
+      this.cameraProjection,
+      this.cameraView
+    );
 
     this.ctx.save();
 

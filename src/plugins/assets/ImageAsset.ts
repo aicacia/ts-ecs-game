@@ -14,8 +14,8 @@ export class ImageAsset extends Asset {
     return this.image;
   }
 
-  loadAsset(): Promise<void> {
-    return new Promise((resolve, reject) => {
+  protected loadAsset() {
+    return new Promise<void>((resolve, reject) => {
       const image = new Image();
 
       image.addEventListener("load", () => {
@@ -27,7 +27,7 @@ export class ImageAsset extends Asset {
     });
   }
 
-  unloadAsset(): Promise<void> {
+  protected unloadAsset() {
     this.image.clear();
     return Promise.resolve();
   }

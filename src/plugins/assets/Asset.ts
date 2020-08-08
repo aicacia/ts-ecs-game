@@ -28,7 +28,7 @@ export abstract class Asset extends EventEmitter {
     return this.loading;
   }
 
-  load(): Promise<void> {
+  load() {
     if (this.loaded) {
       return Promise.resolve();
     } else {
@@ -47,7 +47,7 @@ export abstract class Asset extends EventEmitter {
     }
   }
 
-  unload(): Promise<void> {
+  unload() {
     if (!this.loaded) {
       return Promise.resolve();
     } else {
@@ -63,6 +63,6 @@ export abstract class Asset extends EventEmitter {
     }
   }
 
-  abstract loadAsset(): Promise<void>;
-  abstract unloadAsset(): Promise<void>;
+  protected abstract loadAsset(): Promise<void>;
+  protected abstract unloadAsset(): Promise<void>;
 }

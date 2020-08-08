@@ -17,7 +17,7 @@ export class JSONAsset extends Asset {
     return this.json;
   }
 
-  loadAsset(): Promise<void> {
+  protected loadAsset() {
     return fetch(this.src, this.options)
       .then((response) => response.json())
       .then((json) => {
@@ -25,7 +25,7 @@ export class JSONAsset extends Asset {
       });
   }
 
-  unloadAsset(): Promise<void> {
+  protected unloadAsset() {
     this.json.clear();
     return Promise.resolve();
   }
