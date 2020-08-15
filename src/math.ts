@@ -1,4 +1,4 @@
-import { mat2d, vec2, vec3, vec4 } from "gl-matrix";
+import { mat2d, vec2, vec3, vec4, mat4 } from "gl-matrix";
 
 export const DEG_TO_RAD = Math.PI / 180;
 export const RAD_TO_DEG = 180 / Math.PI;
@@ -130,4 +130,38 @@ export function toRgba(color: vec4) {
   return `rgba(${color[0] * 255}, ${color[1] * 255}, ${color[2] * 255}, ${
     color[3]
   })`;
+}
+
+export function mat4FromMat2d(out: mat4, matrix: mat2d) {
+  return mat4.set(
+    out,
+    matrix[0],
+    matrix[1],
+    0.0,
+    matrix[4],
+    matrix[2],
+    matrix[3],
+    0.0,
+    matrix[5],
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+  );
+}
+
+export function mat2dFromMat4(out: mat2d, matrix: mat4) {
+  return mat2d.set(
+    out,
+    matrix[0],
+    matrix[1],
+    matrix[4],
+    matrix[5],
+    matrix[13],
+    matrix[14]
+  );
 }

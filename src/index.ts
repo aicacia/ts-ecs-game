@@ -57,6 +57,7 @@ export {
   INV_BASE_SIZE,
   getGlobalCanvas,
   getGlobalContext,
+  IBuilder,
   Canvas,
   Loop,
   ILoopHandler,

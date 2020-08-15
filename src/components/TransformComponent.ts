@@ -111,8 +111,12 @@ export abstract class TransformComponent extends RenderableComponent {
 
   abstract updateLocalMatrix(): this;
   abstract updateMatrix(): this;
+
   abstract getMatrix2d(out: mat2d): mat2d;
   abstract getMatrix4(out: mat4): mat4;
+
+  abstract getLocalMatrix2d(out: mat2d): mat2d;
+  abstract getLocalMatrix4(out: mat4): mat4;
 
   abstract getLocalPosition2(out: vec2): vec2;
   abstract getLocalPosition3(out: vec3): vec3;

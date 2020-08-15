@@ -8,6 +8,7 @@ export {
   BASE_SIZE,
   INV_BASE_SIZE,
 } from "./getTextDimensions";
+export { IBuilder } from "./IBuilder";
 export { Canvas, ICanvasOptions } from "./Canvas";
 export { Loop, ILoopHandler } from "./Loop";
 export { IRequirement, filterRequirements } from "./IRequirement";

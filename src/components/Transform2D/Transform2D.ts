@@ -3,6 +3,7 @@ import {
   composeMat2d,
   decomposeMat2d,
   getAngleBetweenPoints,
+  mat4FromMat2d,
 } from "../../math";
 import { TransformComponent } from "../TransformComponent";
 import { Transform2DManager } from "./Transform2DManager";
@@ -180,29 +181,17 @@ export class Transform2D extends TransformComponent {
   }
 
   getMatrix4(out: mat4) {
-    const matrix = this.getMatrix();
-    return mat4.set(
-      out,
-      matrix[0],
-      matrix[1],
-      0.0,
-      matrix[4],
-      matrix[2],
-      matrix[3],
-      0.0,
-      matrix[5],
-      0.0,
-      0.0,
-      1.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      1.0
-    );
+    return mat4FromMat2d(out, this.getMatrix());
   }
   getMatrix2d(out: mat2d) {
     return mat2d.copy(out, this.getMatrix());
+  }
+
+  getLocalMatrix4(out: mat4) {
+    return mat4FromMat2d(out, this.getLocalMatrix());
+  }
+  getLocalMatrix2d(out: mat2d) {
+    return mat2d.copy(out, this.getLocalMatrix());
   }
 
   lookAt(position: vec2) {

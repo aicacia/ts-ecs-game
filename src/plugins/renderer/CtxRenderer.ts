@@ -131,8 +131,7 @@ export class CtxRenderer extends Renderer {
     this.ctx.restore();
 
     this.ctx.lineWidth = this.getLineWidth() * this.getScale();
-    this.ctx.translate(halfWidth, halfHeight);
-    this.ctx.scale(halfWidth, -halfHeight);
+    this.ctx.transform(halfWidth, 0, 0, -halfHeight, halfWidth, halfHeight);
 
     super.onUpdate();
     this.ctx.restore();

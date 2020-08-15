@@ -1,6 +1,7 @@
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { TransformComponent } from "../TransformComponent";
 import { Transform3DManager } from "./Transform3DManager";
+import { mat2dFromMat4 } from "../../math";
 
 const MAT4_0 = mat4.create(),
   QUAT_0 = quat.create(),
@@ -186,16 +187,14 @@ export class Transform3D extends TransformComponent {
     return mat4.copy(out, this.getMatrix());
   }
   getMatrix2d(out: mat2d) {
-    const matrix = this.getMatrix();
-    return mat2d.set(
-      out,
-      matrix[0],
-      matrix[1],
-      matrix[4],
-      matrix[5],
-      matrix[13],
-      matrix[14]
-    );
+    return mat2dFromMat4(out, this.getMatrix());
+  }
+
+  getLocalMatrix4(out: mat4) {
+    return mat4.copy(out, this.getLocalMatrix());
+  }
+  getLocalMatrix2d(out: mat2d) {
+    return mat2dFromMat4(out, this.getLocalMatrix());
   }
 
   lookAt(position: vec3) {
