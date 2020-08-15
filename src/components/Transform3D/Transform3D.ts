@@ -147,8 +147,6 @@ export class Transform3D extends TransformComponent {
   }
 
   updateLocalMatrix() {
-    this.localNeedsUpdate = false;
-
     mat4.fromRotationTranslationScale(
       this.localMatrix,
       this.localRotation,
@@ -160,28 +158,26 @@ export class Transform3D extends TransformComponent {
   }
 
   updateMatrix() {
-    this.needsUpdate = false;
-
-    this.updateLocalMatrixIfNeeded();
-
-    this.getParentTransform().mapOrElse(
-      (parentTransform) => {
-        mat4.mul(
-          this.matrix,
-          parentTransform.getMatrix4(MAT4_0),
-          this.localMatrix
-        );
-        mat4.getRotation(this.rotation, this.matrix);
-        mat4.getScaling(this.scale, this.matrix);
-        mat4.getTranslation(this.position, this.matrix);
-      },
-      () => {
-        mat4.copy(this.matrix, this.localMatrix);
-        vec3.copy(this.position, this.localPosition);
-        vec3.copy(this.scale, this.localScale);
-        quat.copy(this.rotation, this.localRotation);
-      }
-    );
+    this.updateLocalMatrixIfNeeded()
+      .getParentTransform()
+      .mapOrElse(
+        (parentTransform) => {
+          mat4.mul(
+            this.matrix,
+            parentTransform.getMatrix4(MAT4_0),
+            this.localMatrix
+          );
+          mat4.getRotation(this.rotation, this.matrix);
+          mat4.getScaling(this.scale, this.matrix);
+          mat4.getTranslation(this.position, this.matrix);
+        },
+        () => {
+          mat4.copy(this.matrix, this.localMatrix);
+          vec3.copy(this.position, this.localPosition);
+          vec3.copy(this.scale, this.localScale);
+          quat.copy(this.rotation, this.localRotation);
+        }
+      );
 
     return this;
   }

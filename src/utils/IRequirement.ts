@@ -1,4 +1,4 @@
-import { IConstructor } from "./IConstructor";
+import { IConstructor } from "@aicacia/core";
 import { isArray } from "util";
 
 export type IRequirement<T> = IConstructor<T> | Array<IConstructor<T>>;

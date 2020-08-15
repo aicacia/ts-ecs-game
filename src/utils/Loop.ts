@@ -1,18 +1,31 @@
 import raf = require("raf");
 
+export type ILoopHandler = (ms: number) => void;
+
 export class Loop {
   private id: number | null = null;
   private running = false;
-  private handler: (ms: number) => void;
+  private handler: ILoopHandler;
+  private resolve?: () => void;
 
-  constructor(handler: (ms: number) => void) {
+  constructor(handler: ILoopHandler) {
     this.handler = handler;
+  }
+
+  getHandler() {
+    return this.handler;
+  }
+  setHandler(handler: ILoopHandler) {
+    this.handler = handler;
+    return this;
   }
 
   start() {
     this.running = true;
-    this.request();
-    return this;
+    return new Promise<void>((resolve) => {
+      this.resolve = resolve;
+      this.request();
+    });
   }
   stop() {
     this.running = false;
@@ -32,6 +45,9 @@ export class Loop {
 
     if (this.running) {
       this.request();
+    } else if (this.resolve) {
+      this.resolve();
+      this.resolve = undefined;
     }
     return this;
   };

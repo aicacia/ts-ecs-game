@@ -1,4 +1,4 @@
-import { none, Option } from "@aicacia/core";
+import { none, Option, some } from "@aicacia/core";
 import { IJSON } from "@aicacia/json";
 import { Asset } from "./Asset";
 
@@ -21,7 +21,7 @@ export class JSONAsset extends Asset {
     return fetch(this.src, this.options)
       .then((response) => response.json())
       .then((json) => {
-        this.json.replace(json);
+        this.json = some(json);
       });
   }
 

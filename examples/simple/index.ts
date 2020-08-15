@@ -25,9 +25,6 @@ import {
 import logoPng from "./logo.png";
 
 class Rotator extends Component {
-  // only use this if you do not need a manager, it only uses one manager so
-  // any other components using the DefaultManager will be in the same manager
-  static Manager = DefaultManager;
   static requiredComponents = [Transform2D];
   static requiredPlugins = [Time];
 
@@ -69,11 +66,7 @@ function onLoad() {
           .addComponent(
             new Transform2D().setRenderable(false),
             new Camera2DControl(),
-            new Camera2D()
-              .setSize(1)
-              .setMinSize(1)
-              .setMaxSize(16)
-              .setBackground(vec3.fromValues(0.98, 0.98, 0.98))
+            new Camera2D().setBackground(vec3.fromValues(0.98, 0.98, 0.98))
           ),
         new Entity().addComponent(
           new Transform2D(),
@@ -84,7 +77,7 @@ function onLoad() {
           .addChild(
             new Entity().addComponent(
               new Transform2D()
-                .setLocalPosition(vec2.fromValues(9, 0))
+                .setLocalPosition(vec2.fromValues(3, 0))
                 .setRenderable(false),
               new LookAtCamera(),
               new Sprite(logoAsset)
@@ -94,7 +87,7 @@ function onLoad() {
           .addComponent(new Transform2D(), new Rotator())
           .addChild(
             new Entity().addComponent(
-              new Transform2D().setLocalPosition(vec2.fromValues(9, 0))
+              new Transform2D().setLocalPosition(vec2.fromValues(3, 0))
             )
           )
       )

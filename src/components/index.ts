@@ -11,4 +11,4 @@ export { Transform2D, Transform2DManager } from "./Transform2D";
 export { Camera3D, Camera3DManager } from "./Camera3D";
 export { Transform3D, Transform3DManager } from "./Transform3D";
 export { UIElement, UIElementManager, UIText } from "./UI";
-export { Sprite, SpriteManager, SpriteClip } from "./Sprite";
+export { Sprite, SpriteManager, SpriteClip, SpriteSheet } from "./Sprite";

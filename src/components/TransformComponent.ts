@@ -29,8 +29,8 @@ export abstract class TransformComponent extends RenderableComponent {
     );
   }
 
-  protected needsUpdate = true;
-  protected localNeedsUpdate = true;
+  private needsUpdate = true;
+  private localNeedsUpdate = true;
 
   onDetach() {
     return this.setNeedsUpdate();
@@ -71,6 +71,7 @@ export abstract class TransformComponent extends RenderableComponent {
 
   updateLocalMatrixIfNeeded() {
     if (this.localNeedsUpdate) {
+      this.localNeedsUpdate = false;
       return this.updateLocalMatrix();
     } else {
       return this;
@@ -79,6 +80,7 @@ export abstract class TransformComponent extends RenderableComponent {
 
   updateMatrixIfNeeded() {
     if (this.needsUpdate) {
+      this.needsUpdate = false;
       return this.updateMatrix();
     } else {
       return this;

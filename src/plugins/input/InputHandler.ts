@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class InputHandler<
@@ -67,6 +67,5 @@ export abstract class InputHandler<
   }
 }
 
-import { IConstructor } from "../../utils";
 import { Time } from "../Time";
 import { Input } from "./Input";

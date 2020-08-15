@@ -21,7 +21,7 @@ export class FullScreenCanvas extends Plugin {
     if (window) {
       this.window = window;
     } else {
-      throw new Error("failed to window object from canvas element");
+      throw new Error("failed to get window object from canvas element");
     }
   }
 

@@ -1,4 +1,4 @@
-import { none, Option } from "@aicacia/core";
+import { none, Option, some } from "@aicacia/core";
 import { mat2d } from "gl-matrix";
 import { Camera2D, Camera2DManager } from "../../components";
 import { toRgb } from "../../math";
@@ -14,10 +14,12 @@ export class CtxRenderer extends Renderer {
   private cameraView: mat2d = mat2d.create();
   private cameraProjection: mat2d = mat2d.create();
   private cameraViewProjection: mat2d = mat2d.create();
+  private scale = 1.0;
   private enabled = true;
 
   constructor(canvas: HTMLCanvasElement) {
     super();
+
     this.canvas = canvas;
 
     const ctx = canvas.getContext("2d");
@@ -68,22 +70,22 @@ export class CtxRenderer extends Renderer {
     return this.camera.unwrapOrElse(this.getActiveCamera);
   }
   setCamera(camera: Camera2D) {
-    this.camera.replace(camera);
+    this.camera = some(camera);
     return this;
   }
   removeCamera() {
-    this.camera.take();
+    this.camera = none();
     return this;
   }
 
-  getCanvasSize() {
+  private getCanvasSize() {
     const width = this.canvas.width,
       height = this.canvas.height;
 
     return (width > height ? height : width) * 0.5;
   }
   getScale() {
-    return (1.0 / this.getCanvasSize()) * this.getCamera().getScale();
+    return this.scale;
   }
 
   render(fn: (ctx: CanvasRenderingContext2D) => void, model?: mat2d) {
@@ -119,6 +121,7 @@ export class CtxRenderer extends Renderer {
       this.cameraProjection,
       this.cameraView
     );
+    this.scale = (1.0 / this.getCanvasSize()) * camera.getScale();
 
     this.ctx.save();
 

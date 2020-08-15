@@ -1,4 +1,4 @@
-import { none, Option } from "@aicacia/core";
+import { none, Option, some } from "@aicacia/core";
 import { Asset } from "./Asset";
 
 export class ImageAsset extends Asset {
@@ -19,7 +19,7 @@ export class ImageAsset extends Asset {
       const image = new Image();
 
       image.addEventListener("load", () => {
-        this.image.replace(image);
+        this.image = some(image);
         resolve();
       });
       image.addEventListener("error", (error) => reject(error));

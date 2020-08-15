@@ -12,6 +12,7 @@ export {
   Sprite,
   SpriteManager,
   SpriteClip,
+  SpriteSheet,
   UIElement,
   UIElementManager,
   UIText,
@@ -57,9 +58,8 @@ export {
   getGlobalCanvas,
   getGlobalContext,
   Canvas,
-  IConstructor,
-  IBuilder,
   Loop,
+  ILoopHandler,
   IRequirement,
   filterRequirements,
 } from "./utils";

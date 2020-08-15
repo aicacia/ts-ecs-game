@@ -1,50 +1,61 @@
+import { ImageAsset } from "../../plugins/assets/ImageAsset";
 import { RenderableComponent } from "../RenderableComponent";
 
 export class Sprite extends RenderableComponent {
   private layer = 0;
   private imageAsset: ImageAsset;
 
-  private currentTime = 0;
-  private currentFrame = 0;
   private clipX = 0;
   private clipY = 0;
   private clipWidth = 1;
   private clipHeight = 1;
   private width = 1;
   private height = 1;
-  private clips: SpriteClip[] = [];
 
   constructor(imageAsset: ImageAsset) {
     super();
+
     this.imageAsset = imageAsset;
 
-    if (imageAsset.isLoaded()) {
-      this.copyImageClipping();
+    if (this.imageAsset.isLoaded()) {
+      this.onImageLoadHandler();
     } else {
-      imageAsset.on("load", () => {
-        if (this.clips.length === 0) {
-          this.copyImageClipping();
-        }
-      });
+      this.imageAsset.on("load", this.onImageLoadHandler);
     }
-  }
-
-  getClips() {
-    return this.clips;
   }
 
   getClipX() {
     return this.clipX;
   }
+  setClipX(clipX: number) {
+    this.clipX = clipX;
+    return this;
+  }
+
   getClipY() {
     return this.clipY;
   }
+  setClipY(clipY: number) {
+    this.clipY = clipY;
+    return this;
+  }
+
   getClipWidth() {
     return this.clipWidth;
   }
+  setClipWidth(clipWidth: number) {
+    this.clipWidth = clipWidth;
+    return this;
+  }
+
   getClipHeight() {
     return this.clipHeight;
   }
+  setClipHeight(clipHeight: number) {
+    this.clipHeight = clipHeight;
+    return this;
+  }
+
   getWidth() {
     return this.width;
   }
@@ -58,10 +69,6 @@ export class Sprite extends RenderableComponent {
   setHeight(height: number) {
     this.height = height;
     return this;
-  }
-
-  shouldUpdate() {
-    return this.clips.length > 0;
   }
 
   getLayer() {
@@ -87,41 +94,15 @@ export class Sprite extends RenderableComponent {
     return this;
   }
 
-  onUpdate() {
-    const clip = this.clips[this.currentFrame];
-
-    if (clip) {
-      this.clipX = clip.getX();
-      this.clipY = clip.getY();
-      this.clipWidth = clip.getWidth();
-      this.clipHeight = clip.getHeight();
-
-      if (this.currentTime >= clip.getDuration()) {
-        this.currentTime = 0;
-        this.currentFrame += 1;
-
-        if (this.currentFrame >= this.clips.length) {
-          this.currentFrame = 0;
-        }
-      }
-
-      this.currentTime += this.getRequiredPlugin(Time).getDelta();
-    }
-
-    return this;
-  }
-
-  private copyImageClipping() {
+  private onImageLoadHandler = () => {
     this.getImage().ifSome((img) => {
       this.clipWidth = img.width;
       this.clipHeight = img.height;
     });
-  }
+    this.imageAsset.off("load", this.onImageLoadHandler);
+  };
 }
 
-import { ImageAsset, Time } from "../../plugins";
-import { SpriteClip } from "./SpriteClip";
 import { SpriteManager } from "./SpriteManager";
 
 Sprite.Manager = SpriteManager;
-Sprite.requiredPlugins = [Time];

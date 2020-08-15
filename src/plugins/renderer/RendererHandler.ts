@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class RendererHandler<
@@ -88,5 +88,4 @@ export abstract class RendererHandler<
 }
 
 import { Manager, Plugin } from "../../sceneGraph";
-import { IConstructor } from "../../utils";
 import { Renderer } from "./Renderer";

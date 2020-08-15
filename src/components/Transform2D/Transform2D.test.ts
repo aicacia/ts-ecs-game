@@ -21,6 +21,9 @@ tape("Transform2D", (assert: tape.Test) => {
   const parentTransform = parent.getRequiredComponent(Transform2D);
   const childTransform = child.getRequiredComponent(Transform2D);
 
+  assert.true(parentTransform.getNeedsUpdate());
+  assert.true(childTransform.getNeedsUpdate());
+
   assert.true(
     mat2d.equals(
       parentTransform.getMatrix(),

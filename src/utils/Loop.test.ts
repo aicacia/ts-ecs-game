@@ -1,14 +1,12 @@
 import * as tape from "tape";
 import { Loop } from "./Loop";
 
-tape("Loop", (assert: tape.Test) => {
+tape("Loop", async (assert: tape.Test) => {
   let count = 0;
 
   const handler = () => {
     if (++count === 60) {
       loop.stop();
-      assert.true(loop.isStopped());
-      assert.end();
     }
   };
 
@@ -16,7 +14,8 @@ tape("Loop", (assert: tape.Test) => {
 
   assert.true(loop.isStopped());
 
-  loop.start();
+  await loop.start();
 
-  assert.false(loop.isStopped());
+  assert.true(loop.isStopped());
+  assert.end();
 });

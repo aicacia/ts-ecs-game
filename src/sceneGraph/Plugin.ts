@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class Plugin extends EventEmitter {
@@ -96,7 +96,7 @@ export abstract class Plugin extends EventEmitter {
   }
 }
 
-import { IConstructor, IRequirement, filterRequirements } from "../utils";
+import { IRequirement, filterRequirements } from "../utils";
 import { Manager } from "./Manager";
 import { Scene } from "./Scene";
 import { requirementToString } from "../utils/IRequirement";

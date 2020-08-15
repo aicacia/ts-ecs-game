@@ -1,3 +1,4 @@
+import { Option, IConstructor } from "@aicacia/core";
 import { Plugin } from "../../sceneGraph";
 
 export abstract class Renderer extends Plugin {
@@ -98,6 +99,4 @@ export abstract class Renderer extends Plugin {
   }
 }
 
-import { Option } from "@aicacia/core";
-import { IConstructor } from "../../utils";
 import { RendererHandler } from "./RendererHandler";

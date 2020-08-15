@@ -47,6 +47,16 @@ export class Camera2DManager extends DefaultManager<Camera2D> {
 
     return this;
   }
+
+  onInit() {
+    return this;
+  }
+  onUpdate() {
+    return this;
+  }
+  onAfterUpdate() {
+    return this;
+  }
 }
 
 import { Camera2D } from "./Camera2D";

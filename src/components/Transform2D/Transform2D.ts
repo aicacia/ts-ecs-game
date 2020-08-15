@@ -142,8 +142,6 @@ export class Transform2D extends TransformComponent {
   }
 
   updateLocalMatrix() {
-    this.localNeedsUpdate = false;
-
     composeMat2d(
       this.localMatrix,
       this.localPosition,
@@ -155,26 +153,28 @@ export class Transform2D extends TransformComponent {
   }
 
   updateMatrix() {
-    this.needsUpdate = false;
-
-    this.updateLocalMatrixIfNeeded();
-
-    this.getParentTransform().mapOrElse(
-      (parentTransform) => {
-        mat2d.mul(
-          this.matrix,
-          parentTransform.getMatrix2d(MAT2_0),
-          this.localMatrix
-        );
-        this.rotation = decomposeMat2d(this.matrix, this.position, this.scale);
-      },
-      () => {
-        mat2d.copy(this.matrix, this.localMatrix);
-        vec2.copy(this.position, this.localPosition);
-        vec2.copy(this.scale, this.localScale);
-        this.rotation = this.localRotation;
-      }
-    );
+    this.updateLocalMatrixIfNeeded()
+      .getParentTransform()
+      .mapOrElse(
+        (parentTransform) => {
+          mat2d.mul(
+            this.matrix,
+            parentTransform.getMatrix2d(MAT2_0),
+            this.localMatrix
+          );
+          this.rotation = decomposeMat2d(
+            this.matrix,
+            this.position,
+            this.scale
+          );
+        },
+        () => {
+          mat2d.copy(this.matrix, this.localMatrix);
+          vec2.copy(this.position, this.localPosition);
+          vec2.copy(this.scale, this.localScale);
+          this.rotation = this.localRotation;
+        }
+      );
 
     return this;
   }
@@ -205,7 +205,6 @@ export class Transform2D extends TransformComponent {
     return mat2d.copy(out, this.getMatrix());
   }
 
-  // TODO: this makes no sense, position is global but it works! why?
   lookAt(position: vec2) {
     return this.setLocalRotation(
       getAngleBetweenPoints(this.localPosition, position)

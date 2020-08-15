@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class Component extends EventEmitter {
@@ -121,7 +121,7 @@ export abstract class Component extends EventEmitter {
   }
 }
 
-import { IConstructor, IRequirement } from "../utils";
+import { IRequirement } from "../utils";
 import { DefaultManager } from "./DefaultManager";
 import { Entity } from "./Entity";
 import { Manager } from "./Manager";

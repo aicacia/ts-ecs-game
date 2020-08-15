@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class Manager<
@@ -65,7 +65,6 @@ export abstract class Manager<
   abstract onAfterUpdate(): this;
 }
 
-import { IConstructor } from "../utils";
 import { Component } from "./Component";
 import { Plugin } from "./Plugin";
 import { Scene } from "./Scene";

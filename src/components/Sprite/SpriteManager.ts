@@ -35,12 +35,7 @@ export class SpriteManager extends Manager<Sprite> {
   }
 
   sortFunction = (a: Sprite, b: Sprite) => {
-    return a
-      .getEntity()
-      .flatMap((aEntity) =>
-        b.getEntity().map((bEntity) => aEntity.getDepth() - bEntity.getDepth())
-      )
-      .unwrapOr(0);
+    return a.getRequiredEntity().getDepth() - b.getRequiredEntity().getDepth();
   };
 
   sort() {
@@ -51,21 +46,12 @@ export class SpriteManager extends Manager<Sprite> {
   }
 
   onInit() {
-    Object.values(this.layers).forEach((layer) =>
-      layer.forEach((sprite) => sprite.onInit())
-    );
     return this;
   }
   onUpdate() {
-    Object.values(this.layers).forEach((layer) =>
-      layer.forEach((sprite) => sprite.onUpdate())
-    );
     return this;
   }
   onAfterUpdate() {
-    Object.values(this.layers).forEach((layer) =>
-      layer.forEach((sprite) => sprite.onAfterUpdate())
-    );
     return this;
   }
 

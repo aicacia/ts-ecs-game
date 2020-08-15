@@ -47,6 +47,16 @@ export class Camera3DManager extends DefaultManager<Camera3D> {
 
     return this;
   }
+
+  onInit() {
+    return this;
+  }
+  onUpdate() {
+    return this;
+  }
+  onAfterUpdate() {
+    return this;
+  }
 }
 
 import { Camera3D } from "./Camera3D";

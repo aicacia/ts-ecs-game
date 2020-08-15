@@ -19,16 +19,16 @@ export class UIElementManager extends Manager<UIElement> {
     );
   }
 
-  addComponent(sprite: UIElement) {
-    this.getOrCreateLayer(sprite.getLayer()).push(sprite);
+  addComponent(uiElement: UIElement) {
+    this.getOrCreateLayer(uiElement.getLayer()).push(uiElement);
     return this;
   }
-  removeComponent(sprite: UIElement) {
-    const layerIndex = sprite.getLayer(),
+  removeComponent(uiElement: UIElement) {
+    const layerIndex = uiElement.getLayer(),
       layer = this.layers.get(layerIndex);
 
     if (layer) {
-      const index = layer.indexOf(sprite);
+      const index = layer.indexOf(uiElement);
 
       if (index !== -1) {
         layer.splice(index, 1);
@@ -59,21 +59,12 @@ export class UIElementManager extends Manager<UIElement> {
   }
 
   onInit() {
-    for (const layer of this.layers.values()) {
-      layer.forEach((sprite) => sprite.onInit());
-    }
     return this;
   }
   onUpdate() {
-    for (const layer of this.layers.values()) {
-      layer.forEach((sprite) => sprite.onUpdate());
-    }
     return this;
   }
   onAfterUpdate() {
-    for (const layer of this.layers.values()) {
-      layer.forEach((sprite) => sprite.onAfterUpdate());
-    }
     return this;
   }
 

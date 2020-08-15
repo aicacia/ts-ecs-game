@@ -1,3 +1,4 @@
+import { Option, iter } from "@aicacia/core";
 import { Plugin } from "../../sceneGraph";
 
 export class Assets extends Plugin {
@@ -165,5 +166,4 @@ export class Assets extends Plugin {
   }
 }
 
-import { none, Option, some, iter } from "@aicacia/core";
 import { Asset } from "./Asset";

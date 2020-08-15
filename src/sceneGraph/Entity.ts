@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 // tslint:disable-next-line: interface-name
@@ -351,7 +351,7 @@ export class Entity extends EventEmitter {
   }
 }
 
-import { IConstructor, filterRequirements, IRequirement } from "../utils";
+import { filterRequirements, IRequirement } from "../utils";
 import { Component } from "./Component";
 import { Plugin } from "./Plugin";
 import { Scene } from "./Scene";

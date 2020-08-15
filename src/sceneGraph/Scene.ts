@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 // tslint:disable-next-line: interface-name
@@ -210,13 +210,13 @@ export class Scene extends EventEmitter {
   UNSAFE_addComponent(component: Component) {
     const Manager: IConstructor<Manager> = component.getManagerConstructor();
 
-    const managerOption = this.getManager(Manager);
-    let manager: Manager;
+    let managerOption = this.getManager(Manager),
+      manager: Manager;
 
     if (managerOption.isNone()) {
       manager = new Manager();
 
-      managerOption.replace(manager);
+      managerOption = some(manager);
 
       manager.UNSAFE_setScene(this);
 
@@ -338,7 +338,6 @@ export class Scene extends EventEmitter {
   }
 }
 
-import { IConstructor } from "../utils";
 import { Component } from "./Component";
 import { Entity } from "./Entity";
 import { Manager } from "./Manager";

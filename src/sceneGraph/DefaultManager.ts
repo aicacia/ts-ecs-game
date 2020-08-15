@@ -28,12 +28,7 @@ export class DefaultManager<C extends Component = Component> extends Manager<
   }
 
   sortFunction = (a: C, b: C) => {
-    return a
-      .getEntity()
-      .flatMap((aEntity) =>
-        b.getEntity().map((bEntity) => aEntity.getDepth() - bEntity.getDepth())
-      )
-      .unwrapOr(0);
+    return a.getRequiredEntity().getDepth() - b.getRequiredEntity().getDepth();
   };
 
   sort() {
