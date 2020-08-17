@@ -1,0 +1,31 @@
+import { ImageAsset } from "../../plugins/assets/ImageAsset";
+import { RenderableComponent } from "../RenderableComponent";
+export declare class Sprite extends RenderableComponent {
+    private layer;
+    private imageAsset;
+    private clipX;
+    private clipY;
+    private clipWidth;
+    private clipHeight;
+    private width;
+    private height;
+    constructor(imageAsset: ImageAsset);
+    getClipX(): number;
+    setClipX(clipX: number): this;
+    getClipY(): number;
+    setClipY(clipY: number): this;
+    getClipWidth(): number;
+    setClipWidth(clipWidth: number): this;
+    getClipHeight(): number;
+    setClipHeight(clipHeight: number): this;
+    getWidth(): number;
+    setWidth(width: number): this;
+    getHeight(): number;
+    setHeight(height: number): this;
+    getLayer(): number;
+    setLayer(layer: number): this;
+    getImage(): import("@aicacia/core").Option<HTMLImageElement>;
+    getImageAsset(): ImageAsset;
+    setImageAsset(imageAsset: ImageAsset): this;
+    private onImageLoadHandler;
+}

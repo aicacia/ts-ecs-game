@@ -1,0 +1,41 @@
+/// <reference types="node" />
+import { Option, IConstructor } from "@aicacia/core";
+import { EventEmitter } from "events";
+export declare abstract class Component extends EventEmitter {
+    static Manager: IConstructor<Manager>;
+    static requiredComponents: IRequirement<Component>[];
+    static requiredPlugins: IRequirement<Plugin>[];
+    static getManagerConstructor<M extends Manager = Manager>(): IConstructor<M>;
+    static getRequiredComponents(): IRequirement<Component>[];
+    static getRequiredPlugins(): IRequirement<Plugin>[];
+    private entity;
+    private manager;
+    getConstructor(): IConstructor<this>;
+    getManagerConstructor<M extends Manager = Manager>(): IConstructor<M>;
+    getRequiredComponents(): IRequirement<Component>[];
+    getRequiredPlugins(): IRequirement<Plugin>[];
+    getComponent<C extends Component = Component>(Component: IConstructor<C>): Option<C>;
+    getRequiredComponent<C extends Component = Component>(Component: IConstructor<C>): C;
+    getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>): Option<P>;
+    getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>): P;
+    UNSAFE_setEntity(entity: Entity): this;
+    UNSAFE_removeEntity(): this;
+    getEntity(): Option<Entity>;
+    getRequiredEntity(): Entity;
+    getScene(): Option<import("./Scene").Scene>;
+    getRequiredScene(): import("./Scene").Scene;
+    UNSAFE_setManager(manager: Manager): this;
+    UNSAFE_removeManager(): this;
+    getManager<M extends Manager = Manager>(): Option<M>;
+    getRequiredManager<M extends Manager = Manager>(): M;
+    onInit(): this;
+    onDetach(): this;
+    onAdd(): this;
+    onRemove(): this;
+    onUpdate(): this;
+    onAfterUpdate(): this;
+}
+import { IRequirement } from "../utils";
+import { Entity } from "./Entity";
+import { Manager } from "./Manager";
+import { Plugin } from "./Plugin";

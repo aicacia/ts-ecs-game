@@ -1,0 +1,37 @@
+import { Option } from "@aicacia/core";
+import { Plugin } from "../../sceneGraph";
+export declare class Assets extends Plugin {
+    private assets;
+    private loadedAssets;
+    private loadingPromises;
+    private unloadingPromises;
+    find(fn: (asset: Asset) => boolean): Option<Asset>;
+    findWithName(name: string): Option<Asset>;
+    findAll(fn: (asset: Asset) => boolean): Asset[];
+    findAllWithName(name: string): Asset[];
+    isLoading(): boolean;
+    getAssets(): readonly Asset[];
+    getLoadedAssets(): readonly Asset[];
+    getLoadingAssets(): Asset[];
+    getUnloadingAssets(): Asset[];
+    getUnloadedAssets(): ReadonlyArray<Asset>;
+    addAsset(...assets: readonly Asset[]): this;
+    addAssets(assets: readonly Asset[]): this;
+    removeAsset(...assets: readonly Asset[]): this;
+    removeAssets(assets: readonly Asset[]): this;
+    loadAll(): Promise<void[]>;
+    loadAllInBackground(): this;
+    loadAssetInBackground(...assets: readonly Asset[]): this;
+    loadAssetsInBackground(assets: readonly Asset[]): this;
+    unloadAssetInBackground(...assets: readonly Asset[]): this;
+    unloadAssetsInBackground(assets: readonly Asset[]): this;
+    loadAsset(...assets: readonly Asset[]): Promise<void[]>;
+    loadAssets(assets: readonly Asset[]): Promise<void[]>;
+    unloadAsset(...assets: readonly Asset[]): Promise<void[]>;
+    unloadAssets(assets: readonly Asset[]): Promise<void[]>;
+    private _loadAsset;
+    private _unloadAsset;
+    private _addAsset;
+    private _removeAsset;
+}
+import { Asset } from "./Asset";
