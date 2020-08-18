@@ -9,10 +9,12 @@ export class Canvas extends EventEmitter {
   private width = 1;
   private height = 1;
 
-  constructor(options: ICanvasOptions = {}) {
+  constructor(canvas?: HTMLCanvasElement, options: ICanvasOptions = {}) {
     super();
 
-    this.canvas = document.createElement("canvas");
+    this.canvas = canvas ? canvas : document.createElement("canvas");
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
 
     if (options.disableContextMenu === true) {
       this.canvas.oncontextmenu = () => false;

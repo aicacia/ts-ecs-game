@@ -4,7 +4,6 @@ import { InputAxis } from "./InputAxis";
 import { InputButton } from "./InputButton";
 import { InputHandler } from "./InputHandler";
 export declare class Input extends Plugin {
-    static pluginPriority: number;
     private element;
     private inputHandlers;
     private inputHandlerMap;

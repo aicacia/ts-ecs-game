@@ -8,8 +8,6 @@ import { KeyboardInputHandler } from "./KeyboardInputHandler";
 import { MouseInputHandler } from "./MouseInputHandler";
 
 export class Input extends Plugin {
-  static pluginPriority = -Infinity;
-
   private element: Element;
   private inputHandlers: InputHandler[] = [];
   private inputHandlerMap: Map<

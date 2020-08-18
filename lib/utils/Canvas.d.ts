@@ -7,7 +7,7 @@ export declare class Canvas extends EventEmitter {
     private canvas;
     private width;
     private height;
-    constructor(options?: ICanvasOptions);
+    constructor(canvas?: HTMLCanvasElement, options?: ICanvasOptions);
     getElement(): HTMLCanvasElement;
     getWidth(): number;
     getHeight(): number;
