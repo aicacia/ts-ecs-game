@@ -43,7 +43,7 @@ export abstract class Manager<
   getManager<M extends Manager = Manager>(Manager: IConstructor<M>): Option<M> {
     return this.getScene().flatMap((scene) => scene.getManager(Manager));
   }
-  getRequiredManager<M extends Manager = Manager>(Manager: IConstructor<M>) {
+  getRequiredManager<M extends Manager = Manager>(Manager: IConstructor<M>): M {
     return this.getManager(Manager).expect(
       `${this.getConstructor()} required ${Manager} Manager`
     );

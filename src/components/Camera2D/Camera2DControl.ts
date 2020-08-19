@@ -10,6 +10,7 @@ import { Camera2DControlManager } from "./Camera2DControlManager";
 const VEC2_0 = vec2.create(),
   VEC2_1 = vec2.create(),
   VEC2_2 = vec2.create(),
+  ZERO = vec2.fromValues(0, 0),
   MIN_SCALE = vec2.fromValues(1, 1);
 
 export class Camera2DControl extends Component {
@@ -67,6 +68,7 @@ export class Camera2DControl extends Component {
         vec2.sub(this.offset, worldMouse, this.lastMouse);
         vec2.scale(this.offset, this.offset, this.panSpeed);
         vec2.mul(this.offset, this.offset, scale);
+        vec2.rotate(this.offset, this.offset, ZERO, transform.getRotationZ());
         transform.translate2(this.offset);
       }
 
