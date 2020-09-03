@@ -114,6 +114,9 @@ function onLoad() {
   (window as any).scene = scene;
   (window as any).loop = loop;
 
+  canvas.getElement().style.position = "absolute";
+  canvas.getElement().style.left = "0px";
+  canvas.getElement().style.top = "0px";
   document.body.appendChild(canvas.getElement());
   loop.start();
 }

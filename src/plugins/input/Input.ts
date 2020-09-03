@@ -10,6 +10,7 @@ import { WebEventListener } from "./WebEventListener";
 import { EventListener } from "./EventListener";
 import { TouchInputHandler } from "./TouchInputHandler";
 import { InputEvent } from "./InputEvent";
+import { ResizeInputHandler } from "./ResizeInputHandler";
 
 export class Input extends Plugin {
   private events: InputEvent[] = [];
@@ -35,7 +36,8 @@ export class Input extends Plugin {
     this.addInputHandler(
       new MouseInputHandler(),
       new KeyboardInputHandler(),
-      new TouchInputHandler()
+      new TouchInputHandler(),
+      new ResizeInputHandler()
     );
     this.addAxes(
       new InputAxis("horizontal-keys", "ArrowLeft", "ArrowRight"),
@@ -191,6 +193,9 @@ export class Input extends Plugin {
     this.inputHandlers.forEach((inputHandler) => {
       this.events.forEach((event) => inputHandler.onEvent(time, event));
       inputHandler.onUpdate(time);
+    });
+    this.events.forEach((event) => {
+      this.emit(event.type, event);
     });
     this.eventListeners.forEach((eventListener) => {
       for (let i = 0, il = this.events.length; i < il; i++) {

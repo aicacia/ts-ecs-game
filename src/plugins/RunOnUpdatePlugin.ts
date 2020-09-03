@@ -1,8 +1,8 @@
-import { RenderableComponent } from "./RenderableComponent";
+import { Plugin } from "../sceneGraph";
 
 export type RunOnUpdateFn = () => void;
 
-export abstract class RunOnUpdateComponent extends RenderableComponent {
+export abstract class RunOnUpdatePlugin extends Plugin {
   private queue: RunOnUpdateFn[] = [];
   private swap: RunOnUpdateFn[] = [];
 

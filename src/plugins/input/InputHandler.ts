@@ -49,4 +49,5 @@ export abstract class InputHandler<
 }
 
 import { Time } from "../Time";
-import { Input, InputEvent } from "./Input";
+import { Input } from "./Input";
+import { InputEvent } from "./InputEvent";

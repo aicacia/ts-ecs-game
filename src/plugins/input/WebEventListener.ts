@@ -4,22 +4,29 @@ import { TouchInputEvent } from "./TouchInputEvent";
 import { MouseWheelInputEvent } from "./MouseWheelInputEvent";
 import { KeyboardInputEvent } from "./KeyboardInputEvent";
 import { MouseInputEvent } from "./MouseInputEvent";
+import { ResizeInputEvent } from "./ResizeInputEvent";
 
 export class WebEventListener extends EventListener {
   private touchInputEventPool = new Pool(TouchInputEvent);
   private mouseInputEventPool = new Pool(MouseInputEvent);
   private mouseWheelInputEventPool = new Pool(MouseWheelInputEvent);
   private keyboardInputEventPool = new Pool(KeyboardInputEvent);
+  private resizeInputEventPool = new Pool(ResizeInputEvent);
 
   private element: Element;
+  private window: Window;
 
   constructor(element: Element) {
     super();
 
     this.element = element;
+    this.window = element.ownerDocument.defaultView as Window;
   }
 
   onAdd() {
+    this.window.addEventListener("orientationchange", this.onResize);
+    this.window.addEventListener("resize", this.onResize);
+
     this.element.addEventListener("touchstart", this.onTouch);
     this.element.addEventListener("touchmove", this.onTouch);
     this.element.addEventListener("touchend", this.onTouch);
@@ -34,10 +41,15 @@ export class WebEventListener extends EventListener {
     this.element.addEventListener("keydown", this.onKeyboard);
     this.element.addEventListener("keyup", this.onKeyboard);
 
+    this.onResize();
+
     return this;
   }
 
   onRemove() {
+    this.window.removeEventListener("orientationchange", this.onResize);
+    this.window.removeEventListener("resize", this.onResize);
+
     this.element.removeEventListener("touchstart", this.onTouch);
     this.element.removeEventListener("touchmove", this.onTouch);
     this.element.removeEventListener("touchend", this.onTouch);
@@ -54,6 +66,15 @@ export class WebEventListener extends EventListener {
 
     return this;
   }
+
+  onResize = () => {
+    const event = this.resizeInputEventPool.create("resize");
+
+    event.width = this.window.innerWidth;
+    event.height = this.window.innerHeight;
+
+    this.queueEvent(event);
+  };
 
   onTouch = (e: Event) => {
     const touchEvent = e as TouchEvent,
@@ -81,8 +102,8 @@ export class WebEventListener extends EventListener {
       event = this.mouseInputEventPool.create(mouseEvent.type as any);
 
     event.button = mouseEvent.which;
-    event.x = mouseEvent.x;
-    event.y = mouseEvent.y;
+    event.x = x;
+    event.y = y;
 
     this.queueEvent(event);
   };

@@ -1,28 +1,22 @@
-import { Plugin } from "../sceneGraph";
 import { Canvas } from "../utils";
+import { RunOnUpdatePlugin } from "./RunOnUpdatePlugin";
+import { Input } from "./input";
+import { IRequirement, Plugin } from "../sceneGraph";
 
 // tslint:disable-next-line: interface-name
 export interface FullScreenCanvas {
   on(event: "emit", listener: () => void): this;
 }
 
-export class FullScreenCanvas extends Plugin {
+export class FullScreenCanvas extends RunOnUpdatePlugin {
+  static requiredPlugins: IRequirement<Plugin>[] = [Input];
+
   private canvas: Canvas;
-  private window: Window;
 
   constructor(canvas: Canvas) {
     super();
 
     this.canvas = canvas;
-
-    const document = this.canvas.getElement().ownerDocument,
-      window = document?.defaultView;
-
-    if (window) {
-      this.window = window;
-    } else {
-      throw new Error("failed to get window object from canvas element");
-    }
   }
 
   getCanvas() {
@@ -30,30 +24,21 @@ export class FullScreenCanvas extends Plugin {
   }
 
   onAdd() {
-    const style = this.canvas.getElement().style;
-
-    style.position = "absolute";
-    style.top = "0px";
-    style.left = "0px";
-
-    this.window.addEventListener("orientationchange", this.onResize);
-    this.window.addEventListener("resize", this.onResize);
-    this.onResize();
+    this.getRequiredPlugin(Input).on("resize", this.onResize);
     return this;
   }
 
   onRemove() {
-    this.window.removeEventListener("orientationchange", this.onResize);
-    this.window.removeEventListener("resize", this.onResize);
+    this.getRequiredPlugin(Input).off("resize", this.onResize);
     return this;
   }
 
-  onResize = () => {
-    const width = this.window.innerWidth,
-      height = this.window.innerHeight;
+  private onResize = () => {
+    this.enqueue(this.runOnResizeFn);
+  };
 
-    this.canvas.set(width, height);
-
-    this.emit("resize");
+  private runOnResizeFn = () => {
+    const input = this.getRequiredPlugin(Input);
+    this.canvas.set(input.getValue("width"), input.getValue("height"));
   };
 }
