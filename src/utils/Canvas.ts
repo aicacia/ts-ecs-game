@@ -4,31 +4,22 @@ export interface ICanvasOptions {
   disableContextMenu?: boolean;
 }
 
-export class Canvas extends EventEmitter {
-  private canvas: HTMLCanvasElement;
+export abstract class Canvas extends EventEmitter {
   private width = 1;
   private height = 1;
 
-  constructor(canvas?: HTMLCanvasElement, options: ICanvasOptions = {}) {
-    super();
-
-    this.canvas = canvas ? canvas : document.createElement("canvas");
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-
-    if (options.disableContextMenu === true) {
-      this.canvas.oncontextmenu = () => false;
-    }
-  }
-
-  getElement() {
-    return this.canvas;
-  }
   getWidth() {
     return this.width;
   }
   getHeight() {
     return this.height;
+  }
+
+  setWidth(width: number) {
+    return this.set(width, this.height);
+  }
+  setHeight(height: number) {
+    return this.set(this.width, height);
   }
 
   set(width: number, height: number) {
@@ -39,24 +30,11 @@ export class Canvas extends EventEmitter {
       this.width = width;
       this.height = height;
 
-      this.canvas.width = this.width;
-      this.canvas.height = this.height;
-
-      this.canvas.style.width = this.width + "px";
-      this.canvas.style.height = this.height + "px";
-
+      this.onResize();
       this.emit("resize", width, height, origWidth, origHeight);
     }
     return this;
   }
 
-  getImageURI() {
-    return this.canvas
-      .toDataURL("image/png")
-      .replace("image/png", "image/octet-stream");
-  }
-
-  getStream(fps = 60): MediaStream {
-    return (this.canvas as any).captureStream(fps);
-  }
+  abstract onResize(): this;
 }

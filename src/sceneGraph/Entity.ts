@@ -1,3 +1,4 @@
+import { IJSONObject, isJSONArray } from "@aicacia/json";
 import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
@@ -72,8 +73,11 @@ export class Entity extends EventEmitter {
   getRequiredScene() {
     return this.getScene().expect("Entity expected to have a Scene");
   }
-  UNSAFE_setScene(scene: Scene) {
+  UNSAFE_setScene(scene: Scene, recur = false) {
     this.scene = some(scene);
+    if (recur) {
+      this.forEachChild((child) => child.UNSAFE_setScene(scene, recur), false);
+    }
     return this;
   }
   UNSAFE_removeScene() {
@@ -264,13 +268,11 @@ export class Entity extends EventEmitter {
     if (missingComponents.length > 0 || missingPlugins.length > 0) {
       const componentMessage = missingComponents.map(
         (missingRequirement) =>
-          `${this} requires ${requirementToString(
-            missingRequirement
-          )} Component`
+          `Entity requires ${requirementToString(missingRequirement)} Component`
       );
       const pluginMessage = missingPlugins.map(
         (missingRequirement) =>
-          `${this} requires ${requirementToString(missingRequirement)} Plugin`
+          `Entity requires ${requirementToString(missingRequirement)} Plugin`
       );
       const message =
         componentMessage.length > 0
@@ -349,10 +351,48 @@ export class Entity extends EventEmitter {
     this.children.forEach((child) => child.setDepth(depth + 1));
     return this;
   }
+
+  private setParent(parent: Entity) {
+    this.parent = some(parent);
+    return this;
+  }
+
+  toJSON(): IJSONObject {
+    return {
+      name: this.name,
+      depth: this.depth,
+      tags: [...this.tags.values()],
+      children: this.children.map((child) => child.toJSON()),
+      components: this.components.map((component) => component.toJSON()),
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    this.name = json.name as string;
+    this.depth = json.depth as number;
+    if (isJSONArray(json.tags)) {
+      json.tags.forEach((tag) => this.tags.add(tag as string));
+    }
+    if (isJSONArray(json.children)) {
+      json.children.forEach((child) =>
+        this.children.push(
+          new Entity().fromJSON(child as IJSONObject).setParent(this)
+        )
+      );
+    }
+    if (isJSONArray(json.children)) {
+      json.children.forEach((child) =>
+        this.children.push(new Entity().fromJSON(child as IJSONObject))
+      );
+    }
+    return this;
+  }
 }
 
-import { filterRequirements, IRequirement } from "../utils";
+import {
+  filterRequirements,
+  IRequirement,
+  requirementToString,
+} from "./IRequirement";
 import { Component } from "./Component";
 import { Plugin } from "./Plugin";
 import { Scene } from "./Scene";
-import { requirementToString } from "../utils/IRequirement";

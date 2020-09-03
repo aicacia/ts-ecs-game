@@ -3,11 +3,12 @@ import { mat2d } from "gl-matrix";
 import { Camera2D, Camera2DManager } from "../../components";
 import { toRgb } from "../../math";
 import { Renderer } from "./Renderer";
+import { Canvas } from "../../utils";
 
 const MAT2D_0 = mat2d.create();
 
 export class CtxRenderer extends Renderer {
-  private canvas: HTMLCanvasElement;
+  private canvas: Canvas;
   private ctx: CanvasRenderingContext2D;
   private lineWidth = 1.0;
   private camera: Option<Camera2D> = none();
@@ -17,15 +18,10 @@ export class CtxRenderer extends Renderer {
   private scale = 1.0;
   private enabled = true;
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: Canvas, ctx: CanvasRenderingContext2D) {
     super();
 
     this.canvas = canvas;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      throw new Error("Could not get context of canvas element");
-    }
     this.ctx = ctx;
   }
 
@@ -79,8 +75,8 @@ export class CtxRenderer extends Renderer {
   }
 
   private getCanvasSize() {
-    const width = this.canvas.width,
-      height = this.canvas.height;
+    const width = this.canvas.getWidth(),
+      height = this.canvas.getHeight();
 
     return (width > height ? height : width) * 0.5;
   }
@@ -108,8 +104,8 @@ export class CtxRenderer extends Renderer {
       return this;
     }
     const camera = this.getCamera(),
-      width = this.canvas.width,
-      height = this.canvas.height,
+      width = this.canvas.getWidth(),
+      height = this.canvas.getHeight(),
       halfWidth = width * 0.5,
       halfHeight = height * 0.5;
 

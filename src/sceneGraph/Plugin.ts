@@ -96,7 +96,10 @@ export abstract class Plugin extends EventEmitter {
   }
 }
 
-import { IRequirement, filterRequirements } from "../utils";
+import {
+  IRequirement,
+  filterRequirements,
+  requirementToString,
+} from "./IRequirement";
 import { Manager } from "./Manager";
 import { Scene } from "./Scene";
-import { requirementToString } from "../utils/IRequirement";

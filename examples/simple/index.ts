@@ -4,7 +4,6 @@ import {
   Camera2D,
   Camera2DControl,
   Camera2DManager,
-  Canvas,
   Component,
   CtxRenderer,
   CtxSpriteRendererHandler,
@@ -15,14 +14,15 @@ import {
   FullScreenCanvas,
   ImageAsset,
   Input,
-  Loop,
   Scene,
   Sprite,
   Time,
+  Loop,
   Transform2D,
   UIText,
 } from "../../src";
 import logoPng from "./logo.png";
+import { WebCanvas } from "../../src/utils";
 
 class Rotator extends Component {
   static requiredComponents = [Transform2D];
@@ -57,7 +57,7 @@ class LookAtCamera extends Component {
 
 function onLoad() {
   const logoAsset = new ImageAsset(logoPng),
-    canvas = new Canvas().set(256, 256),
+    canvas = new WebCanvas().set(256, 256),
     scene = new Scene()
       .addEntity(
         // Camera setup
@@ -92,7 +92,10 @@ function onLoad() {
           )
       )
       .addPlugin(
-        new CtxRenderer(canvas.getElement()).addRendererHandler(
+        new CtxRenderer(
+          canvas,
+          canvas.getElement().getContext("2d")
+        ).addRendererHandler(
           new CtxTransform2DRendererHandler(),
           new CtxSpriteRendererHandler(),
           new CtxUIRendererHandler()
@@ -100,7 +103,7 @@ function onLoad() {
         // Required by many Components and plugins
         new Time(),
         // Handles all input
-        new Input(canvas.getElement()),
+        Input.createForBrowser(canvas.getElement()),
         // forces a canvas to stay in sync with the window size
         new FullScreenCanvas(canvas),
         // assets

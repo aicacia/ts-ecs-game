@@ -1,3 +1,4 @@
+import { IJSONObject, isJSONArray } from "@aicacia/json";
 import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
@@ -19,6 +20,8 @@ export interface Scene {
 }
 
 export class Scene extends EventEmitter {
+  private name = "";
+
   private entities: Entity[] = [];
   private entitiesToAdd: Entity[] = [];
   private entitiesToRemove: Entity[] = [];
@@ -56,6 +59,21 @@ export class Scene extends EventEmitter {
     this.managers.forEach((manager) => manager.onAfterUpdate());
     this.plugins.forEach((plugin) => plugin.onAfterUpdate());
     this.isUpdating = false;
+    return this;
+  }
+
+  clear() {
+    this.emit("clear");
+    this.removeEntities(this.entities);
+    this.removePlugin(...this.pluginsMap.keys());
+    return this;
+  }
+
+  getName() {
+    return this.name;
+  }
+  setName(name: string) {
+    this.name = name;
     return this;
   }
 
@@ -335,6 +353,25 @@ export class Scene extends EventEmitter {
   }
   private managerSortFunction(a: Manager, b: Manager) {
     return a.getManagerPriority() - b.getManagerPriority();
+  }
+
+  toJSON(): IJSONObject {
+    return {
+      name: this.name,
+      entities: this.entities.map((entity) => entity.toJSON()),
+    };
+  }
+
+  fromJSON(json: IJSONObject) {
+    this.name = json.name as string;
+    if (isJSONArray(json.entities)) {
+      this.addEntities(
+        json.entities.map((entity) =>
+          new Entity().fromJSON(entity as IJSONObject)
+        )
+      );
+    }
+    return this;
   }
 }
 

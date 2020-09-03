@@ -46,24 +46,10 @@ export {
   DefaultManager,
   Entity,
   Scene,
+  Loop,
+  IRequirement,
   Plugin,
 } from "./sceneGraph";
-export {
-  getTextHeight,
-  getTextUnitHeight,
-  getTextUnitWidth,
-  getTextWidth,
-  BASE_SIZE,
-  INV_BASE_SIZE,
-  getGlobalCanvas,
-  getGlobalContext,
-  IBuilder,
-  Canvas,
-  Loop,
-  ILoopHandler,
-  IRequirement,
-  filterRequirements,
-} from "./utils";
 export {
   composeMat2d,
   decomposeMat2d,

@@ -4,33 +4,52 @@ import { Time } from "../Time";
 import { InputAxis } from "./InputAxis";
 import { InputButton } from "./InputButton";
 import { InputHandler } from "./InputHandler";
-import { KeyboardInputHandler } from "./KeyboardInputHandler";
 import { MouseInputHandler } from "./MouseInputHandler";
+import { KeyboardInputHandler } from "./KeyboardInputHandler";
+import { WebEventListener } from "./WebEventListener";
+import { EventListener } from "./EventListener";
+import { TouchInputHandler } from "./TouchInputHandler";
+import { InputEvent } from "./InputEvent";
 
 export class Input extends Plugin {
-  private element: Element;
+  private events: InputEvent[] = [];
+
   private inputHandlers: InputHandler[] = [];
   private inputHandlerMap: Map<
     IConstructor<InputHandler>,
     InputHandler
   > = new Map();
+
+  private eventListeners: EventListener[] = [];
+  private eventListenerMap: Map<
+    IConstructor<EventListener>,
+    EventListener
+  > = new Map();
+
   private buttons: { [key: string]: InputButton } = {};
   private axes: { [key: string]: InputAxis } = {};
 
-  constructor(element: Element) {
+  constructor() {
     super();
 
-    this.element = element;
-
-    this.addInputHandler(new MouseInputHandler(), new KeyboardInputHandler());
+    this.addInputHandler(
+      new MouseInputHandler(),
+      new KeyboardInputHandler(),
+      new TouchInputHandler()
+    );
     this.addAxes(
       new InputAxis("horizontal-keys", "ArrowLeft", "ArrowRight"),
       new InputAxis("vertical-keys", "ArrowDown", "ArrowUp")
     );
   }
 
-  getElement() {
-    return this.element;
+  static createForBrowser(element: Element) {
+    return new Input().addEventListener(new WebEventListener(element));
+  }
+
+  queueEvent(event: InputEvent) {
+    this.events.push(event);
+    return this;
   }
 
   addAxes(...axes: InputAxis[]) {
@@ -69,6 +88,19 @@ export class Input extends Plugin {
     );
   }
 
+  getEventListener<I extends EventListener = EventListener>(
+    EventListener: IConstructor<I>
+  ) {
+    return Option.from(this.eventListenerMap.get(EventListener));
+  }
+  getRequiredEventListener<I extends EventListener = EventListener>(
+    EventListener: IConstructor<I>
+  ) {
+    return this.getEventListener(EventListener).expect(
+      `Failed to get Required EventListener ${EventListener}`
+    );
+  }
+
   removeAxes(...axes: InputAxis[]) {
     axes.forEach((axis) => this._removeAxis(axis));
     return this;
@@ -95,6 +127,26 @@ export class Input extends Plugin {
   }
   removeInputHandler(...inputHandlers: IConstructor<InputHandler>[]) {
     return this.removeInputHandlers(...inputHandlers);
+  }
+
+  addEventListeners(...eventListeners: EventListener[]) {
+    eventListeners.forEach((eventListener) =>
+      this._addEventListener(eventListener)
+    );
+    return this;
+  }
+  addEventListener(...eventListeners: EventListener[]) {
+    return this.addEventListeners(...eventListeners);
+  }
+
+  removeEventListeners(...eventListeners: IConstructor<EventListener>[]) {
+    eventListeners.forEach((eventListener) =>
+      this._removeEventListener(eventListener)
+    );
+    return this;
+  }
+  removeEventListener(...eventListeners: IConstructor<EventListener>[]) {
+    return this.removeEventListeners(...eventListeners);
   }
 
   getOrCreateButton(name: string) {
@@ -136,7 +188,21 @@ export class Input extends Plugin {
   onUpdate() {
     const time = this.getRequiredPlugin(Time);
     this.updateAxes(time);
-    this.inputHandlers.forEach((inputHandler) => inputHandler.onUpdate(time));
+    this.inputHandlers.forEach((inputHandler) => {
+      this.events.forEach((event) => inputHandler.onEvent(time, event));
+      inputHandler.onUpdate(time);
+    });
+    this.eventListeners.forEach((eventListener) => {
+      for (let i = 0, il = this.events.length; i < il; i++) {
+        const event = this.events[i];
+
+        if (eventListener.dequeueEvent(event)) {
+          this.events.splice(i, 1);
+          i--;
+        }
+      }
+    });
+    this.events.length = 0;
     return this;
   }
 
@@ -205,6 +271,35 @@ export class Input extends Plugin {
       this.inputHandlers.splice(this.inputHandlers.indexOf(inputHandler), 1);
       this.inputHandlerMap.delete(InputHandler);
       inputHandler.UNSAFE_removeInput();
+    });
+    return this;
+  }
+
+  private _addEventListener<E extends EventListener = EventListener>(
+    eventListener: E
+  ) {
+    const EventListener = eventListener.getConstructor();
+
+    if (!this.eventListenerMap.has(EventListener)) {
+      this.eventListeners.push(eventListener);
+      this.eventListenerMap.set(EventListener, eventListener);
+      eventListener.UNSAFE_setInput(this);
+      eventListener.onAdd();
+      this.emit("add-event_listener", eventListener);
+    }
+
+    return this;
+  }
+  private _removeEventListener<E extends EventListener = EventListener>(
+    EventListener: IConstructor<E>
+  ) {
+    this.getEventListener(EventListener).ifSome((eventListener) => {
+      this.emit("remove-event_listener", eventListener);
+      eventListener.onRemove();
+
+      this.eventListeners.splice(this.eventListeners.indexOf(eventListener), 1);
+      this.eventListenerMap.delete(EventListener);
+      eventListener.UNSAFE_removeInput();
     });
     return this;
   }

@@ -61,7 +61,11 @@ export class Camera2DControl extends Component {
         camera = this.getRequiredComponent(Camera2D),
         worldMouse = camera.toRelative(
           VEC2_0,
-          vec2.set(VEC2_0, -input.getValue("mouseX"), -input.getValue("mouseY"))
+          vec2.set(
+            VEC2_0,
+            -input.getValue("mouse-x"),
+            -input.getValue("mouse-y")
+          )
         );
 
       if (this.dragging) {
@@ -72,14 +76,14 @@ export class Camera2DControl extends Component {
         transform.translate2(this.offset);
       }
 
-      if (input.isDown("mouse1")) {
+      if (input.isDown("mouse-1")) {
         this.dragging = true;
       }
-      if (input.isUp("mouse1")) {
+      if (input.isUp("mouse-1")) {
         this.dragging = false;
       }
 
-      const mouseWheel = input.getValue("mouseWheel"),
+      const mouseWheel = input.getValue("mouse-wheel"),
         zoomSpeed = vec2.set(VEC2_2, this.zoomSpeed, this.zoomSpeed);
 
       if (mouseWheel > 0) {

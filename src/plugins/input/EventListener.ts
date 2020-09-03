@@ -1,7 +1,7 @@
 import { none, Option, some, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
-export abstract class InputHandler<
+export abstract class EventListener<
   I extends Input = Input
 > extends EventEmitter {
   private input: Option<I> = none();
@@ -33,6 +33,11 @@ export abstract class InputHandler<
     return this.getScene().expect(`${this.getConstructor()} requires a Scene`);
   }
 
+  queueEvent(event: InputEvent) {
+    return this.getInput().map((input) => input.queueEvent(event));
+  }
+  abstract dequeueEvent(event: InputEvent): boolean;
+
   onAdd() {
     return this;
   }
@@ -42,11 +47,8 @@ export abstract class InputHandler<
   onUpdate(_time: Time) {
     return this;
   }
-  onAfterUpdate(_time: Time) {
-    return this;
-  }
-  abstract onEvent(time: Time, event: InputEvent): this;
 }
 
 import { Time } from "../Time";
-import { Input, InputEvent } from "./Input";
+import { Input } from "./Input";
+import { InputEvent } from "./InputEvent";
