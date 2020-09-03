@@ -1,14 +1,16 @@
-import { Plugin } from "../sceneGraph";
 import { Canvas } from "../utils";
+import { RunOnUpdatePlugin } from "./RunOnUpdatePlugin";
+import { IRequirement, Plugin } from "../sceneGraph";
 export interface FullScreenCanvas {
     on(event: "emit", listener: () => void): this;
 }
-export declare class FullScreenCanvas extends Plugin {
+export declare class FullScreenCanvas extends RunOnUpdatePlugin {
+    static requiredPlugins: IRequirement<Plugin>[];
     private canvas;
-    private window;
     constructor(canvas: Canvas);
     getCanvas(): Canvas;
     onAdd(): this;
     onRemove(): this;
-    onResize: () => void;
+    private onResize;
+    private runOnResizeFn;
 }

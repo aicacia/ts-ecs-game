@@ -3,15 +3,13 @@ import { EventEmitter } from "events";
 export interface ICanvasOptions {
     disableContextMenu?: boolean;
 }
-export declare class Canvas extends EventEmitter {
-    private canvas;
+export declare abstract class Canvas extends EventEmitter {
     private width;
     private height;
-    constructor(canvas?: HTMLCanvasElement, options?: ICanvasOptions);
-    getElement(): HTMLCanvasElement;
     getWidth(): number;
     getHeight(): number;
+    setWidth(width: number): this;
+    setHeight(height: number): this;
     set(width: number, height: number): this;
-    getImageURI(): string;
-    getStream(fps?: number): MediaStream;
+    abstract onResize(): this;
 }

@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import { IJSONObject } from "@aicacia/json";
 import { Option, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 export interface Entity {
@@ -29,7 +30,7 @@ export declare class Entity extends EventEmitter {
     hasScene(): boolean;
     getScene(): Option<Scene>;
     getRequiredScene(): Scene;
-    UNSAFE_setScene(scene: Scene): this;
+    UNSAFE_setScene(scene: Scene, recur?: boolean): this;
     UNSAFE_removeScene(): this;
     forEachChild(fn: (entity: Entity) => void, recur?: boolean): this;
     find(fn: (entity: Entity) => boolean, recur?: boolean): Option<Entity>;
@@ -66,6 +67,9 @@ export declare class Entity extends EventEmitter {
     private _addChild;
     private _removeChild;
     private setDepth;
+    private setParent;
+    toJSON(): IJSONObject;
+    fromJSON(json: IJSONObject): this;
 }
 import { Component } from "./Component";
 import { Scene } from "./Scene";

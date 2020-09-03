@@ -3,7 +3,6 @@ import { Option, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 export declare abstract class InputHandler<I extends Input = Input> extends EventEmitter {
     private input;
-    private events;
     getConstructor(): IConstructor<this>;
     UNSAFE_setInput(input: I): this;
     UNSAFE_removeInput(): this;
@@ -11,14 +10,12 @@ export declare abstract class InputHandler<I extends Input = Input> extends Even
     getRequiredInput(): I;
     getScene(): Option<import("../..").Scene>;
     getRequiredScene(): import("../..").Scene;
-    getElement(): Element;
-    getEvents(): Event[];
-    queueEvent: (event: Event) => this;
     onAdd(): this;
     onRemove(): this;
-    onUpdate(time: Time): this;
+    onUpdate(_time: Time): this;
     onAfterUpdate(_time: Time): this;
-    onEvent(_time: Time, _event: Event): this;
+    abstract onEvent(time: Time, event: InputEvent): this;
 }
 import { Time } from "../Time";
 import { Input } from "./Input";
+import { InputEvent } from "./InputEvent";

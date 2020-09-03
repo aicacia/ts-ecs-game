@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import { IJSONObject } from "@aicacia/json";
 import { Option, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 export declare abstract class Component extends EventEmitter {
@@ -34,8 +35,9 @@ export declare abstract class Component extends EventEmitter {
     onRemove(): this;
     onUpdate(): this;
     onAfterUpdate(): this;
+    toJSON(): IJSONObject;
 }
-import { IRequirement } from "../utils";
+import { IRequirement } from "./IRequirement";
 import { Entity } from "./Entity";
 import { Manager } from "./Manager";
 import { Plugin } from "./Plugin";

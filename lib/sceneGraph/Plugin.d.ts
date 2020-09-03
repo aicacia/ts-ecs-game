@@ -25,6 +25,6 @@ export declare abstract class Plugin extends EventEmitter {
     onAfterUpdate(): this;
     onUpdate(): this;
 }
-import { IRequirement } from "../utils";
+import { IRequirement } from "./IRequirement";
 import { Manager } from "./Manager";
 import { Scene } from "./Scene";

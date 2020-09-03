@@ -1,6 +1,7 @@
 import { mat2d } from "gl-matrix";
 import { Camera2D } from "../../components";
 import { Renderer } from "./Renderer";
+import { Canvas } from "../../utils";
 export declare class CtxRenderer extends Renderer {
     private canvas;
     private ctx;
@@ -11,11 +12,11 @@ export declare class CtxRenderer extends Renderer {
     private cameraViewProjection;
     private scale;
     private enabled;
-    constructor(canvas: HTMLCanvasElement);
+    constructor(canvas: Canvas, ctx: CanvasRenderingContext2D);
     getCameraView(): mat2d;
     getCameraProjection(): mat2d;
     getCameraViewProjection(): mat2d;
-    getCanvas(): HTMLCanvasElement;
+    getCanvas(): Canvas;
     getCtx(): CanvasRenderingContext2D;
     getEnabled(): boolean;
     setEnabled(enabled?: boolean): this;

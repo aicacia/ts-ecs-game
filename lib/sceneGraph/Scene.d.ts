@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import { IJSONObject } from "@aicacia/json";
 import { Option, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 export interface Scene {
@@ -8,6 +9,7 @@ export interface Scene {
     on(event: "add-entity" | "remove-entity", listener: (entity: Entity) => void): this;
 }
 export declare class Scene extends EventEmitter {
+    private name;
     private entities;
     private entitiesToAdd;
     private entitiesToRemove;
@@ -19,6 +21,9 @@ export declare class Scene extends EventEmitter {
     private isInitted;
     maintain(): this;
     update(): this;
+    clear(): this;
+    getName(): string;
+    setName(name: string): this;
     find(fn: (entity: Entity) => boolean, recur?: boolean): Option<Entity>;
     findWithTag(...tags: string[]): Option<Entity>;
     findWithTags(tags: string[]): Option<Entity>;
@@ -54,6 +59,8 @@ export declare class Scene extends EventEmitter {
     private pluginSortFunction;
     private sortManagers;
     private managerSortFunction;
+    toJSON(): IJSONObject;
+    fromJSON(json: IJSONObject): this;
 }
 import { Component } from "./Component";
 import { Entity } from "./Entity";

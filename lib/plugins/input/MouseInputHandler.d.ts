@@ -1,8 +1,8 @@
 import { Time } from "../Time";
 import { InputHandler } from "./InputHandler";
+import { MouseInputEvent } from "./MouseInputEvent";
+import { MouseWheelInputEvent } from "./MouseWheelInputEvent";
 export declare class MouseInputHandler extends InputHandler {
-    onAdd(): this;
-    onRemove(): this;
-    onEvent(time: Time, e: MouseEvent): this;
+    onEvent(time: Time, event: MouseInputEvent | MouseWheelInputEvent): this;
     onAfterUpdate(): this;
 }

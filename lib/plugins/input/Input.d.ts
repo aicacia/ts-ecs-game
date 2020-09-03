@@ -3,14 +3,19 @@ import { Plugin } from "../../sceneGraph";
 import { InputAxis } from "./InputAxis";
 import { InputButton } from "./InputButton";
 import { InputHandler } from "./InputHandler";
+import { EventListener } from "./EventListener";
+import { InputEvent } from "./InputEvent";
 export declare class Input extends Plugin {
-    private element;
+    private events;
     private inputHandlers;
     private inputHandlerMap;
+    private eventListeners;
+    private eventListenerMap;
     private buttons;
     private axes;
-    constructor(element: Element);
-    getElement(): Element;
+    constructor();
+    static createForBrowser(element: Element): Input;
+    queueEvent(event: InputEvent): this;
     addAxes(...axes: InputAxis[]): this;
     addAxis(...axes: InputAxis[]): this;
     getAxis(name: string): Option<InputAxis>;
@@ -19,12 +24,18 @@ export declare class Input extends Plugin {
     getRequiredAxisValue(name: string): number;
     getInputHandler<I extends InputHandler = InputHandler>(InputHandler: IConstructor<I>): Option<InputHandler<Input>>;
     getRequiredInputHandler<I extends InputHandler = InputHandler>(InputHandler: IConstructor<I>): InputHandler<Input>;
+    getEventListener<I extends EventListener = EventListener>(EventListener: IConstructor<I>): Option<EventListener<Input>>;
+    getRequiredEventListener<I extends EventListener = EventListener>(EventListener: IConstructor<I>): EventListener<Input>;
     removeAxes(...axes: InputAxis[]): this;
     removeAxis(...axes: InputAxis[]): this;
     addInputHandlers(...inputHandlers: InputHandler[]): this;
     addInputHandler(...inputHandlers: InputHandler[]): this;
     removeInputHandlers(...inputHandlers: IConstructor<InputHandler>[]): this;
     removeInputHandler(...inputHandlers: IConstructor<InputHandler>[]): this;
+    addEventListeners(...eventListeners: EventListener[]): this;
+    addEventListener(...eventListeners: EventListener[]): this;
+    removeEventListeners(...eventListeners: IConstructor<EventListener>[]): this;
+    removeEventListener(...eventListeners: IConstructor<EventListener>[]): this;
     getOrCreateButton(name: string): InputButton;
     getButton(name: string): Option<InputButton>;
     getValue(name: string): number;
@@ -38,4 +49,6 @@ export declare class Input extends Plugin {
     private updateAxis;
     private _addInputHandler;
     private _removeInputHandler;
+    private _addEventListener;
+    private _removeEventListener;
 }
