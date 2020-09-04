@@ -1,4 +1,4 @@
-import { Manager } from "../../sceneGraph";
+import { Manager } from "../../Manager";
 export declare class SpriteManager extends Manager<Sprite> {
     private layers;
     isEmpty(): boolean;

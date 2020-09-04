@@ -36,16 +36,6 @@ export {
   InputButton,
 } from "./plugins";
 export {
-  Component,
-  Manager,
-  DefaultManager,
-  Entity,
-  Scene,
-  Loop,
-  IRequirement,
-  Plugin,
-} from "./sceneGraph";
-export {
   composeMat2d,
   decomposeMat2d,
   degToRad,
@@ -70,3 +60,11 @@ export {
   projectPointOnAxis,
   equals,
 } from "./math";
+export { Component } from "./Component";
+export { Manager } from "./Manager";
+export { DefaultManager } from "./DefaultManager";
+export { Entity } from "./Entity";
+export { IRequirement } from "./IRequirement";
+export { Loop } from "./Loop";
+export { Scene } from "./Scene";
+export { Plugin } from "./Plugin";

@@ -1,7 +1,8 @@
 import { Canvas } from "../Canvas";
 import { RunOnUpdatePlugin } from "./RunOnUpdatePlugin";
 import { Input } from "./input";
-import { IRequirement, Plugin } from "../sceneGraph";
+import { IRequirement } from "../IRequirement";
+import { Plugin } from "../Plugin";
 
 // tslint:disable-next-line: interface-name
 export interface FullScreenCanvas {

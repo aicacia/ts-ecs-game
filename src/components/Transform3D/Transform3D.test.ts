@@ -1,6 +1,7 @@
 import { mat4, vec3 } from "gl-matrix";
 import * as tape from "tape";
-import { Entity, Scene } from "../../sceneGraph";
+import { Entity } from "../../Entity";
+import { Scene } from "../../Scene";
 import { Transform3D } from "./Transform3D";
 
 tape("Transform3D", (assert: tape.Test) => {

@@ -1,5 +1,5 @@
 import { Option } from "@aicacia/core";
-import { DefaultManager } from "../../sceneGraph";
+import { DefaultManager } from "../../DefaultManager";
 export declare class Camera3DManager extends DefaultManager<Camera3D> {
     private active;
     setActive(camera: Camera3D): this;

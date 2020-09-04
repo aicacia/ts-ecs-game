@@ -14,8 +14,8 @@ export declare abstract class RendererHandler<R extends Renderer = Renderer> ext
     UNSAFE_removeRenderer(): this;
     getRenderer(): Option<R>;
     getRequiredRenderer(): R;
-    getScene(): Option<import("../../sceneGraph").Scene>;
-    getRequiredScene(): import("../../sceneGraph").Scene;
+    getScene(): Option<import("../..").Scene>;
+    getRequiredScene(): import("../..").Scene;
     getManager<M extends Manager>(Manager: IConstructor<M>): Option<M>;
     getRequiredManager<M extends Manager>(Manager: IConstructor<M>): M;
     getPlugin<P extends Plugin>(Plugin: new (...args: any[]) => P): Option<P>;
@@ -26,5 +26,6 @@ export declare abstract class RendererHandler<R extends Renderer = Renderer> ext
     onRender(): this;
     onAfterRender(): this;
 }
-import { Manager, Plugin } from "../../sceneGraph";
+import { Manager } from "../../Manager";
+import { Plugin } from "../../Plugin";
 import { Renderer } from "./Renderer";

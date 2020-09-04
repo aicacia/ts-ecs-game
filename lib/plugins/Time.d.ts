@@ -1,4 +1,4 @@
-import { Plugin } from "../sceneGraph";
+import { Plugin } from "../Plugin";
 export declare class Time extends Plugin {
     static pluginPriority: number;
     private scale;

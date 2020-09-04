@@ -1,5 +1,5 @@
 import { Input } from "../../plugins";
-import { Component } from "../../sceneGraph";
+import { Component } from "../../Component";
 import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { Camera2DControlManager } from "./Camera2DControlManager";

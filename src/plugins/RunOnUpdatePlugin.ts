@@ -1,4 +1,4 @@
-import { Plugin } from "../sceneGraph";
+import { Plugin } from "../Plugin";
 
 export type RunOnUpdateFn = () => void;
 

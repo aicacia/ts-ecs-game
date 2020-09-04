@@ -1,5 +1,5 @@
 import { EPSILON } from "../math";
-import { Plugin } from "../sceneGraph";
+import { Plugin } from "../Plugin";
 
 export class Time extends Plugin {
   static pluginPriority = -Infinity;

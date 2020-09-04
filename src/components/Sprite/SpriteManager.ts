@@ -1,4 +1,4 @@
-import { Manager } from "../../sceneGraph";
+import { Manager } from "../../Manager";
 
 export class SpriteManager extends Manager<Sprite> {
   private layers: Record<number, Sprite[]> = {};

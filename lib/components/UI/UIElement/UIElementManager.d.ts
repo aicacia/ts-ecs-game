@@ -1,4 +1,4 @@
-import { Manager } from "../../../sceneGraph";
+import { Manager } from "../../../Manager";
 export declare class UIElementManager extends Manager<UIElement> {
     private layers;
     isEmpty(): boolean;

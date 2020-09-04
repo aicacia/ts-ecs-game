@@ -1,6 +1,6 @@
 import { none, Option, some } from "@aicacia/core";
 import { SpriteClip } from "./SpriteClip";
-import { Component } from "../../sceneGraph";
+import { Component } from "../../Component";
 import { Time } from "../..";
 import { Sprite } from "./Sprite";
 

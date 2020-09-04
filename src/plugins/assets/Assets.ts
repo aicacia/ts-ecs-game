@@ -1,5 +1,5 @@
 import { Option, iter } from "@aicacia/core";
-import { Plugin } from "../../sceneGraph";
+import { Plugin } from "../../Plugin";
 
 export class Assets extends Plugin {
   private assets: Asset[] = [];

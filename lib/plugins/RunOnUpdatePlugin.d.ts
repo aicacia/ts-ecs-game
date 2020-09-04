@@ -1,4 +1,4 @@
-import { Plugin } from "../sceneGraph";
+import { Plugin } from "../Plugin";
 export declare type RunOnUpdateFn = () => void;
 export declare abstract class RunOnUpdatePlugin extends Plugin {
     private queue;

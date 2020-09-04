@@ -87,5 +87,6 @@ export abstract class RendererHandler<
   }
 }
 
-import { Manager, Plugin } from "../../sceneGraph";
+import { Manager } from "../../Manager";
+import { Plugin } from "../../Plugin";
 import { Renderer } from "./Renderer";

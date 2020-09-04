@@ -5,14 +5,9 @@ import {
   Camera2DControl,
   Camera2DManager,
   Component,
-  CtxRenderer,
-  CtxSpriteRendererHandler,
-  CtxTransform2DRendererHandler,
-  CtxUIRendererHandler,
   DefaultManager,
   Entity,
   FullScreenCanvas,
-  ImageAsset,
   Input,
   Scene,
   Sprite,
@@ -21,8 +16,16 @@ import {
   Transform2D,
   UIText,
 } from "../../src";
+import {
+  WebCanvas,
+  CtxRenderer,
+  CtxSpriteRendererHandler,
+  CtxTransform2DRendererHandler,
+  CtxUIRendererHandler,
+  WebImageAsset,
+  WebEventListener,
+} from "../../src/web";
 import logoPng from "./logo.png";
-import { WebCanvas } from "../../src/utils";
 
 class Rotator extends Component {
   static requiredComponents = [Transform2D];
@@ -56,7 +59,7 @@ class LookAtCamera extends Component {
 }
 
 function onLoad() {
-  const logoAsset = new ImageAsset(logoPng),
+  const logoAsset = new WebImageAsset(logoPng),
     canvas = new WebCanvas().set(256, 256),
     scene = new Scene()
       .addEntity(
@@ -103,7 +106,7 @@ function onLoad() {
         // Required by many Components and plugins
         new Time(),
         // Handles all input
-        Input.createForBrowser(canvas.getElement()),
+        new Input().addEventListener(new WebEventListener(canvas.getElement())),
         // forces a canvas to stay in sync with the window size
         new FullScreenCanvas(canvas),
         // assets

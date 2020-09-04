@@ -1,4 +1,4 @@
-import { Component } from "../sceneGraph";
+import { Component } from "../Component";
 
 export class RenderableComponent extends Component {
   private renderable = true;

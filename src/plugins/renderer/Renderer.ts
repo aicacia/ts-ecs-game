@@ -1,5 +1,5 @@
 import { Option, IConstructor } from "@aicacia/core";
-import { Plugin } from "../../sceneGraph";
+import { Plugin } from "../../Plugin";
 
 export abstract class Renderer extends Plugin {
   static pluginPriority = Infinity;

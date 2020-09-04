@@ -2,7 +2,7 @@ import { vec2 } from "gl-matrix";
 import { Input } from "../../plugins";
 import { Camera2D } from "./Camera2D";
 import { TransformComponent } from "../TransformComponent";
-import { Component } from "../../sceneGraph";
+import { Component } from "../../Component";
 import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { Camera2DControlManager } from "./Camera2DControlManager";

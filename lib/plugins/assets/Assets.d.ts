@@ -1,5 +1,5 @@
 import { Option } from "@aicacia/core";
-import { Plugin } from "../../sceneGraph";
+import { Plugin } from "../../Plugin";
 export declare class Assets extends Plugin {
     private assets;
     private loadedAssets;

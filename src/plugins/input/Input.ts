@@ -1,5 +1,5 @@
 import { Option, IConstructor } from "@aicacia/core";
-import { Plugin } from "../../sceneGraph";
+import { Plugin } from "../../Plugin";
 import { Time } from "../Time";
 import { InputAxis } from "./InputAxis";
 import { InputButton } from "./InputButton";
