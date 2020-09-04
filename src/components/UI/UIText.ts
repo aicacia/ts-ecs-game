@@ -3,7 +3,7 @@ import {
   getTextHeight,
   getTextWidth,
   BASE_SIZE,
-} from "../../utils/getTextDimensions";
+} from "../../web/getTextDimensions";
 
 export enum TextAlign {
   Start = "start",

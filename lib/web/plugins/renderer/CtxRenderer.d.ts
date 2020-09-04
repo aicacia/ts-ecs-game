@@ -1,7 +1,7 @@
 import { mat2d } from "gl-matrix";
-import { Camera2D } from "../../components";
-import { Renderer } from "./Renderer";
-import { Canvas } from "../../utils";
+import { Camera2D } from "../../../components/Camera2D";
+import { Renderer } from "../../../plugins/renderer/Renderer";
+import { Canvas } from "../../../Canvas";
 export declare class CtxRenderer extends Renderer {
     private canvas;
     private ctx;

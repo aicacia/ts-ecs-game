@@ -1,4 +1,4 @@
-import { Canvas } from "./Canvas";
+import { Canvas } from "../Canvas";
 
 export class WebCanvas extends Canvas {
   private canvas: HTMLCanvasElement;

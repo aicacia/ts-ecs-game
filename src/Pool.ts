@@ -1,23 +1,19 @@
 import { IConstructor } from "@aicacia/core";
 
-export type IPoolDeconstructor<T extends Object, A extends any[] = any[]> = (
+export type IPoolDeconstructor<T, A extends any[] = any[]> = (
   object: T,
   ...args: A
 ) => void;
 
-export function DEFAULT_DECONSTRUCTOR<T extends Object>(object: T) {
-  for (let key in object) {
-    if (object.hasOwnProperty(key)) {
+export function DEFAULT_DECONSTRUCTOR<T>(object: T) {
+  for (const key in object) {
+    if ((object as any).hasOwnProperty(key)) {
       object[key] = null as any;
     }
   }
 }
 
-export class Pool<
-  T extends Object,
-  CA extends any[] = any[],
-  DA extends any[] = any[]
-> {
+export class Pool<T, CA extends any[] = any[], DA extends any[] = any[]> {
   private pool: T[] = [];
   private Constructor: IConstructor<T, CA>;
   private Deconstructor: IPoolDeconstructor<T, DA>;

@@ -82,10 +82,6 @@ export class Sprite extends RenderableComponent {
     return this;
   }
 
-  getImage() {
-    return this.imageAsset.getImage();
-  }
-
   getImageAsset() {
     return this.imageAsset;
   }
@@ -95,10 +91,8 @@ export class Sprite extends RenderableComponent {
   }
 
   private onImageLoadHandler = () => {
-    this.getImage().ifSome((img) => {
-      this.clipWidth = img.width;
-      this.clipHeight = img.height;
-    });
+    this.clipWidth = this.imageAsset.getWidth();
+    this.clipHeight = this.imageAsset.getHeight();
     this.imageAsset.off("load", this.onImageLoadHandler);
   };
 }

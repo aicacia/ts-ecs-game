@@ -1,5 +1,5 @@
 import { InputEvent } from "./InputEvent";
 
 export class MouseWheelInputEvent extends InputEvent<"wheel"> {
-  wheel: number = 0;
+  wheel = 0;
 }

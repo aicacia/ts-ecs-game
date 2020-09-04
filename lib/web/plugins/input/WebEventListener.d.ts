@@ -1,4 +1,4 @@
-import { EventListener } from "./EventListener";
+import { EventListener } from "../../../plugins/input/EventListener";
 export declare class WebEventListener extends EventListener {
     private touchInputEventPool;
     private mouseInputEventPool;

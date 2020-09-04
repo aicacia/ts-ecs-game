@@ -6,7 +6,6 @@ import { InputButton } from "./InputButton";
 import { InputHandler } from "./InputHandler";
 import { MouseInputHandler } from "./MouseInputHandler";
 import { KeyboardInputHandler } from "./KeyboardInputHandler";
-import { WebEventListener } from "./WebEventListener";
 import { EventListener } from "./EventListener";
 import { TouchInputHandler } from "./TouchInputHandler";
 import { InputEvent } from "./InputEvent";
@@ -43,10 +42,6 @@ export class Input extends Plugin {
       new InputAxis("horizontal-keys", "ArrowLeft", "ArrowRight"),
       new InputAxis("vertical-keys", "ArrowDown", "ArrowUp")
     );
-  }
-
-  static createForBrowser(element: Element) {
-    return new Input().addEventListener(new WebEventListener(element));
   }
 
   queueEvent(event: InputEvent) {

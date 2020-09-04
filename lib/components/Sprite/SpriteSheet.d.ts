@@ -1,7 +1,7 @@
 import { Option } from "@aicacia/core";
 import { SpriteClip } from "./SpriteClip";
 import { Component } from "../../sceneGraph";
-import { Time } from "../../plugins";
+import { Time } from "../..";
 import { Sprite } from "./Sprite";
 export declare class SpriteSheet extends Component {
     static requiredComponents: (typeof Sprite)[];

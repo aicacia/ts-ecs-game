@@ -1,5 +1,5 @@
 import { CtxRenderer } from "./CtxRenderer";
-import { RendererHandler } from "./RendererHandler";
+import { RendererHandler } from "../../../plugins/renderer/RendererHandler";
 
 export abstract class CtxRendererHandler extends RendererHandler<CtxRenderer> {
   static rendererHandlerPriority = 0;

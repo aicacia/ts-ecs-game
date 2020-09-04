@@ -1,7 +1,8 @@
-import { SpriteManager } from "../../../components";
-import { TransformComponent } from "../../../components/TransformComponent";
+import { SpriteManager } from "../../../../components/Sprite";
+import { TransformComponent } from "../../../../components/TransformComponent";
 import { CtxRendererHandler } from "../CtxRendererHandler";
 import { mat2d } from "gl-matrix";
+import { WebImageAsset } from "../../assets/WebImageAsset";
 
 const MAT2_0 = mat2d.create();
 
@@ -11,7 +12,7 @@ export class CtxSpriteRendererHandler extends CtxRendererHandler {
       const renderer = this.getRequiredRenderer();
 
       spriteManager.getComponents().forEach((sprite) => {
-        const image = sprite.getImage();
+        const image = (sprite.getImageAsset() as WebImageAsset).getImage();
 
         if (sprite.getRenderable()) {
           image.ifSome((img) =>

@@ -24,7 +24,6 @@ export declare class Sprite extends RenderableComponent {
     setHeight(height: number): this;
     getLayer(): number;
     setLayer(layer: number): this;
-    getImage(): import("@aicacia/core").Option<HTMLImageElement>;
     getImageAsset(): ImageAsset;
     setImageAsset(imageAsset: ImageAsset): this;
     private onImageLoadHandler;

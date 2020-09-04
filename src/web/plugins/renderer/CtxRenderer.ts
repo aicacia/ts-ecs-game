@@ -1,9 +1,9 @@
 import { none, Option, some } from "@aicacia/core";
 import { mat2d } from "gl-matrix";
-import { Camera2D, Camera2DManager } from "../../components";
-import { toRgb } from "../../math";
-import { Renderer } from "./Renderer";
-import { Canvas } from "../../utils";
+import { Camera2D, Camera2DManager } from "../../../components/Camera2D";
+import { toRgb } from "../../../math";
+import { Renderer } from "../../../plugins/renderer/Renderer";
+import { Canvas } from "../../../Canvas";
 
 const MAT2D_0 = mat2d.create();
 

@@ -1,8 +1,8 @@
-import { UIElementManager, UIText } from "../../../components";
-import { TransformComponent } from "../../../components/TransformComponent";
+import { UIElementManager, UIText } from "../../../../components/UI";
+import { TransformComponent } from "../../../../components/TransformComponent";
 import { CtxRendererHandler } from "../CtxRendererHandler";
 import { mat2d } from "gl-matrix";
-import { INV_BASE_SIZE } from "../../../utils/getTextDimensions";
+import { INV_BASE_SIZE } from "../../../getTextDimensions";
 
 const MAT2_0 = mat2d.create();
 

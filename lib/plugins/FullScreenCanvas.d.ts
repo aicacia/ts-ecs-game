@@ -1,4 +1,4 @@
-import { Canvas } from "../utils";
+import { Canvas } from "../Canvas";
 import { RunOnUpdatePlugin } from "./RunOnUpdatePlugin";
 import { IRequirement, Plugin } from "../sceneGraph";
 export interface FullScreenCanvas {

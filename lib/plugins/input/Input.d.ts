@@ -14,7 +14,6 @@ export declare class Input extends Plugin {
     private buttons;
     private axes;
     constructor();
-    static createForBrowser(element: Element): Input;
     queueEvent(event: InputEvent): this;
     addAxes(...axes: InputAxis[]): this;
     addAxis(...axes: InputAxis[]): this;

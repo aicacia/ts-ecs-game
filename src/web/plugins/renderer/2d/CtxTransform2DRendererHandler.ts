@@ -1,4 +1,4 @@
-import { Transform2DManager } from "../../../components";
+import { Transform2DManager } from "../../../../components/Transform2D";
 import { CtxRendererHandler } from "../CtxRendererHandler";
 
 export class CtxTransform2DRendererHandler extends CtxRendererHandler {

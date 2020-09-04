@@ -1,10 +1,12 @@
-import { EventListener } from "./EventListener";
-import { Pool } from "../../utils/Pool";
-import { TouchInputEvent } from "./TouchInputEvent";
-import { MouseWheelInputEvent } from "./MouseWheelInputEvent";
-import { KeyboardInputEvent } from "./KeyboardInputEvent";
-import { MouseInputEvent } from "./MouseInputEvent";
-import { ResizeInputEvent } from "./ResizeInputEvent";
+import { EventListener } from "../../../plugins/input/EventListener";
+import { Pool } from "../../../Pool";
+import {
+  TouchInputEvent,
+  MouseInputEvent,
+  MouseWheelInputEvent,
+  KeyboardInputEvent,
+  ResizeInputEvent,
+} from "../../../plugins/input";
 
 export class WebEventListener extends EventListener {
   private touchInputEventPool = new Pool(TouchInputEvent);
