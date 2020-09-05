@@ -2,9 +2,6 @@ import { Canvas } from "../Canvas";
 import { RunOnUpdatePlugin } from "./RunOnUpdatePlugin";
 import { IRequirement } from "../IRequirement";
 import { Plugin } from "../Plugin";
-export interface FullScreenCanvas {
-    on(event: "emit", listener: () => void): this;
-}
 export declare class FullScreenCanvas extends RunOnUpdatePlugin {
     static requiredPlugins: IRequirement<Plugin>[];
     private canvas;

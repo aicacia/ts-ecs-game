@@ -44,7 +44,6 @@ class Rotator extends Component {
 }
 
 class LookAtCamera extends Component {
-  static Manager = DefaultManager;
   static requiredComponents = [Transform2D];
 
   onUpdate() {

@@ -37,7 +37,5 @@ export declare class UIText extends UIElement {
     setFont(font: string): this;
     getSize(): number;
     setSize(size: number): this;
-    getCtxFontStyle(scale?: number): string;
-    getHTMLFontStyle(): string;
     forceResize(): this;
 }

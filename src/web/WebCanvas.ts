@@ -7,7 +7,7 @@ export class WebCanvas extends Canvas {
     super();
 
     this.canvas = canvas ? canvas : document.createElement("canvas");
-    this.onResize();
+    this.set(this.canvas.width, this.canvas.height);
   }
 
   getElement() {

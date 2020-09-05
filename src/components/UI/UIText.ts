@@ -1,9 +1,5 @@
 import { UIElement } from "./UIElement";
-import {
-  getTextHeight,
-  getTextWidth,
-  BASE_SIZE,
-} from "../../web/getTextDimensions";
+import { getTextHeight, getTextWidth } from "../../web/getTextDimensions";
 
 export enum TextAlign {
   Start = "start",
@@ -81,14 +77,6 @@ export class UIText extends UIElement {
   setSize(size: number) {
     this.size = size;
     return this.forceResize();
-  }
-
-  getCtxFontStyle(scale = 1) {
-    return `${this.size * scale}px ${this.font}`;
-  }
-
-  getHTMLFontStyle() {
-    return `${this.size * BASE_SIZE}px ${this.font}`;
   }
 
   forceResize() {

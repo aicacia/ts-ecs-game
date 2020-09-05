@@ -2,6 +2,7 @@ node_modules
 coverage
 docs
 test
+examples
 npm-debug.log
 tsconfig.json
 .vscode

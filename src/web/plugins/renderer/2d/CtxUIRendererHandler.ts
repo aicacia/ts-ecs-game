@@ -6,6 +6,10 @@ import { INV_BASE_SIZE } from "../../../getTextDimensions";
 
 const MAT2_0 = mat2d.create();
 
+function getCtxFontStyle(uiText: UIText) {
+  return `${uiText.getSize()}px ${uiText.getFont()}`;
+}
+
 export class CtxUIRendererHandler extends CtxRendererHandler {
   onRender() {
     this.getManager(UIElementManager).ifSome((uiElementManager) => {
@@ -21,7 +25,7 @@ export class CtxUIRendererHandler extends CtxRendererHandler {
                 if (uiElement instanceof UIText) {
                   const uiText = uiElement;
                   ctx.scale(INV_BASE_SIZE, -INV_BASE_SIZE);
-                  ctx.font = uiText.getCtxFontStyle();
+                  ctx.font = getCtxFontStyle(uiText);
                   ctx.textBaseline = uiText.getBaseline();
                   ctx.textAlign = uiText.getAlign();
                   ctx.direction = uiText.getDirection();
