@@ -1,7 +1,7 @@
 import { none, Option, some } from "@aicacia/core";
-import { DefaultManager } from "../../DefaultManager";
+import { DefaultDescriptorManager } from "../../DefaultDescriptorManager";
 
-export class Camera2DManager extends DefaultManager<Camera2D> {
+export class Camera2DManager extends DefaultDescriptorManager<Camera2D> {
   private active: Option<Camera2D> = none();
 
   setActive(camera: Camera2D) {
@@ -45,16 +45,6 @@ export class Camera2DManager extends DefaultManager<Camera2D> {
       }
     });
 
-    return this;
-  }
-
-  onInit() {
-    return this;
-  }
-  onUpdate() {
-    return this;
-  }
-  onAfterUpdate() {
     return this;
   }
 }

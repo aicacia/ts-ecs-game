@@ -1,6 +1,5 @@
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { TransformComponent } from "../TransformComponent";
-import { Transform3DManager } from "./Transform3DManager";
 import { mat2dFromMat4 } from "../../math";
 
 const MAT4_0 = mat4.create(),
@@ -9,8 +8,6 @@ const MAT4_0 = mat4.create(),
   VEC3_UP = vec3.fromValues(0.0, 0.0, 1.0);
 
 export class Transform3D extends TransformComponent {
-  static Manager = Transform3DManager;
-
   private localPosition: vec3 = vec3.create();
   private localScale: vec3 = vec3.fromValues(1, 1, 1);
   private localRotation: quat = quat.identity(quat.create());

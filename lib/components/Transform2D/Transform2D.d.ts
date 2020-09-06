@@ -1,8 +1,6 @@
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { TransformComponent } from "../TransformComponent";
-import { Transform2DManager } from "./Transform2DManager";
 export declare class Transform2D extends TransformComponent {
-    static Manager: typeof Transform2DManager;
     private localPosition;
     private localScale;
     private localRotation;

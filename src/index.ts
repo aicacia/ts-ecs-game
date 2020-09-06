@@ -2,13 +2,12 @@ export {
   Transform2D,
   Camera2D,
   Camera2DManager,
-  Transform2DManager,
   Camera2DControl,
   Camera2DControlManager,
   Camera3D,
   Camera3DManager,
   Transform3D,
-  Transform3DManager,
+  TransformComponentManager,
   Sprite,
   SpriteManager,
   SpriteClip,
@@ -72,6 +71,7 @@ export {
 } from "./math";
 export { Canvas } from "./Canvas";
 export { Component } from "./Component";
+export { DefaultDescriptorManager } from "./DefaultDescriptorManager";
 export { DefaultManager } from "./DefaultManager";
 export { Entity } from "./Entity";
 export { IRequirement } from "./IRequirement";

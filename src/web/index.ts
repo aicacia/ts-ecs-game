@@ -12,7 +12,7 @@ export {
   CtxRenderer,
   CtxRendererHandler,
   CtxSpriteRendererHandler,
-  CtxTransform2DRendererHandler,
+  CtxTransformRendererHandler,
   CtxUIRendererHandler,
 } from "./plugins";
 export { WebCanvas } from "./WebCanvas";

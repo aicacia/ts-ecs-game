@@ -6,15 +6,12 @@ import {
   mat4FromMat2d,
 } from "../../math";
 import { TransformComponent } from "../TransformComponent";
-import { Transform2DManager } from "./Transform2DManager";
 
 const VEC2_0 = vec2.create(),
   VEC3_UP = vec3.fromValues(0, 0, 1),
   MAT2_0 = mat2d.create();
 
 export class Transform2D extends TransformComponent {
-  static Manager = Transform2DManager;
-
   private localPosition: vec2 = vec2.create();
   private localScale: vec2 = vec2.fromValues(1, 1);
   private localRotation = 0.0;

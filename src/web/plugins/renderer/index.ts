@@ -1,6 +1,6 @@
 export {
   CtxSpriteRendererHandler,
-  CtxTransform2DRendererHandler,
+  CtxTransformRendererHandler,
   CtxUIRendererHandler,
 } from "./2d";
 export { CtxRenderer } from "./CtxRenderer";

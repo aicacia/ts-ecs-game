@@ -1,4 +1,4 @@
 import { CtxRendererHandler } from "../CtxRendererHandler";
-export declare class CtxTransform2DRendererHandler extends CtxRendererHandler {
+export declare class CtxTransformRendererHandler extends CtxRendererHandler {
     onRender(): this;
 }

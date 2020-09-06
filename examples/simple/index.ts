@@ -20,7 +20,7 @@ import {
   WebCanvas,
   CtxRenderer,
   CtxSpriteRendererHandler,
-  CtxTransform2DRendererHandler,
+  CtxTransformRendererHandler,
   CtxUIRendererHandler,
   WebImageAsset,
   WebEventListener,
@@ -98,7 +98,7 @@ function onLoad() {
           canvas,
           canvas.getElement().getContext("2d")
         ).addRendererHandler(
-          new CtxTransform2DRendererHandler(),
+          new CtxTransformRendererHandler(),
           new CtxSpriteRendererHandler(),
           new CtxUIRendererHandler()
         ),

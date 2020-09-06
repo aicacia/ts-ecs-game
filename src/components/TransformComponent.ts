@@ -2,11 +2,14 @@ import { Option } from "@aicacia/core";
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { Entity } from "../Entity";
 import { RenderableComponent } from "./RenderableComponent";
+import { TransformComponentManager } from "./TransformComponentManager";
 
 const VEC2_0 = vec2.create(),
   VEC3_0 = vec3.create();
 
 export abstract class TransformComponent extends RenderableComponent {
+  static Manager = TransformComponentManager;
+
   static getParentTransform(entity: Entity): Option<TransformComponent> {
     return entity.getParent().flatMap(TransformComponent.getTransform);
   }

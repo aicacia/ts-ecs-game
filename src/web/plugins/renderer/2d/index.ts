@@ -1,3 +1,3 @@
-export { CtxTransform2DRendererHandler } from "./CtxTransform2DRendererHandler";
+export { CtxTransformRendererHandler } from "./CtxTransformRendererHandler";
 export { CtxSpriteRendererHandler } from "./CtxSpriteRendererHandler";
 export { CtxUIRendererHandler } from "./CtxUIRendererHandler";
