@@ -1,5 +1,6 @@
 export { EventListener } from "./EventListener";
 export { Input } from "./Input";
+export { InputAxis } from "./InputAxis";
 export { InputButton } from "./InputButton";
 export { InputEvent } from "./InputEvent";
 export { InputHandler } from "./InputHandler";
