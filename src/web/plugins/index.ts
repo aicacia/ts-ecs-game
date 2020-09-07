@@ -3,7 +3,7 @@ export { WebEventListener } from "./input/WebEventListener";
 export {
   CtxRenderer,
   CtxRendererHandler,
-  CtxSpriteRendererHandler,
-  CtxTransformRendererHandler,
-  CtxUIRendererHandler,
+  SpriteCtxRendererHandler,
+  TransformCtxRendererHandler,
+  UICtxRendererHandler,
 } from "./renderer";

@@ -19,9 +19,9 @@ import {
 import {
   WebCanvas,
   CtxRenderer,
-  CtxSpriteRendererHandler,
-  CtxTransformRendererHandler,
-  CtxUIRendererHandler,
+  SpriteCtxRendererHandler,
+  TransformCtxRendererHandler,
+  UICtxRendererHandler,
   WebImageAsset,
   WebEventListener,
 } from "../../src/web";
@@ -98,9 +98,9 @@ function onLoad() {
           canvas,
           canvas.getElement().getContext("2d")
         ).addRendererHandler(
-          new CtxTransformRendererHandler(),
-          new CtxSpriteRendererHandler(),
-          new CtxUIRendererHandler()
+          new TransformCtxRendererHandler(),
+          new SpriteCtxRendererHandler(),
+          new UICtxRendererHandler()
         ),
         // Required by many Components and plugins
         new Time(),

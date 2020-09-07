@@ -4,7 +4,7 @@ import { mat2d } from "gl-matrix";
 
 const MAT2D_0 = mat2d.create();
 
-export class CtxTransformRendererHandler extends CtxRendererHandler {
+export class TransformCtxRendererHandler extends CtxRendererHandler {
   onRender() {
     this.getManager(TransformComponentManager).ifSome(
       (transformComponentManager) => {

@@ -10,7 +10,7 @@ function getCtxFontStyle(uiText: UIText) {
   return `${uiText.getSize()}px ${uiText.getFont()}`;
 }
 
-export class CtxUIRendererHandler extends CtxRendererHandler {
+export class UICtxRendererHandler extends CtxRendererHandler {
   onRender() {
     this.getManager(UIElementManager).ifSome((uiElementManager) => {
       const renderer = this.getRequiredRenderer();

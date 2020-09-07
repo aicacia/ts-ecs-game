@@ -6,7 +6,7 @@ import { WebImageAsset } from "../../assets/WebImageAsset";
 
 const MAT2_0 = mat2d.create();
 
-export class CtxSpriteRendererHandler extends CtxRendererHandler {
+export class SpriteCtxRendererHandler extends CtxRendererHandler {
   onRender() {
     this.getManager(SpriteManager).ifSome((spriteManager) => {
       const renderer = this.getRequiredRenderer();

@@ -11,8 +11,8 @@ export {
   WebImageAsset,
   CtxRenderer,
   CtxRendererHandler,
-  CtxSpriteRendererHandler,
-  CtxTransformRendererHandler,
-  CtxUIRendererHandler,
+  SpriteCtxRendererHandler,
+  TransformCtxRendererHandler,
+  UICtxRendererHandler,
 } from "./plugins";
 export { WebCanvas } from "./WebCanvas";
