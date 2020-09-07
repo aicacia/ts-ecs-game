@@ -46,6 +46,13 @@ export class Entity extends EventEmitter {
     tags.forEach((tag) => this.tags.add(tag));
     return this;
   }
+  removeTag(...tags: string[]) {
+    return this.removeTags(tags);
+  }
+  removeTags(tags: string[]) {
+    tags.forEach((tag) => this.tags.delete(tag));
+    return this;
+  }
   addTag(...tags: string[]) {
     return this.addTags(tags);
   }

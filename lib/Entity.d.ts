@@ -22,6 +22,8 @@ export declare class Entity extends EventEmitter {
     hasTag(...tags: string[]): boolean;
     getTags(): Set<string>;
     addTags(tags: string[]): this;
+    removeTag(...tags: string[]): this;
+    removeTags(tags: string[]): this;
     addTag(...tags: string[]): this;
     getDepth(): number;
     getRoot(): Entity;
