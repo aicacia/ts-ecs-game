@@ -1,8 +1,8 @@
 import { RenderableComponent } from "./RenderableComponent";
-export declare type RunOnUpdateFn = () => void;
+import { RunOnUpdateFn } from "../RunOnUpdateFn";
 export declare abstract class RunOnUpdateComponent extends RenderableComponent {
     private queue;
     private swap;
-    enqueue(...events: RunOnUpdateFn[]): this;
+    runOnUpdate(...fns: RunOnUpdateFn<this>[]): this;
     onUpdate(): this;
 }

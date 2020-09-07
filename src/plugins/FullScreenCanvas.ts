@@ -20,21 +20,21 @@ export class FullScreenCanvas extends RunOnUpdatePlugin {
   }
 
   onAdd() {
-    this.getRequiredPlugin(Input).on("resize", this.onResize);
+    this.getRequiredPlugin(Input).on("resize", this.onResizeEventListener);
     return this;
   }
 
   onRemove() {
-    this.getRequiredPlugin(Input).off("resize", this.onResize);
+    this.getRequiredPlugin(Input).off("resize", this.onResizeEventListener);
     return this;
   }
 
-  private onResize = () => {
-    this.enqueue(this.runOnResizeFn);
+  private onResizeEventListener = () => {
+    this.runOnUpdate(this.onResize);
   };
 
-  private runOnResizeFn = () => {
+  private onResize() {
     const input = this.getRequiredPlugin(Input);
     this.canvas.set(input.getValue("width"), input.getValue("height"));
-  };
+  }
 }

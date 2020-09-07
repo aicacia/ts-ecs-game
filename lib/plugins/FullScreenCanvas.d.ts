@@ -9,6 +9,6 @@ export declare class FullScreenCanvas extends RunOnUpdatePlugin {
     getCanvas(): Canvas;
     onAdd(): this;
     onRemove(): this;
+    private onResizeEventListener;
     private onResize;
-    private runOnResizeFn;
 }

@@ -117,3 +117,18 @@ tape("Scene to/from JSON", (assert: tape.Test) => {
 
   assert.end();
 });
+
+tape("Scene find(All)", (assert: tape.Test) => {
+  const scene = new Scene().addEntity(
+    new Entity()
+      .addTag("parent")
+      .addChild(new Entity().addTag("child"), new Entity().addTag("child"))
+  );
+
+  scene.maintain();
+
+  assert.equals(scene.findAllWithTag("parent").length, 1);
+  assert.equals(scene.findAllWithTag("child").length, 2);
+
+  assert.end();
+});

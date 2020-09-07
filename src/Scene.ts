@@ -95,13 +95,13 @@ export class Scene extends EventEmitter {
     return none();
   }
   findWithTag(...tags: string[]) {
-    return this.find((entity) => entity.hasTags(tags));
+    return this.find((entity) => entity.hasTags(tags), true);
   }
   findWithTags(tags: string[]) {
     return this.findWithTag(...tags);
   }
   findWithName(name: string) {
-    return this.find((entity) => entity.getName() === name);
+    return this.find((entity) => entity.getName() === name, true);
   }
 
   findAll(fn: (entity: Entity) => boolean, recur = true): Entity[] {
@@ -119,13 +119,13 @@ export class Scene extends EventEmitter {
     return matching;
   }
   findAllWithTag(...tags: string[]) {
-    return this.findAll((entity) => entity.hasTags(tags));
+    return this.findAll((entity) => entity.hasTags(tags), true);
   }
   findAllWithTags(tags: string[]) {
     return this.findAllWithTag(...tags);
   }
   findAllWithName(name: string) {
-    return this.findAll((entity) => entity.getName() === name);
+    return this.findAll((entity) => entity.getName() === name, true);
   }
 
   getEntities() {

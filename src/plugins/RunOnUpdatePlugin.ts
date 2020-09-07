@@ -1,13 +1,12 @@
 import { Plugin } from "../Plugin";
-
-export type RunOnUpdateFn = () => void;
+import { RunOnUpdateFn } from "../RunOnUpdateFn";
 
 export abstract class RunOnUpdatePlugin extends Plugin {
-  private queue: RunOnUpdateFn[] = [];
-  private swap: RunOnUpdateFn[] = [];
+  private queue: RunOnUpdateFn<this>[] = [];
+  private swap: RunOnUpdateFn<this>[] = [];
 
-  enqueue(...events: RunOnUpdateFn[]) {
-    this.queue.push(...events);
+  runOnUpdate(...fns: RunOnUpdateFn<this>[]) {
+    this.queue.push(...fns);
     return this;
   }
 
@@ -18,7 +17,7 @@ export abstract class RunOnUpdatePlugin extends Plugin {
       this.queue = this.swap;
       this.swap = queue;
 
-      queue.forEach((event) => event());
+      queue.forEach((fn) => fn.call(this));
       this.swap.length = 0;
     }
     return this;

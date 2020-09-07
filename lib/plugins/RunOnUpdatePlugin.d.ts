@@ -1,8 +1,8 @@
 import { Plugin } from "../Plugin";
-export declare type RunOnUpdateFn = () => void;
+import { RunOnUpdateFn } from "../RunOnUpdateFn";
 export declare abstract class RunOnUpdatePlugin extends Plugin {
     private queue;
     private swap;
-    enqueue(...events: RunOnUpdateFn[]): this;
+    runOnUpdate(...fns: RunOnUpdateFn<this>[]): this;
     onUpdate(): this;
 }

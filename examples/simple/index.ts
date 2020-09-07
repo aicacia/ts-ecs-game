@@ -5,7 +5,6 @@ import {
   Camera2DControl,
   Camera2DManager,
   Component,
-  DefaultManager,
   Entity,
   FullScreenCanvas,
   Input,

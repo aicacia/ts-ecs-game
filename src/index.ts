@@ -79,4 +79,5 @@ export { Loop } from "./Loop";
 export { Manager } from "./Manager";
 export { Plugin } from "./Plugin";
 export { Pool } from "./Pool";
+export { RunOnUpdateFn } from "./RunOnUpdateFn";
 export { Scene } from "./Scene";
