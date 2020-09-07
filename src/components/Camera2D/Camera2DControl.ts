@@ -52,50 +52,45 @@ export class Camera2DControl extends Component {
   }
 
   onUpdate() {
-    if (this.enabled) {
-      const input = this.getRequiredPlugin(Input),
-        transform = TransformComponent.getRequiredTransform(
-          this.getRequiredEntity()
-        ),
-        scale = transform.getLocalScale2(VEC2_1),
-        camera = this.getRequiredComponent(Camera2D),
-        worldMouse = camera.toRelative(
-          VEC2_0,
-          vec2.set(
-            VEC2_0,
-            -input.getValue("mouse-x"),
-            -input.getValue("mouse-y")
-          )
-        );
+    const input = this.getRequiredPlugin(Input),
+      transform = TransformComponent.getRequiredTransform(
+        this.getRequiredEntity()
+      ),
+      scale = transform.getLocalScale2(VEC2_1),
+      camera = this.getRequiredComponent(Camera2D),
+      worldMouse = camera.toRelative(
+        VEC2_0,
+        vec2.set(VEC2_0, -input.getValue("mouse-x"), -input.getValue("mouse-y"))
+      );
 
-      if (this.dragging) {
-        vec2.sub(this.offset, worldMouse, this.lastMouse);
-        vec2.scale(this.offset, this.offset, this.panSpeed);
-        vec2.mul(this.offset, this.offset, scale);
-        vec2.rotate(this.offset, this.offset, ZERO, transform.getRotationZ());
-        transform.translate2(this.offset);
-      }
-
-      if (input.isDown("mouse-1")) {
-        this.dragging = true;
-      }
-      if (input.isUp("mouse-1")) {
-        this.dragging = false;
-      }
-
-      const mouseWheel = input.getValue("mouse-wheel"),
-        zoomSpeed = vec2.set(VEC2_2, this.zoomSpeed, this.zoomSpeed);
-
-      if (mouseWheel > 0) {
-        vec2.add(scale, scale, zoomSpeed);
-      } else if (mouseWheel < 0) {
-        vec2.sub(scale, scale, zoomSpeed);
-        vec2.max(scale, MIN_SCALE, scale);
-      }
-
-      transform.setLocalScale2(scale);
-      vec2.copy(this.lastMouse, worldMouse);
+    if (this.dragging) {
+      vec2.sub(this.offset, worldMouse, this.lastMouse);
+      vec2.scale(this.offset, this.offset, this.panSpeed);
+      vec2.mul(this.offset, this.offset, scale);
+      vec2.rotate(this.offset, this.offset, ZERO, transform.getRotationZ());
+      this.enabled && transform.translate2(this.offset);
     }
+
+    if (input.isDown("mouse-1")) {
+      this.dragging = true;
+    }
+    if (input.isUp("mouse-1")) {
+      this.dragging = false;
+    }
+
+    const mouseWheel = input.getValue("mouse-wheel"),
+      zoomSpeed = vec2.set(VEC2_2, this.zoomSpeed, this.zoomSpeed);
+
+    if (mouseWheel > 0) {
+      vec2.add(scale, scale, zoomSpeed);
+    } else if (mouseWheel < 0) {
+      vec2.sub(scale, scale, zoomSpeed);
+      vec2.max(scale, MIN_SCALE, scale);
+    }
+
+    this.enabled && transform.setLocalScale2(scale);
+    vec2.copy(this.lastMouse, worldMouse);
+
     return this;
   }
 }
