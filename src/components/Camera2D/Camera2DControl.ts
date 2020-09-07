@@ -73,8 +73,7 @@ export class Camera2DControl extends Component {
 
     if (input.isDown("mouse-1")) {
       this.dragging = true;
-    }
-    if (input.isUp("mouse-1")) {
+    } else {
       this.dragging = false;
     }
 

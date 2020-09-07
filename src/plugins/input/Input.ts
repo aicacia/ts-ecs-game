@@ -147,14 +147,15 @@ export class Input extends Plugin {
   }
 
   getOrCreateButton(name: string) {
-    let button = this.buttons[name];
+    const button = this.buttons[name];
 
-    if (!button) {
-      button = new InputButton(name);
-      this.buttons[name] = button;
+    if (button) {
+      return button;
+    } else {
+      const newButton = new InputButton(name);
+      this.buttons[name] = newButton;
+      return newButton;
     }
-
-    return button;
   }
   getButton(name: string) {
     return Option.from(this.buttons[name]);
@@ -165,7 +166,7 @@ export class Input extends Plugin {
       .unwrapOr(0.0);
   }
 
-  isDown(name: string) {
+  isDownCurrentFrame(name: string) {
     return this.getButton(name)
       .map(
         (button) =>
@@ -173,13 +174,20 @@ export class Input extends Plugin {
       )
       .unwrapOr(false);
   }
-  isUp(name: string) {
+  isDown(name: string) {
+    return !this.isUp(name);
+  }
+
+  isUpCurrentFrame(name: string) {
     return this.getButton(name)
       .map(
         (button) =>
           button.getFrameUp() === this.getRequiredPlugin(Time).getFrame()
       )
       .unwrapOr(false);
+  }
+  isUp(name: string) {
+    return this.getValue(name) == 0.0;
   }
 
   onUpdate() {

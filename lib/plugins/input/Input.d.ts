@@ -38,7 +38,9 @@ export declare class Input extends Plugin {
     getOrCreateButton(name: string): InputButton;
     getButton(name: string): Option<InputButton>;
     getValue(name: string): number;
+    isDownCurrentFrame(name: string): boolean;
     isDown(name: string): boolean;
+    isUpCurrentFrame(name: string): boolean;
     isUp(name: string): boolean;
     onUpdate(): this;
     onAfterUpdate(): this;
