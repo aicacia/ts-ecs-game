@@ -78,9 +78,7 @@ export class Scene extends EventEmitter {
   }
 
   find(fn: (entity: Entity) => boolean, recur = true): Option<Entity> {
-    const entities = this.getEntities();
-
-    for (const entity of entities) {
+    for (const entity of this.entities) {
       if (fn(entity)) {
         return some(entity);
       } else if (recur) {
@@ -105,10 +103,9 @@ export class Scene extends EventEmitter {
   }
 
   findAll(fn: (entity: Entity) => boolean, recur = true): Entity[] {
-    const entities = this.getEntities(),
-      matching = [];
+    const matching = [];
 
-    for (const entity of entities) {
+    for (const entity of this.entities) {
       if (fn(entity)) {
         matching.push(entity);
       } else if (recur) {
@@ -128,13 +125,14 @@ export class Scene extends EventEmitter {
     return this.findAll((entity) => entity.getName() === name, true);
   }
 
-  getEntities() {
+  getEntities(): readonly Entity[] {
     return this.entities;
   }
 
-  getManagers() {
+  getManagers(): readonly Manager[] {
     return this.managers;
   }
+
   getManager<M extends Manager>(Manager: IConstructor<M>): Option<M> {
     return Option.from(this.managerMap.get(Manager)) as Option<M>;
   }
@@ -142,9 +140,10 @@ export class Scene extends EventEmitter {
     return this.getManager(Manager).expect(`Scene required ${Manager} Manager`);
   }
 
-  getPlugins() {
+  getPlugins(): readonly Plugin[] {
     return this.plugins;
   }
+
   hasPlugin<P extends Plugin>(Plugin: IConstructor<P>) {
     return this.getPlugin(Plugin).isSome();
   }

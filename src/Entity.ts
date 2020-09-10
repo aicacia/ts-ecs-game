@@ -175,7 +175,7 @@ export class Entity extends EventEmitter {
     });
   }
 
-  getComponents() {
+  getComponents(): readonly Component[] {
     return this.components;
   }
   hasComponent<C extends Component = Component>(Component: IConstructor<C>) {
@@ -236,7 +236,7 @@ export class Entity extends EventEmitter {
       this.getComponents().forEach((component) => component.onDetach());
     });
   }
-  getChildren() {
+  getChildren(): readonly Entity[] {
     return this.children;
   }
   addChildren(children: Entity[]) {

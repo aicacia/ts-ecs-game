@@ -14,11 +14,11 @@ export declare class Assets extends Plugin {
     getLoadedAssets(): readonly Asset[];
     getLoadingAssets(): Asset[];
     getUnloadingAssets(): Asset[];
-    getUnloadedAssets(): ReadonlyArray<Asset>;
-    addAsset(...assets: readonly Asset[]): this;
-    addAssets(assets: readonly Asset[]): this;
-    removeAsset(...assets: readonly Asset[]): this;
-    removeAssets(assets: readonly Asset[]): this;
+    getUnloadedAssets(): readonly Asset[];
+    addAsset(...assets: Asset[]): this;
+    addAssets(assets: Asset[]): this;
+    removeAsset(...assets: Asset[]): this;
+    removeAssets(assets: Asset[]): this;
     loadAll(): Promise<void[]>;
     loadAllInBackground(): this;
     loadAssetInBackground(...assets: readonly Asset[]): this;

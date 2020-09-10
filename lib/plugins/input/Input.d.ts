@@ -18,9 +18,8 @@ export declare class Input extends Plugin {
     addAxes(...axes: InputAxis[]): this;
     addAxis(...axes: InputAxis[]): this;
     getAxis(name: string): Option<InputAxis>;
-    getAxisValue(name: string): Option<number>;
+    getAxisValue(name: string): number;
     getRequiredAxis(name: string): InputAxis;
-    getRequiredAxisValue(name: string): number;
     getInputHandler<I extends InputHandler = InputHandler>(InputHandler: IConstructor<I>): Option<InputHandler<Input>>;
     getRequiredInputHandler<I extends InputHandler = InputHandler>(InputHandler: IConstructor<I>): InputHandler<Input>;
     getEventListener<I extends EventListener = EventListener>(EventListener: IConstructor<I>): Option<EventListener<Input>>;
@@ -37,7 +36,7 @@ export declare class Input extends Plugin {
     removeEventListener(...eventListeners: IConstructor<EventListener>[]): this;
     getOrCreateButton(name: string): InputButton;
     getButton(name: string): Option<InputButton>;
-    getValue(name: string): number;
+    getButtonValue(name: string): number;
     isDownCurrentFrame(name: string): boolean;
     isDown(name: string): boolean;
     isUpCurrentFrame(name: string): boolean;

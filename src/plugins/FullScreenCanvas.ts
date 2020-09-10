@@ -35,6 +35,9 @@ export class FullScreenCanvas extends RunOnUpdatePlugin {
 
   private onResize() {
     const input = this.getRequiredPlugin(Input);
-    this.canvas.set(input.getValue("width"), input.getValue("height"));
+    this.canvas.set(
+      input.getButtonValue("width"),
+      input.getButtonValue("height")
+    );
   }
 }

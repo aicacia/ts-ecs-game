@@ -4,7 +4,7 @@ export declare abstract class Renderer extends Plugin {
     static pluginPriority: number;
     private rendererHandlers;
     private rendererHandlerMap;
-    getRendererHandlers(): RendererHandler<Renderer>[];
+    getRendererHandlers(): readonly RendererHandler[];
     getRendererHandler<R extends RendererHandler>(RendererHandler: IConstructor<R>): Option<RendererHandler<Renderer>>;
     addRendererHandlers(...rendererHandlers: RendererHandler[]): this;
     addRendererHandler(...rendererHandlers: RendererHandler[]): this;

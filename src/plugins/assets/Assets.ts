@@ -39,22 +39,22 @@ export class Assets extends Plugin {
   getUnloadingAssets() {
     return Array.from(this.unloadingPromises.keys());
   }
-  getUnloadedAssets(): ReadonlyArray<Asset> {
+  getUnloadedAssets(): readonly Asset[] {
     return this.assets.filter((asset) => !asset.isLoaded());
   }
 
-  addAsset(...assets: readonly Asset[]) {
+  addAsset(...assets: Asset[]) {
     return this.addAssets(assets);
   }
-  addAssets(assets: readonly Asset[]) {
+  addAssets(assets: Asset[]) {
     assets.forEach((asset) => this._addAsset(asset));
     return this;
   }
 
-  removeAsset(...assets: readonly Asset[]) {
+  removeAsset(...assets: Asset[]) {
     return this.removeAssets(assets);
   }
-  removeAssets(assets: readonly Asset[]) {
+  removeAssets(assets: Asset[]) {
     assets.forEach((asset) => this._removeAsset(asset));
     return this;
   }

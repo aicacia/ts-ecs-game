@@ -10,7 +10,7 @@ export abstract class Renderer extends Plugin {
     RendererHandler
   > = new Map();
 
-  getRendererHandlers() {
+  getRendererHandlers(): readonly RendererHandler[] {
     return this.rendererHandlers;
   }
   getRendererHandler<R extends RendererHandler>(

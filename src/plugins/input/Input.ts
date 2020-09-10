@@ -26,8 +26,8 @@ export class Input extends Plugin {
     EventListener
   > = new Map();
 
-  private buttons: { [key: string]: InputButton } = {};
-  private axes: { [key: string]: InputAxis } = {};
+  private buttons: Record<string, InputButton> = {};
+  private axes: Record<string, InputAxis> = {};
 
   constructor() {
     super();
@@ -60,16 +60,13 @@ export class Input extends Plugin {
     return Option.from(this.axes[name]);
   }
   getAxisValue(name: string) {
-    return this.getAxis(name).map((axis) => axis.getValue());
+    return this.getAxis(name)
+      .map((axis) => axis.getValue())
+      .unwrapOr(0.0);
   }
 
   getRequiredAxis(name: string) {
     return this.getAxis(name).expect(`Failed to get Required Axis ${name}`);
-  }
-  getRequiredAxisValue(name: string) {
-    return this.getAxisValue(name).expect(
-      `Failed to get Required Axis value for ${name}`
-    );
   }
 
   getInputHandler<I extends InputHandler = InputHandler>(
@@ -160,7 +157,7 @@ export class Input extends Plugin {
   getButton(name: string) {
     return Option.from(this.buttons[name]);
   }
-  getValue(name: string) {
+  getButtonValue(name: string) {
     return this.getButton(name)
       .map((button) => button.getValue())
       .unwrapOr(0.0);
@@ -187,21 +184,21 @@ export class Input extends Plugin {
       .unwrapOr(false);
   }
   isUp(name: string) {
-    return this.getValue(name) == 0.0;
+    return this.getButtonValue(name) == 0.0;
   }
 
   onUpdate() {
     const time = this.getRequiredPlugin(Time);
-    this.updateAxes(time);
+    this.eventListeners.forEach((eventListener) =>
+      eventListener.onUpdate(time)
+    );
     this.inputHandlers.forEach((inputHandler) => {
       this.events.forEach((event) => inputHandler.onEvent(time, event));
       inputHandler.onUpdate(time);
     });
-    this.events.forEach((event) => {
-      this.emit(event.type, event);
-    });
+    this.events.forEach((event) => this.emit(event.type, event));
     this.eventListeners.forEach((eventListener) => {
-      for (let i = 0, il = this.events.length; i < il; i++) {
+      for (let i = 0; i < this.events.length; i++) {
         const event = this.events[i];
 
         if (eventListener.dequeueEvent(event)) {
@@ -211,6 +208,7 @@ export class Input extends Plugin {
       }
     });
     this.events.length = 0;
+    this.updateAxes(time);
     return this;
   }
 
@@ -243,8 +241,8 @@ export class Input extends Plugin {
   }
 
   private updateAxis(axis: InputAxis, time: Time) {
-    const posValue = this.getValue(axis.getPosButton()),
-      negValue = this.getValue(axis.getNegButton());
+    const posValue = this.getButtonValue(axis.getPosButton()),
+      negValue = this.getButtonValue(axis.getNegButton());
 
     axis.UNSAFE_update(
       time,

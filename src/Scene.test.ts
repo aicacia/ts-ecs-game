@@ -97,8 +97,6 @@ tape("Scene to/from JSON", (assert: tape.Test) => {
   scene.clear();
   scene.maintain();
 
-  console.log(scene);
-
   assert.deepEqual(json, {
     name: "",
     entities: [

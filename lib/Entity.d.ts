@@ -46,7 +46,7 @@ export declare class Entity extends EventEmitter {
     findAllWithTags(tags: string[]): Entity[];
     findAllWithComponent<C extends Component>(Component: IConstructor<C>, recur?: boolean): Entity[];
     findParent(fn: (entity: Entity) => boolean): Option<Entity>;
-    getComponents(): Component[];
+    getComponents(): readonly Component[];
     hasComponent<C extends Component = Component>(Component: IConstructor<C>): boolean;
     getComponent<C extends Component = Component>(Component: IConstructor<C>): Option<C>;
     getRequiredComponent<C extends Component = Component>(Component: IConstructor<C>): C;
@@ -58,7 +58,7 @@ export declare class Entity extends EventEmitter {
     removeComponent(...components: IConstructor<Component>[]): this;
     removeFromScene(): void;
     detach(): void;
-    getChildren(): Entity[];
+    getChildren(): readonly Entity[];
     addChildren(children: Entity[]): this;
     addChild(...children: Entity[]): this;
     removeChildren(...children: Entity[]): this;

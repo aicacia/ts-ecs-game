@@ -32,11 +32,11 @@ export declare class Scene extends EventEmitter {
     findAllWithTag(...tags: string[]): Entity[];
     findAllWithTags(tags: string[]): Entity[];
     findAllWithName(name: string): Entity[];
-    getEntities(): Entity[];
-    getManagers(): Manager<Component>[];
+    getEntities(): readonly Entity[];
+    getManagers(): readonly Manager[];
     getManager<M extends Manager>(Manager: IConstructor<M>): Option<M>;
     getRequiredManager<M extends Manager>(Manager: IConstructor<M>): M;
-    getPlugins(): Plugin[];
+    getPlugins(): readonly Plugin[];
     hasPlugin<P extends Plugin>(Plugin: IConstructor<P>): boolean;
     getPlugin<P extends Plugin>(Plugin: IConstructor<P>): Option<P>;
     getRequiredPlugin<P extends Plugin>(Plugin: IConstructor<P>): P;
