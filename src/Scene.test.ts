@@ -84,7 +84,10 @@ tape("Scene to/from JSON", (assert: tape.Test) => {
     new Entity()
       .addTag("parent")
       .addComponent(new Test())
-      .addChild(new Entity().addTag("child").addComponent(new Test()))
+      .addChild(
+        new Entity().addTag("child").addComponent(new Test()),
+        new Entity().addTag("child").addComponent(new Test())
+      )
   );
 
   scene.maintain();
@@ -94,6 +97,8 @@ tape("Scene to/from JSON", (assert: tape.Test) => {
   scene.clear();
   scene.maintain();
 
+  console.log(scene);
+
   assert.deepEqual(json, {
     name: "",
     entities: [
@@ -102,6 +107,13 @@ tape("Scene to/from JSON", (assert: tape.Test) => {
         depth: 0,
         tags: ["parent"],
         children: [
+          {
+            name: "",
+            depth: 1,
+            tags: ["child"],
+            children: [],
+            components: [{ type: "Test", position: 0, globalPosition: 0 }],
+          },
           {
             name: "",
             depth: 1,

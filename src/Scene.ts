@@ -219,7 +219,10 @@ export class Scene extends EventEmitter {
       entity.getParent().map((parent) => parent.removeChild(entity));
     }
 
-    entity.getChildren().forEach((child) => this.removeEntityNow(child, true));
+    entity
+      .getChildren()
+      .slice()
+      .forEach((child) => this.removeEntityNow(child, true));
     this.emit("remove-entity", entity);
 
     return this;
