@@ -1,7 +1,6 @@
-/// <reference types="node" />
 import { Option, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
-export declare abstract class Plugin extends EventEmitter {
+import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
+export declare abstract class Plugin extends ToFromJSONEventEmitter {
     static pluginPriority: number;
     static requiredPlugins: IRequirement<Plugin>[];
     static getPluginPriority(): number;

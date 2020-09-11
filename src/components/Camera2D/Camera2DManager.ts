@@ -11,7 +11,7 @@ export class Camera2DManager extends DefaultDescriptorManager<Camera2D> {
         .map((manager) => manager === this)
         .unwrapOr(false)
     ) {
-      this.active = some(camera);
+      this.active.replace(camera);
     } else {
       throw new Error(
         "Camera2DManager.setActive(camera: Camera2D): cannot set active if camera is not in manager"
@@ -30,7 +30,7 @@ export class Camera2DManager extends DefaultDescriptorManager<Camera2D> {
     super.addComponent(camera);
 
     if (this.active.isNone()) {
-      this.active = some(camera);
+      this.active.replace(camera);
     }
 
     return this;
@@ -41,7 +41,7 @@ export class Camera2DManager extends DefaultDescriptorManager<Camera2D> {
 
     this.active.map((active) => {
       if (active === camera) {
-        this.active = none();
+        this.active.clear();
       }
     });
 

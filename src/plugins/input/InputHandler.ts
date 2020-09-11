@@ -11,11 +11,11 @@ export abstract class InputHandler<
   }
 
   UNSAFE_setInput(input: I) {
-    this.input = some(input);
+    this.input.replace(input);
     return this;
   }
   UNSAFE_removeInput() {
-    this.input = none();
+    this.input.clear();
     return this;
   }
   getInput() {

@@ -76,9 +76,9 @@ export class Sprite extends RenderableComponent {
   }
   setLayer(layer: number) {
     const managerOption = this.getManager();
-    managerOption.map((manager) => manager.removeComponent(this));
+    managerOption.ifSome((manager) => manager.removeComponent(this));
     this.layer = layer | 0;
-    managerOption.map((manager) => manager.addComponent(this));
+    managerOption.ifSome((manager) => manager.addComponent(this));
     return this;
   }
 

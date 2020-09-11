@@ -202,41 +202,17 @@ export class Scene extends EventEmitter {
         "Scene.removeEntityNow called while updating, use force to suppress this Error"
       );
     }
-
-    entity
-      .getComponents()
-      .forEach((component) => this.UNSAFE_removeComponent(component));
-
-    if (entity.isRoot()) {
-      const index = this.entities.indexOf(entity);
-
-      if (index !== -1) {
-        this.entities.splice(index, 1);
-        entity.UNSAFE_removeScene();
-      }
-    } else {
-      entity.getParent().map((parent) => parent.removeChild(entity));
-    }
-
-    entity
-      .getChildren()
-      .slice()
-      .forEach((child) => this.removeEntityNow(child, true));
-    this.emit("remove-entity", entity);
-
-    return this;
+    return this._removeEntityNow(entity);
   }
 
   UNSAFE_addComponent(component: Component) {
     const Manager: IConstructor<Manager> = component.getManagerConstructor();
 
-    let managerOption = this.getManager(Manager),
-      manager: Manager;
+    const managerOption = this.getManager(Manager);
+    let manager: Manager;
 
     if (managerOption.isNone()) {
       manager = new Manager();
-
-      managerOption = some(manager);
 
       manager.UNSAFE_setScene(this);
 
@@ -284,7 +260,19 @@ export class Scene extends EventEmitter {
     return this;
   }
   private _addEntityNow(entity: Entity, isChild: boolean) {
-    entity.getScene().map((scene) => scene.removeEntityNow(entity, true));
+    const entitySceneOption = entity.getScene();
+
+    if (entitySceneOption.isSome()) {
+      const entityScene = entitySceneOption.unwrap();
+
+      if (entityScene === this) {
+        throw new Error(
+          "Scene trying to add an Entity that is already a member of the Scene"
+        );
+      } else {
+        entityScene.removeEntityNow(entity, true);
+      }
+    }
 
     if (entity.isRoot()) {
       this.entities.push(entity);
@@ -298,7 +286,7 @@ export class Scene extends EventEmitter {
     entity
       .getComponents()
       .forEach((component) => this.UNSAFE_addComponent(component));
-    entity.getChildren().forEach((child) => this._addEntityNow(child, true));
+    entity.forEachChild((child) => this._addEntityNow(child, true), false);
 
     if (process.env.NODE_ENV !== "production") {
       entity.validateRequirements();
@@ -309,11 +297,49 @@ export class Scene extends EventEmitter {
     return this;
   }
 
-  private _addPlugin<P extends Plugin>(plugin: P) {
-    const Plugin: IConstructor<Plugin> = plugin.getConstructor(),
-      index = this.plugins.indexOf(plugin);
+  private _removeEntityNow(entity: Entity) {
+    const entitySceneOption = entity.getScene();
 
-    if (index === -1) {
+    if (entitySceneOption.isSome()) {
+      const entityScene = entitySceneOption.unwrap();
+
+      if (entityScene !== this) {
+        throw new Error(
+          "Scene trying to remove an Entity that is not a member of the Scene"
+        );
+      }
+    }
+
+    entity
+      .getComponents()
+      .forEach((component) => this.UNSAFE_removeComponent(component));
+
+    if (entity.isRoot()) {
+      const index = this.entities.indexOf(entity);
+
+      if (index !== -1) {
+        this.entities.splice(index, 1);
+        entity.UNSAFE_removeScene();
+      }
+    } else {
+      entity.getParent().ifSome((parent) => parent.removeChild(entity));
+    }
+
+    entity
+      .getChildren()
+      .slice()
+      .forEach((child) => this.removeEntityNow(child, true));
+    this.emit("remove-entity", entity);
+
+    return this;
+  }
+
+  private _addPlugin<P extends Plugin>(plugin: P) {
+    const Plugin: IConstructor<Plugin> = plugin.getConstructor();
+
+    if (!this.hasPlugin(Plugin)) {
+      const Plugin: IConstructor<Plugin> = plugin.getConstructor();
+
       this.plugins.push(plugin);
       this.pluginsMap.set(Plugin, plugin);
       plugin.UNSAFE_setScene(this);
@@ -330,9 +356,7 @@ export class Scene extends EventEmitter {
     return this;
   }
   private _removePlugin<P extends Plugin>(Plugin: IConstructor<P>) {
-    const pluginOption = this.getPlugin(Plugin);
-
-    pluginOption.ifSome((plugin) => {
+    this.getPlugin(Plugin).ifSome((plugin) => {
       this.emit("remove-plugin", plugin);
       plugin.onRemove();
       plugin.UNSAFE_removeScene();
@@ -361,6 +385,7 @@ export class Scene extends EventEmitter {
     return {
       name: this.name,
       entities: this.entities.map((entity) => entity.toJSON()),
+      plugins: this.plugins.map((plugin) => plugin.toJSON()),
     };
   }
 
@@ -373,6 +398,12 @@ export class Scene extends EventEmitter {
         )
       );
     }
+    if (isJSONArray(json.plugins)) {
+      this.addPlugins(
+        json.plugins.map((plugin) => Plugin.newFromJSON(plugin as IJSONObject))
+      );
+    }
+    this.maintain();
     return this;
   }
 }

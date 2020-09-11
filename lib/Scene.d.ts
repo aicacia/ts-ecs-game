@@ -53,6 +53,7 @@ export declare class Scene extends EventEmitter {
     UNSAFE_addComponent(component: Component): this;
     UNSAFE_removeComponent(component: Component): this;
     private _addEntityNow;
+    private _removeEntityNow;
     private _addPlugin;
     private _removePlugin;
     private sortPlugins;

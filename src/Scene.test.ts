@@ -1,5 +1,7 @@
 import * as tape from "tape";
 import { Component, Entity, Plugin, Scene } from ".";
+import { IJSONObject } from "@aicacia/json";
+import { globalJSONClassRegistry } from "./JSONClassRegistry";
 
 export class Test extends Component {
   position = 0;
@@ -31,6 +33,12 @@ export class Test extends Component {
       globalPosition: this.globalPosition,
     };
   }
+
+  fromJSON(json: IJSONObject) {
+    this.position = json.position as number;
+    this.globalPosition = json.globalPosition as number;
+    return this;
+  }
 }
 
 export class Test1Plugin extends Plugin {
@@ -46,7 +54,10 @@ tape("Scene", (assert: tape.Test) => {
     new Entity()
       .addTag("parent")
       .addComponent(new Test())
-      .addChild(new Entity().addTag("child").addComponent(new Test()))
+      .addChild(
+        new Entity().addTag("child").addComponent(new Test()),
+        new Entity().addTag("child2").addComponent(new Test())
+      )
   );
 
   const test1Plugin = new Test1Plugin(),
@@ -76,19 +87,23 @@ tape("Scene", (assert: tape.Test) => {
   assert.true(child.isRoot());
   assert.equal(child.getDepth(), 0);
 
+  assert.true(scene.findWithTag("child2").isSome());
+
   assert.end();
 });
 
 tape("Scene to/from JSON", (assert: tape.Test) => {
-  const scene = new Scene().addEntity(
-    new Entity()
-      .addTag("parent")
-      .addComponent(new Test())
-      .addChild(
-        new Entity().addTag("child").addComponent(new Test()),
-        new Entity().addTag("child").addComponent(new Test())
-      )
-  );
+  const scene = new Scene()
+    .addEntity(
+      new Entity()
+        .addTag("parent")
+        .addComponent(new Test())
+        .addChild(
+          new Entity().addTag("child").addComponent(new Test()),
+          new Entity().addTag("child").addComponent(new Test())
+        )
+    )
+    .addPlugin(new Test1Plugin(), new Test2Plugin());
 
   scene.maintain();
 
@@ -97,33 +112,51 @@ tape("Scene to/from JSON", (assert: tape.Test) => {
   scene.clear();
   scene.maintain();
 
+  const TestTypeId = globalJSONClassRegistry.getByConstructor(Test);
+  const Test1PluginTypeId = globalJSONClassRegistry.getByConstructor(
+    Test1Plugin
+  );
+  const Test2PluginTypeId = globalJSONClassRegistry.getByConstructor(
+    Test2Plugin
+  );
+
   assert.deepEqual(json, {
     name: "",
     entities: [
       {
         name: "",
-        depth: 0,
         tags: ["parent"],
         children: [
           {
             name: "",
-            depth: 1,
             tags: ["child"],
             children: [],
-            components: [{ type: "Test", position: 0, globalPosition: 0 }],
+            components: [
+              { typeId: TestTypeId, position: 0, globalPosition: 0 },
+            ],
           },
           {
             name: "",
-            depth: 1,
             tags: ["child"],
             children: [],
-            components: [{ type: "Test", position: 0, globalPosition: 0 }],
+            components: [
+              { typeId: TestTypeId, position: 0, globalPosition: 0 },
+            ],
           },
         ],
-        components: [{ type: "Test", position: 0, globalPosition: 0 }],
+        components: [{ typeId: TestTypeId, position: 0, globalPosition: 0 }],
       },
     ],
+    plugins: [{ typeId: Test1PluginTypeId }, { typeId: Test2PluginTypeId }],
   });
+
+  scene.fromJSON(json);
+
+  assert.equals(scene.findAllWithTag("child").length, 2);
+  assert.equals(
+    scene.findWithTag("child").unwrap().getRequiredComponent(Test).position,
+    0
+  );
 
   assert.end();
 });

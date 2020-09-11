@@ -21,7 +21,7 @@ export class JSONAsset extends Asset {
     return fetch(this.src, this.options)
       .then((response) => response.json())
       .then((json) => {
-        this.json = some(json);
+        this.json.replace(json);
       });
   }
 

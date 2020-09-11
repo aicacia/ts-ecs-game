@@ -25,7 +25,7 @@ export class WebImageAsset extends ImageAsset {
       const image = new Image();
 
       image.addEventListener("load", () => {
-        this.image = some(image);
+        this.image.replace(image);
         resolve();
       });
       image.addEventListener("error", (error) => reject(error));

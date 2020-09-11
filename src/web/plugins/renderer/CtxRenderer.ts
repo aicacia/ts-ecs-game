@@ -66,11 +66,11 @@ export class CtxRenderer extends Renderer {
     return this.camera.unwrapOrElse(this.getActiveCamera);
   }
   setCamera(camera: Camera2D) {
-    this.camera = some(camera);
+    this.camera.replace(camera);
     return this;
   }
   removeCamera() {
-    this.camera = none();
+    this.camera.clear();
     return this;
   }
 

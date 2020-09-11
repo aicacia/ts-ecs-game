@@ -1,4 +1,4 @@
-import { none, Option, some, IConstructor } from "@aicacia/core";
+import { none, Option, IConstructor } from "@aicacia/core";
 import { EventEmitter } from "events";
 
 export abstract class Manager<
@@ -13,11 +13,11 @@ export abstract class Manager<
   protected scene: Option<Scene> = none();
 
   UNSAFE_setScene(scene: Scene) {
-    this.scene = some(scene);
+    this.scene.replace(scene);
     return this;
   }
   UNSAFE_removeScene() {
-    this.scene = none();
+    this.scene.clear();
     return this;
   }
   getScene(): Option<Scene> {

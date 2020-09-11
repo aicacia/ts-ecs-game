@@ -1,7 +1,7 @@
-import { none, Option, some, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
+import { none, Option, IConstructor } from "@aicacia/core";
+import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
 
-export abstract class Plugin extends EventEmitter {
+export abstract class Plugin extends ToFromJSONEventEmitter {
   static pluginPriority = 0;
   static requiredPlugins: IRequirement<Plugin>[] = [];
 
@@ -65,11 +65,11 @@ export abstract class Plugin extends EventEmitter {
   }
 
   UNSAFE_setScene(scene: Scene) {
-    this.scene = some(scene);
+    this.scene.replace(scene);
     return this;
   }
   UNSAFE_removeScene() {
-    this.scene = none();
+    this.scene.clear();
     return this;
   }
   getScene() {

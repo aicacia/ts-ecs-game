@@ -1,8 +1,7 @@
-import { IJSONObject } from "@aicacia/json";
-import { none, Option, some, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
+import { none, Option, IConstructor } from "@aicacia/core";
+import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
 
-export abstract class Component extends EventEmitter {
+export abstract class Component extends ToFromJSONEventEmitter {
   static Manager: IConstructor<Manager>;
   static requiredComponents: IRequirement<Component>[] = [];
   static requiredPlugins: IRequirement<Plugin>[] = [];
@@ -23,9 +22,6 @@ export abstract class Component extends EventEmitter {
   private entity: Option<Entity> = none();
   private manager: Option<Manager> = none();
 
-  getConstructor(): IConstructor<this> {
-    return Object.getPrototypeOf(this).constructor;
-  }
   getManagerConstructor<M extends Manager = Manager>(): IConstructor<M> {
     return Object.getPrototypeOf(this).constructor.getManagerConstructor();
   }
@@ -58,11 +54,11 @@ export abstract class Component extends EventEmitter {
   }
 
   UNSAFE_setEntity(entity: Entity) {
-    this.entity = some(entity);
+    this.entity.replace(entity);
     return this;
   }
   UNSAFE_removeEntity() {
-    this.entity = none();
+    this.entity.clear();
     return this;
   }
   getEntity() {
@@ -84,11 +80,11 @@ export abstract class Component extends EventEmitter {
   }
 
   UNSAFE_setManager(manager: Manager) {
-    this.manager = some(manager);
+    this.manager.replace(manager);
     return this;
   }
   UNSAFE_removeManager() {
-    this.entity = none();
+    this.manager.clear();
     return this;
   }
   getManager<M extends Manager = Manager>() {
@@ -119,12 +115,6 @@ export abstract class Component extends EventEmitter {
   }
   onAfterUpdate() {
     return this;
-  }
-
-  toJSON(): IJSONObject {
-    return {
-      type: this.getConstructor().name,
-    };
   }
 }
 

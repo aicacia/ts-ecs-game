@@ -48,7 +48,7 @@ export abstract class TransformComponent extends RenderableComponent {
 
     if (needsUpdate !== this.needsUpdate) {
       this.needsUpdate = needsUpdate;
-      this.getEntity().map((entity) =>
+      this.getEntity().ifSome((entity) =>
         entity.forEachChild((child) =>
           child
             .getComponentsInstanceOf(TransformComponent as any)

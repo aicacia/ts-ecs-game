@@ -81,14 +81,14 @@ export class Entity extends EventEmitter {
     return this.getScene().expect("Entity expected to have a Scene");
   }
   UNSAFE_setScene(scene: Scene, recur = false) {
-    this.scene = some(scene);
+    this.scene.replace(scene);
     if (recur) {
       this.forEachChild((child) => child.UNSAFE_setScene(scene, recur), false);
     }
     return this;
   }
   UNSAFE_removeScene() {
-    this.scene = none();
+    this.scene.clear();
     return this;
   }
 
@@ -225,14 +225,14 @@ export class Entity extends EventEmitter {
   }
 
   removeFromScene() {
-    this.scene.map((scene) => {
+    this.scene.ifSome((scene) => {
       scene.removeEntity(this);
     });
   }
   detach() {
-    this.parent.map((parent) => {
+    this.parent.ifSome((parent) => {
       parent._removeChild(this);
-      this.scene.map((scene) => scene.addEntity(this));
+      this.scene.ifSome((scene) => scene.addEntity(this));
       this.getComponents().forEach((component) => component.onDetach());
     });
   }
@@ -299,7 +299,7 @@ export class Entity extends EventEmitter {
       this.components.push(component);
       this.componentMap.set(Component, component);
 
-      this.scene.map((scene) => scene.UNSAFE_addComponent(component));
+      this.scene.ifSome((scene) => scene.UNSAFE_addComponent(component));
       this.emit("add-component", component);
     }
     return this;
@@ -315,7 +315,7 @@ export class Entity extends EventEmitter {
       this.components.splice(this.components.indexOf(component), 1);
       this.componentMap.delete(Component);
 
-      this.scene.map((scene) => scene.UNSAFE_removeComponent(component));
+      this.scene.ifSome((scene) => scene.UNSAFE_removeComponent(component));
     });
     return this;
   }
@@ -323,14 +323,14 @@ export class Entity extends EventEmitter {
   private _addChild(child: Entity) {
     if (this.children.indexOf(child) === -1) {
       if (child.isRoot()) {
-        child.scene.map((scene) => scene.removeEntity(child));
+        child.scene.ifSome((scene) => scene.removeEntity(child));
       }
-      child.parent.map((parent) => parent._removeChild(child));
+      child.parent.ifSome((parent) => parent._removeChild(child));
 
       this.children.push(child);
 
-      child.scene = this.scene;
-      child.parent = some(this);
+      child.scene = this.scene.clone();
+      child.parent.replace(this);
       child.root = this.root;
       child.setDepth(this.depth + 1);
 
@@ -345,8 +345,8 @@ export class Entity extends EventEmitter {
       this.emit("remove-child", child);
       this.children.splice(index, 1);
 
-      child.scene = none();
-      child.parent = none();
+      child.scene.clear();
+      child.parent.clear();
       child.root = child;
       child.setDepth(0);
     }
@@ -359,15 +359,9 @@ export class Entity extends EventEmitter {
     return this;
   }
 
-  private setParent(parent: Entity) {
-    this.parent = some(parent);
-    return this;
-  }
-
   toJSON(): IJSONObject {
     return {
       name: this.name,
-      depth: this.depth,
       tags: [...this.tags.values()],
       children: this.children.map((child) => child.toJSON()),
       components: this.components.map((component) => component.toJSON()),
@@ -375,20 +369,21 @@ export class Entity extends EventEmitter {
   }
   fromJSON(json: IJSONObject) {
     this.name = json.name as string;
-    this.depth = json.depth as number;
     if (isJSONArray(json.tags)) {
-      json.tags.forEach((tag) => this.tags.add(tag as string));
+      this.addTags(json.tags as string[]);
     }
     if (isJSONArray(json.children)) {
-      json.children.forEach((child) =>
-        this.children.push(
-          new Entity().fromJSON(child as IJSONObject).setParent(this)
+      this.addChildren(
+        json.children.map((childJSON) =>
+          new Entity().fromJSON(childJSON as IJSONObject)
         )
       );
     }
-    if (isJSONArray(json.children)) {
-      json.children.forEach((child) =>
-        this.children.push(new Entity().fromJSON(child as IJSONObject))
+    if (isJSONArray(json.components)) {
+      this.addComponents(
+        json.components.map((componentJSON) =>
+          Component.newFromJSON(componentJSON as IJSONObject)
+        )
       );
     }
     return this;
@@ -403,3 +398,4 @@ import {
 import { Component } from "./Component";
 import { Plugin } from "./Plugin";
 import { Scene } from "./Scene";
+import { globalJSONClassRegistry } from "./JSONClassRegistry";

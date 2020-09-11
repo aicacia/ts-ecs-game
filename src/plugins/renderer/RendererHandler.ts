@@ -29,11 +29,11 @@ export abstract class RendererHandler<
   }
 
   UNSAFE_setRenderer(renderer: R) {
-    this.renderer = some(renderer);
+    this.renderer.replace(renderer);
     return this;
   }
   UNSAFE_removeRenderer() {
-    this.renderer = none();
+    this.renderer.clear();
     return this;
   }
   getRenderer() {

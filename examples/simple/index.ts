@@ -88,7 +88,7 @@ function onLoad() {
           .addComponent(new Transform2D(), new Rotator())
           .addChild(
             new Entity().addComponent(
-              new Transform2D().setLocalPosition(vec2.fromValues(3, 0))
+              new Transform2D().setLocalPosition(vec2.fromValues(0, 3))
             )
           )
       )

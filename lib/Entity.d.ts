@@ -69,7 +69,6 @@ export declare class Entity extends EventEmitter {
     private _addChild;
     private _removeChild;
     private setDepth;
-    private setParent;
     toJSON(): IJSONObject;
     fromJSON(json: IJSONObject): this;
 }

@@ -34,7 +34,7 @@ export class SpriteSheet extends Component {
         `SpriteSheet setCurrent(name: string) no SpriteSheet found named ${name}`
       );
     }
-    this.currentName = some(name);
+    this.currentName.replace(name);
     this.currentFrame = 0;
     this.currentTime = 0;
     return this;
