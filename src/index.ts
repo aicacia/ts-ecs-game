@@ -35,6 +35,7 @@ export {
   RendererHandler,
   FullScreenCanvas,
   EventListener,
+  RunOnUpdatePlugin,
   Input,
   InputAxis,
   InputButton,
