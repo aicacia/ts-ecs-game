@@ -1,3 +1,4 @@
+import { IJSONObject } from "@aicacia/json";
 import { Plugin } from "../Plugin";
 export declare class Time extends Plugin {
     static pluginPriority: number;
@@ -29,4 +30,10 @@ export declare class Time extends Plugin {
     setFixedDelta(fixedDelta: number): this;
     now(): number;
     onUpdate(): this;
+    toJSON(): {
+        frame: number;
+        scale: number;
+        fixedDelta: number;
+    };
+    fromJSON(json: IJSONObject): this;
 }

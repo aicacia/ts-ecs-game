@@ -1,7 +1,6 @@
-/// <reference types="node" />
 import { Option, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
-export declare abstract class InputHandler<I extends Input = Input> extends EventEmitter {
+import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
+export declare abstract class InputHandler<I extends Input = Input> extends ToFromJSONEventEmitter {
     private input;
     getConstructor(): IConstructor<this>;
     UNSAFE_setInput(input: I): this;

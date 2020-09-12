@@ -1,6 +1,6 @@
 import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
-import { mat2d, vec2, vec3 } from "gl-matrix";
+import { mat2d, vec2, vec4 } from "gl-matrix";
 import { RenderableComponent } from "../RenderableComponent";
 
 const MAT2D_0 = mat2d.create(),
@@ -21,13 +21,13 @@ export class Camera2D extends RenderableComponent {
   private view = mat2d.identity(mat2d.create());
 
   private needsUpdate = true;
-  private background: vec3 = vec3.create();
+  private background: vec4 = vec4.create();
 
   getBackground() {
     return this.background;
   }
-  setBackground(background: vec3) {
-    vec3.copy(this.background, background);
+  setBackground(background: vec4) {
+    vec4.copy(this.background, background);
     return this;
   }
 
@@ -119,6 +119,12 @@ export class Camera2D extends RenderableComponent {
     }
   }
 
+  isActive(): boolean {
+    return this.getRequiredManager<Camera2DManager>()
+      .getActive()
+      .map((active) => active === this)
+      .unwrapOr(false);
+  }
   setActive() {
     this.getRequiredManager<Camera2DManager>().setActive(this);
     return this;
@@ -169,10 +175,29 @@ export class Camera2D extends RenderableComponent {
 
     return out;
   }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      width: this.width,
+      height: this.height,
+      size: this.size,
+      background: this.background as IJSONArray,
+    };
+  }
+
+  fromJSON(json: IJSONObject) {
+    return super
+      .fromJSON(json)
+      .set(json.width as number, json.height as number)
+      .setSize(json.size as number)
+      .setBackground(json.background as vec4);
+  }
 }
 
 import { TransformComponent } from "../TransformComponent";
 import { Camera2DManager } from "./Camera2DManager";
 import { extractScale } from "../../math";
+import { IJSONArray, IJSONObject } from "@aicacia/json";
 
 Camera2D.Manager = Camera2DManager;

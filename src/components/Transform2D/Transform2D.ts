@@ -1,3 +1,4 @@
+import { IJSONArray, IJSONObject } from "@aicacia/json";
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import {
   composeMat2d,
@@ -195,5 +196,22 @@ export class Transform2D extends TransformComponent {
     return this.setLocalRotation(
       getAngleBetweenPoints(this.localPosition, position)
     );
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      localPosition: this.localPosition as IJSONArray,
+      localScale: this.localScale as IJSONArray,
+      localRotation: this.localRotation,
+    };
+  }
+
+  fromJSON(json: IJSONObject) {
+    return super
+      .fromJSON(json)
+      .setLocalPosition(json.localPosition as vec2)
+      .setLocalScale(json.localScale as vec2)
+      .setLocalRotation(json.localRotation as number);
   }
 }

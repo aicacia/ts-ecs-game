@@ -1,3 +1,4 @@
+import { IJSONArray, IJSONObject } from "@aicacia/json";
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { TransformComponent } from "../TransformComponent";
 export declare class Transform2D extends TransformComponent {
@@ -45,4 +46,10 @@ export declare class Transform2D extends TransformComponent {
     getLocalMatrix4(out: mat4): mat4;
     getLocalMatrix2d(out: mat2d): mat2d;
     lookAt(position: vec2): this;
+    toJSON(): {
+        localPosition: IJSONArray;
+        localScale: IJSONArray;
+        localRotation: number;
+    };
+    fromJSON(json: IJSONObject): this;
 }

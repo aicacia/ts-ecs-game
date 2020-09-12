@@ -9,6 +9,8 @@ import {
 } from "../../../plugins/input";
 
 export class WebEventListener extends EventListener {
+  static toFromJSONEnabled = false;
+
   private touchInputEventPool = new Pool(TouchInputEvent);
   private mouseInputEventPool = new Pool(MouseInputEvent);
   private mouseWheelInputEventPool = new Pool(MouseWheelInputEvent);

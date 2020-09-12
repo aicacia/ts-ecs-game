@@ -1,13 +1,16 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option } from "@aicacia/core";
 import { mat2d } from "gl-matrix";
 import { Camera2D, Camera2DManager } from "../../../components/Camera2D";
-import { toRgb } from "../../../math";
+import { toRgba } from "../../../math";
 import { Renderer } from "../../../plugins/renderer/Renderer";
 import { Canvas } from "../../../Canvas";
+import { IJSONObject } from "@aicacia/json";
 
 const MAT2D_0 = mat2d.create();
 
 export class CtxRenderer extends Renderer {
+  static toFromJSONEnabled = false;
+
   private canvas: Canvas;
   private ctx: CanvasRenderingContext2D;
   private lineWidth = 1.0;
@@ -122,7 +125,7 @@ export class CtxRenderer extends Renderer {
     this.ctx.save();
 
     this.ctx.save();
-    this.ctx.fillStyle = toRgb(camera.getBackground());
+    this.ctx.fillStyle = toRgba(camera.getBackground());
     this.ctx.fillRect(0, 0, width, height);
     this.ctx.restore();
 
@@ -132,6 +135,20 @@ export class CtxRenderer extends Renderer {
     super.onUpdate();
     this.ctx.restore();
 
+    return this;
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      lineWidth: this.lineWidth,
+      enabled: this.enabled,
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
+    this.lineWidth = json.lineWidth as number;
+    this.enabled = json.enabled as boolean;
     return this;
   }
 }

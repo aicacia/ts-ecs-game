@@ -1,4 +1,4 @@
-import { mat4, vec2, vec3 } from "gl-matrix";
+import { mat4, vec2, vec3, vec4 } from "gl-matrix";
 import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { EPSILON } from "../../math";
@@ -28,13 +28,13 @@ export class Camera3D extends RenderableComponent {
   private view = mat4.identity(mat4.create());
 
   private needsUpdate = true;
-  private background: vec3 = vec3.create();
+  private background: vec4 = vec4.create();
 
   getBackground() {
     return this.background;
   }
-  setBackground(background: vec3) {
-    vec3.copy(this.background, background);
+  setBackground(background: vec4) {
+    vec4.copy(this.background, background);
     return this;
   }
 
@@ -140,6 +140,12 @@ export class Camera3D extends RenderableComponent {
     }
   }
 
+  isActive(): boolean {
+    return this.getRequiredManager<Camera3DManager>()
+      .getActive()
+      .map((active) => active === this)
+      .unwrapOr(false);
+  }
   setActive() {
     this.getRequiredManager<Camera3DManager>().setActive(this);
     return this;
@@ -206,9 +212,34 @@ export class Camera3D extends RenderableComponent {
 
     return out;
   }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      width: this.width,
+      height: this.height,
+      size: this.size,
+      fov: this.fov,
+      near: this.near,
+      far: this.far,
+      background: this.background as IJSONArray,
+    };
+  }
+
+  fromJSON(json: IJSONObject) {
+    return super
+      .fromJSON(json)
+      .set(json.width as number, json.height as number)
+      .setSize(json.size as number)
+      .setFov(json.fov as number)
+      .setNear(json.near as number)
+      .setFar(json.far as number)
+      .setBackground(json.background as vec4);
+  }
 }
 
 import { TransformComponent } from "../TransformComponent";
 import { Camera3DManager } from "./Camera3DManager";
+import { IJSONArray, IJSONObject } from "@aicacia/json";
 
 Camera3D.Manager = Camera3DManager;

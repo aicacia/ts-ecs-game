@@ -1,6 +1,6 @@
 import { IJSONObject, isJSONArray } from "@aicacia/json";
 import { none, Option, some, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
+import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
 
 // tslint:disable-next-line: interface-name
 export interface Entity {
@@ -14,7 +14,7 @@ export interface Entity {
   ): this;
 }
 
-export class Entity extends EventEmitter {
+export class Entity extends ToFromJSONEventEmitter {
   private name = "";
   private depth = 0;
   private scene: Option<Scene> = none();
@@ -398,4 +398,3 @@ import {
 import { Component } from "./Component";
 import { Plugin } from "./Plugin";
 import { Scene } from "./Scene";
-import { globalJSONClassRegistry } from "./JSONClassRegistry";

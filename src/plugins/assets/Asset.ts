@@ -1,4 +1,6 @@
-import { EventEmitter } from "events";
+import { IJSONObject } from "@aicacia/json";
+import { v4 } from "uuid";
+import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
 
 // tslint:disable-next-line: interface-name
 export interface Asset {
@@ -9,11 +11,15 @@ export interface Asset {
   ): this;
 }
 
-export abstract class Asset extends EventEmitter {
+export abstract class Asset extends ToFromJSONEventEmitter {
+  private uuid = v4();
   private name = "";
   private loaded = false;
   private loading = false;
 
+  getUUID() {
+    return this.uuid;
+  }
   getName() {
     return this.name;
   }
@@ -65,4 +71,18 @@ export abstract class Asset extends EventEmitter {
 
   protected abstract loadAsset(): Promise<void>;
   protected abstract unloadAsset(): Promise<void>;
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      uuid: this.uuid,
+      name: this.name,
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
+    this.uuid = json.uuid as string;
+    this.name = json.name as string;
+    return this;
+  }
 }

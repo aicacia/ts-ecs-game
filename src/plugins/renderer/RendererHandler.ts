@@ -1,9 +1,9 @@
-import { none, Option, some, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
+import { none, Option, IConstructor } from "@aicacia/core";
+import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
 
 export abstract class RendererHandler<
   R extends Renderer = Renderer
-> extends EventEmitter {
+> extends ToFromJSONEventEmitter {
   static rendererHandlerPriority: number;
 
   static getRendererHandlerPriority() {
@@ -85,8 +85,21 @@ export abstract class RendererHandler<
   onAfterRender() {
     return this;
   }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      enabled: this.enabled,
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
+    this.enabled = json.enabled as boolean;
+    return this;
+  }
 }
 
 import { Manager } from "../../Manager";
 import { Plugin } from "../../Plugin";
 import { Renderer } from "./Renderer";
+import { IJSONObject } from "@aicacia/json";

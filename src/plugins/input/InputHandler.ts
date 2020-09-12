@@ -1,9 +1,9 @@
-import { none, Option, some, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
+import { none, Option, IConstructor } from "@aicacia/core";
+import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
 
 export abstract class InputHandler<
   I extends Input = Input
-> extends EventEmitter {
+> extends ToFromJSONEventEmitter {
   private input: Option<I> = none();
 
   getConstructor(): IConstructor<this> {

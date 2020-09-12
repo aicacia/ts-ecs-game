@@ -1,7 +1,6 @@
-/// <reference types="node" />
 import { Option, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
-export declare abstract class EventListener<I extends Input = Input> extends EventEmitter {
+import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
+export declare abstract class EventListener<I extends Input = Input> extends ToFromJSONEventEmitter {
     private input;
     getConstructor(): IConstructor<this>;
     UNSAFE_setInput(input: I): this;
@@ -15,6 +14,7 @@ export declare abstract class EventListener<I extends Input = Input> extends Eve
     onAdd(): this;
     onRemove(): this;
     onUpdate(_time: Time): this;
+    onAfterUpdate(_time: Time): this;
 }
 import { Time } from "../Time";
 import { Input } from "./Input";

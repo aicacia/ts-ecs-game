@@ -1,6 +1,6 @@
 import { IJSONObject, isJSONArray } from "@aicacia/json";
 import { none, Option, some, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
+import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
 
 // tslint:disable-next-line: interface-name
 export interface Scene {
@@ -19,7 +19,7 @@ export interface Scene {
   ): this;
 }
 
-export class Scene extends EventEmitter {
+export class Scene extends ToFromJSONEventEmitter {
   private name = "";
 
   private entities: Entity[] = [];
@@ -231,6 +231,7 @@ export class Scene extends EventEmitter {
     manager.sort();
     component.onAdd();
 
+    component.emit("add-to-scene");
     this.emit("add-component", component);
 
     return this;
@@ -242,6 +243,7 @@ export class Scene extends EventEmitter {
     const managerOption = this.getManager(Manager);
 
     this.emit("remove-component", component);
+    component.emit("remove-from-scene");
 
     managerOption.ifSome((manager) => {
       component.onRemove();
@@ -383,14 +385,27 @@ export class Scene extends EventEmitter {
 
   toJSON(): IJSONObject {
     return {
+      ...super.toJSON(),
       name: this.name,
+      plugins: this.plugins
+        .filter((plugin) =>
+          (plugin.getConstructor() as any).isToFromJSONEnabled()
+        )
+        .map((plugin) => plugin.toJSON()),
       entities: this.entities.map((entity) => entity.toJSON()),
-      plugins: this.plugins.map((plugin) => plugin.toJSON()),
     };
   }
 
   fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
     this.name = json.name as string;
+    if (isJSONArray(json.plugins)) {
+      this.addPlugins(
+        (json.plugins as Array<IJSONObject>).map((plugin) =>
+          Plugin.newFromJSON(plugin)
+        )
+      );
+    }
     if (isJSONArray(json.entities)) {
       this.addEntities(
         json.entities.map((entity) =>
@@ -398,12 +413,6 @@ export class Scene extends EventEmitter {
         )
       );
     }
-    if (isJSONArray(json.plugins)) {
-      this.addPlugins(
-        json.plugins.map((plugin) => Plugin.newFromJSON(plugin as IJSONObject))
-      );
-    }
-    this.maintain();
     return this;
   }
 }

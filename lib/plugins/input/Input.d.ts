@@ -5,6 +5,7 @@ import { InputButton } from "./InputButton";
 import { InputHandler } from "./InputHandler";
 import { EventListener } from "./EventListener";
 import { InputEvent } from "./InputEvent";
+import { IJSONObject } from "@aicacia/json";
 export declare class Input extends Plugin {
     private events;
     private inputHandlers;
@@ -15,7 +16,7 @@ export declare class Input extends Plugin {
     private axes;
     constructor();
     queueEvent(event: InputEvent): this;
-    addAxes(...axes: InputAxis[]): this;
+    addAxes(axes: InputAxis[]): this;
     addAxis(...axes: InputAxis[]): this;
     getAxis(name: string): Option<InputAxis>;
     getAxisValue(name: string): number;
@@ -24,15 +25,15 @@ export declare class Input extends Plugin {
     getRequiredInputHandler<I extends InputHandler = InputHandler>(InputHandler: IConstructor<I>): InputHandler<Input>;
     getEventListener<I extends EventListener = EventListener>(EventListener: IConstructor<I>): Option<EventListener<Input>>;
     getRequiredEventListener<I extends EventListener = EventListener>(EventListener: IConstructor<I>): EventListener<Input>;
-    removeAxes(...axes: InputAxis[]): this;
+    removeAxes(axes: InputAxis[]): this;
     removeAxis(...axes: InputAxis[]): this;
-    addInputHandlers(...inputHandlers: InputHandler[]): this;
+    addInputHandlers(inputHandlers: InputHandler[]): this;
     addInputHandler(...inputHandlers: InputHandler[]): this;
-    removeInputHandlers(...inputHandlers: IConstructor<InputHandler>[]): this;
+    removeInputHandlers(inputHandlers: IConstructor<InputHandler>[]): this;
     removeInputHandler(...inputHandlers: IConstructor<InputHandler>[]): this;
-    addEventListeners(...eventListeners: EventListener[]): this;
+    addEventListeners(eventListeners: EventListener[]): this;
     addEventListener(...eventListeners: EventListener[]): this;
-    removeEventListeners(...eventListeners: IConstructor<EventListener>[]): this;
+    removeEventListeners(eventListeners: IConstructor<EventListener>[]): this;
     removeEventListener(...eventListeners: IConstructor<EventListener>[]): this;
     getOrCreateButton(name: string): InputButton;
     getButton(name: string): Option<InputButton>;
@@ -51,4 +52,6 @@ export declare class Input extends Plugin {
     private _removeInputHandler;
     private _addEventListener;
     private _removeEventListener;
+    toJSON(): IJSONObject;
+    fromJSON(json: IJSONObject): this;
 }

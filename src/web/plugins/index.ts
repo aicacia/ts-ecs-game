@@ -5,5 +5,5 @@ export {
   CtxRendererHandler,
   SpriteCtxRendererHandler,
   TransformCtxRendererHandler,
-  UICtxRendererHandler,
+  UITextCtxRendererHandler,
 } from "./renderer";

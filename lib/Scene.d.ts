@@ -1,14 +1,13 @@
-/// <reference types="node" />
 import { IJSONObject } from "@aicacia/json";
 import { Option, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
+import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
 export interface Scene {
     on(event: "maintain" | "update", listener: () => void): this;
     on(event: "add-component" | "remove-component", listener: (component: Component) => void): this;
     on(event: "add-plugin" | "remove-plugin", listener: (entity: Plugin) => void): this;
     on(event: "add-entity" | "remove-entity", listener: (entity: Entity) => void): this;
 }
-export declare class Scene extends EventEmitter {
+export declare class Scene extends ToFromJSONEventEmitter {
     private name;
     private entities;
     private entitiesToAdd;

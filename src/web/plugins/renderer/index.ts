@@ -1,7 +1,7 @@
 export {
   SpriteCtxRendererHandler,
   TransformCtxRendererHandler,
-  UICtxRendererHandler,
+  UITextCtxRendererHandler,
 } from "./2d";
 export { CtxRenderer } from "./CtxRenderer";
 export { CtxRendererHandler } from "./CtxRendererHandler";

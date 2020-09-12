@@ -2,7 +2,9 @@ import { mat2d } from "gl-matrix";
 import { Camera2D } from "../../../components/Camera2D";
 import { Renderer } from "../../../plugins/renderer/Renderer";
 import { Canvas } from "../../../Canvas";
+import { IJSONObject } from "@aicacia/json";
 export declare class CtxRenderer extends Renderer {
+    static toFromJSONEnabled: boolean;
     private canvas;
     private ctx;
     private lineWidth;
@@ -30,4 +32,12 @@ export declare class CtxRenderer extends Renderer {
     getScale(): number;
     render(fn: (ctx: CanvasRenderingContext2D) => void, model?: mat2d): this;
     onUpdate(): this;
+    toJSON(): {
+        lineWidth: number;
+        enabled: boolean;
+        rendererHandlers: {
+            enabled: boolean;
+        }[];
+    };
+    fromJSON(json: IJSONObject): this;
 }

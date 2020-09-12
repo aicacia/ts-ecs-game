@@ -1,3 +1,4 @@
+import { IJSONObject } from "@aicacia/json";
 import { clamp, sign } from "../../math";
 import { Time } from "../Time";
 
@@ -91,5 +92,27 @@ export class InputAxis {
     }
 
     this.value = value;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      negButton: this.negButton,
+      posButton: this.posButton,
+      gravity: this.gravity,
+      sensitivity: this.sensitivity,
+      dead: this.dead,
+      value: this.value,
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    this.name = json.name as string;
+    this.negButton = json.negButton as string;
+    this.posButton = json.posButton as string;
+    this.gravity = json.gravity as number;
+    this.sensitivity = json.sensitivity as number;
+    this.dead = json.dead as number;
+    this.value = json.value as number;
+    return this;
   }
 }

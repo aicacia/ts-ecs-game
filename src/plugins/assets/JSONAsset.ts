@@ -1,5 +1,5 @@
-import { none, Option, some } from "@aicacia/core";
-import { IJSON } from "@aicacia/json";
+import { none, Option } from "@aicacia/core";
+import { IJSON, IJSONObject } from "@aicacia/json";
 import { Asset } from "./Asset";
 
 export class JSONAsset extends Asset {
@@ -28,5 +28,19 @@ export class JSONAsset extends Asset {
   protected unloadAsset() {
     this.json.clear();
     return Promise.resolve();
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      src: this.src,
+      options: this.options,
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
+    this.src = json.src as RequestInfo;
+    this.options = json.options as RequestInit;
+    return this;
   }
 }

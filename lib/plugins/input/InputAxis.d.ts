@@ -1,3 +1,4 @@
+import { IJSONObject } from "@aicacia/json";
 import { Time } from "../Time";
 export declare class InputAxis {
     private name;
@@ -22,4 +23,14 @@ export declare class InputAxis {
     getValue(): number;
     UNSAFE_setValue(value: number): this;
     UNSAFE_update(time: Time, value: number, isNeg: boolean, isPos: boolean): void;
+    toJSON(): {
+        name: string;
+        negButton: string;
+        posButton: string;
+        gravity: number;
+        sensitivity: number;
+        dead: number;
+        value: number;
+    };
+    fromJSON(json: IJSONObject): this;
 }

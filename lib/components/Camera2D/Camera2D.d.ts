@@ -1,6 +1,6 @@
 import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
-import { mat2d, vec2, vec3 } from "gl-matrix";
+import { mat2d, vec2, vec4 } from "gl-matrix";
 import { RenderableComponent } from "../RenderableComponent";
 export declare class Camera2D extends RenderableComponent {
     static requiredComponents: (typeof Transform2D | typeof Transform3D)[][];
@@ -14,8 +14,8 @@ export declare class Camera2D extends RenderableComponent {
     private view;
     private needsUpdate;
     private background;
-    getBackground(): vec3;
-    setBackground(background: vec3): this;
+    getBackground(): import("gl-matrix").mat2;
+    setBackground(background: vec4): this;
     set(width: number, height: number): this;
     getWidth(): number;
     setWidth(width: number): this;
@@ -33,9 +33,18 @@ export declare class Camera2D extends RenderableComponent {
     getProjection(): mat2d;
     setNeedsUpdate(needsUpdate?: boolean): this;
     updateProjectionIfNeeded(): this;
+    isActive(): boolean;
     setActive(): this;
     updateProjection(): this;
     toRelative(out: vec2, screen: vec2): vec2;
     toWorld(out: vec2, screen: vec2): vec2;
     toScreen(out: vec2, world: vec2): vec2;
+    toJSON(): {
+        width: number;
+        height: number;
+        size: number;
+        background: IJSONArray;
+    };
+    fromJSON(json: IJSONObject): this;
 }
+import { IJSONArray, IJSONObject } from "@aicacia/json";

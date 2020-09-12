@@ -1,7 +1,6 @@
-/// <reference types="node" />
 import { Option, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
-export declare abstract class RendererHandler<R extends Renderer = Renderer> extends EventEmitter {
+import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
+export declare abstract class RendererHandler<R extends Renderer = Renderer> extends ToFromJSONEventEmitter {
     static rendererHandlerPriority: number;
     static getRendererHandlerPriority(): number;
     private renderer;
@@ -25,7 +24,12 @@ export declare abstract class RendererHandler<R extends Renderer = Renderer> ext
     onBeforeRender(): this;
     onRender(): this;
     onAfterRender(): this;
+    toJSON(): {
+        enabled: boolean;
+    };
+    fromJSON(json: IJSONObject): this;
 }
 import { Manager } from "../../Manager";
 import { Plugin } from "../../Plugin";
 import { Renderer } from "./Renderer";
+import { IJSONObject } from "@aicacia/json";

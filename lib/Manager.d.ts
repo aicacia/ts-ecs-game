@@ -1,7 +1,6 @@
-/// <reference types="node" />
 import { Option, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
-export declare abstract class Manager<C extends Component = Component> extends EventEmitter {
+import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
+export declare abstract class Manager<C extends Component = Component> extends ToFromJSONEventEmitter {
     static managerPriority: number;
     static getManagerPriority(): number;
     protected scene: Option<Scene>;

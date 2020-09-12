@@ -1,4 +1,4 @@
-import { vec2, vec3 } from "gl-matrix";
+import { vec2, vec4 } from "gl-matrix";
 import {
   Assets,
   Camera2D,
@@ -20,7 +20,7 @@ import {
   CtxRenderer,
   SpriteCtxRendererHandler,
   TransformCtxRendererHandler,
-  UICtxRendererHandler,
+  UITextCtxRendererHandler,
   WebImageAsset,
   WebEventListener,
 } from "../../src/web";
@@ -67,7 +67,7 @@ function onLoad() {
           .addComponent(
             new Transform2D().setRenderable(false),
             new Camera2DControl(),
-            new Camera2D().setBackground(vec3.fromValues(0.98, 0.98, 0.98))
+            new Camera2D().setBackground(vec4.fromValues(0.98, 0.98, 0.98, 1.0))
           ),
         new Entity().addComponent(
           new Transform2D(),
@@ -81,7 +81,7 @@ function onLoad() {
                 .setLocalPosition(vec2.fromValues(3, 0))
                 .setRenderable(false),
               new LookAtCamera(),
-              new Sprite(logoAsset)
+              new Sprite().setImageAsset(logoAsset)
             )
           ),
         new Entity()
@@ -99,7 +99,7 @@ function onLoad() {
         ).addRendererHandler(
           new TransformCtxRendererHandler(),
           new SpriteCtxRendererHandler(),
-          new UICtxRendererHandler()
+          new UITextCtxRendererHandler()
         ),
         // Required by many Components and plugins
         new Time(),
@@ -120,6 +120,14 @@ function onLoad() {
   canvas.getElement().style.top = "0px";
   document.body.appendChild(canvas.getElement());
   loop.start();
+
+  setTimeout(() => {
+    const json = scene.toJSON();
+    console.log(json);
+    const newScene: Scene = Scene.newFromJSON(json);
+    newScene.maintain();
+    console.log(newScene);
+  }, 1000);
 }
 
 window.addEventListener("load", onLoad);

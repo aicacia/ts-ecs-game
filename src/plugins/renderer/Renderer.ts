@@ -1,4 +1,5 @@
 import { Option, IConstructor } from "@aicacia/core";
+import { IJSONObject, isJSONArray } from "@aicacia/json";
 import { Plugin } from "../../Plugin";
 
 export abstract class Renderer extends Plugin {
@@ -19,17 +20,17 @@ export abstract class Renderer extends Plugin {
     return Option.from(this.rendererHandlerMap.get(RendererHandler));
   }
 
-  addRendererHandlers(...rendererHandlers: RendererHandler[]) {
+  addRendererHandlers(rendererHandlers: RendererHandler[]) {
     rendererHandlers.forEach((rendererHandler) =>
       this._addRendererHandler(rendererHandler)
     );
     return this;
   }
   addRendererHandler(...rendererHandlers: RendererHandler[]) {
-    return this.addRendererHandlers(...rendererHandlers);
+    return this.addRendererHandlers(rendererHandlers);
   }
 
-  removeRendererHandlers(...rendererHandlers: IConstructor<RendererHandler>[]) {
+  removeRendererHandlers(rendererHandlers: IConstructor<RendererHandler>[]) {
     rendererHandlers.forEach((rendererHandler) =>
       this._removeRendererHandler(rendererHandler)
     );
@@ -37,7 +38,7 @@ export abstract class Renderer extends Plugin {
     return this;
   }
   removeRendererHandler(...rendererHandlers: IConstructor<RendererHandler>[]) {
-    return this.removeRendererHandlers(...rendererHandlers);
+    return this.removeRendererHandlers(rendererHandlers);
   }
 
   onUpdate() {
@@ -96,6 +97,26 @@ export abstract class Renderer extends Plugin {
   }
   private sortFunction(a: RendererHandler, b: RendererHandler) {
     return a.getRendererHandlerPriority() - b.getRendererHandlerPriority();
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      rendererHandlers: this.rendererHandlers.map((rendererHandler) =>
+        rendererHandler.toJSON()
+      ),
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
+    if (isJSONArray(json.rendererHandlers)) {
+      this.addRendererHandlers(
+        json.rendererHandlers.map((json) =>
+          RendererHandler.newFromJSON(json as IJSONObject)
+        )
+      );
+    }
+    return this;
   }
 }
 

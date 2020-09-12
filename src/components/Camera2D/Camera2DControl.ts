@@ -6,6 +6,7 @@ import { Component } from "../../Component";
 import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { Camera2DControlManager } from "./Camera2DControlManager";
+import { IJSONObject } from "@aicacia/json";
 
 const VEC2_0 = vec2.create(),
   VEC2_1 = vec2.create(),
@@ -94,6 +95,22 @@ export class Camera2DControl extends Component {
     this.enabled && transform.setLocalScale2(scale);
     vec2.copy(this.lastMouse, worldMouse);
 
+    return this;
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      enabled: this.enabled,
+      zoomSpeed: this.zoomSpeed,
+      panSpeed: this.panSpeed,
+    };
+  }
+
+  fromJSON(json: IJSONObject) {
+    this.setEnabled(json.enabled as boolean);
+    this.setZoomSpeed(json.zoomSpeed as number);
+    this.setPanSpeed(json.panSpeed as number);
     return this;
   }
 }

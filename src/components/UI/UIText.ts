@@ -1,5 +1,4 @@
 import { UIElement } from "./UIElement";
-import { getTextHeight, getTextWidth } from "../../web/getTextDimensions";
 
 export enum TextAlign {
   Start = "start",
@@ -36,7 +35,7 @@ export class UIText extends UIElement {
   }
   setText(text: string) {
     this.text = text;
-    return this.forceResize();
+    return this;
   }
 
   getAlign() {
@@ -68,7 +67,7 @@ export class UIText extends UIElement {
   }
   setFont(font: string) {
     this.font = font;
-    return this.forceResize();
+    return this;
   }
 
   getSize() {
@@ -76,12 +75,6 @@ export class UIText extends UIElement {
   }
   setSize(size: number) {
     this.size = size;
-    return this.forceResize();
-  }
-
-  forceResize() {
-    this.width = getTextWidth(this.font, this.size, this.text);
-    this.height = getTextHeight(this.font, this.size);
     return this;
   }
 }

@@ -1,62 +1,18 @@
-import { mat2d, vec2 } from "gl-matrix";
 import { RenderableComponent } from "../../RenderableComponent";
-
-const MAT2D_0: mat2d = mat2d.create(),
-  VEC2_0: vec2 = vec2.create(),
-  VEC2_1: vec2 = vec2.create();
+import { Transform2D } from "../../Transform2D";
+import { Transform3D } from "../../Transform3D";
 
 export class UIElement extends RenderableComponent {
-  protected width = 0;
-  protected height = 0;
+  static requiredComponents = [[Transform2D, Transform3D]];
+
+  private dirty = true;
   private layer = 0;
 
-  getLocalAABB(min: vec2, max: vec2) {
-    this.getEntity()
-      .flatMap(TransformComponent.getTransform)
-      .ifSome((transform) => {
-        const matrix = transform.getMatrix2d(MAT2D_0),
-          hw = this.width * 0.5,
-          hh = this.height * 0.5;
-        vec2.set(min, -hw, -hh);
-        vec2.set(max, hw, hh);
-        vec2.transformMat2d(min, min, matrix);
-        vec2.transformMat2d(max, max, matrix);
-      })
-      .ifNone(() => {
-        vec2.set(min, 0, 0);
-        vec2.set(max, 0, 0);
-      });
+  isDirty() {
+    return this.dirty;
   }
-
-  getAABB(min: vec2, max: vec2) {
-    const childMin = VEC2_0,
-      childMax = VEC2_1;
-
-    this.getLocalAABB(min, max);
-
-    this.getRequiredEntity()
-      .findAllWithComponent(UIElement, false)
-      .forEach((element) => {
-        const childElement = element.getRequiredComponent(UIElement);
-        childElement.getAABB(childMin, childMax);
-        vec2.min(min, min, childMin);
-        vec2.max(max, max, childMax);
-      });
-  }
-
-  getWidth() {
-    return this.width;
-  }
-  setWidth(width: number) {
-    this.width = width;
-    return this;
-  }
-
-  getHeight() {
-    return this.height;
-  }
-  setHeight(height: number) {
-    this.height = height;
+  setDirty(dirty = true) {
+    this.dirty = !!dirty;
     return this;
   }
 
@@ -72,7 +28,6 @@ export class UIElement extends RenderableComponent {
   }
 }
 
-import { TransformComponent } from "../../TransformComponent";
 import { UIElementManager } from "./UIElementManager";
 
 UIElement.Manager = UIElementManager;

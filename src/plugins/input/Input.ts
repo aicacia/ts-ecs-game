@@ -10,6 +10,7 @@ import { EventListener } from "./EventListener";
 import { TouchInputHandler } from "./TouchInputHandler";
 import { InputEvent } from "./InputEvent";
 import { ResizeInputHandler } from "./ResizeInputHandler";
+import { IJSONObject, isJSONArray } from "@aicacia/json";
 
 export class Input extends Plugin {
   private events: InputEvent[] = [];
@@ -38,7 +39,7 @@ export class Input extends Plugin {
       new TouchInputHandler(),
       new ResizeInputHandler()
     );
-    this.addAxes(
+    this.addAxis(
       new InputAxis("horizontal-keys", "ArrowLeft", "ArrowRight"),
       new InputAxis("vertical-keys", "ArrowDown", "ArrowUp")
     );
@@ -49,12 +50,12 @@ export class Input extends Plugin {
     return this;
   }
 
-  addAxes(...axes: InputAxis[]) {
+  addAxes(axes: InputAxis[]) {
     axes.forEach((axis) => this._addAxis(axis));
     return this;
   }
   addAxis(...axes: InputAxis[]) {
-    return this.addAxes(...axes);
+    return this.addAxes(axes);
   }
   getAxis(name: string) {
     return Option.from(this.axes[name]);
@@ -95,52 +96,52 @@ export class Input extends Plugin {
     );
   }
 
-  removeAxes(...axes: InputAxis[]) {
+  removeAxes(axes: InputAxis[]) {
     axes.forEach((axis) => this._removeAxis(axis));
     return this;
   }
   removeAxis(...axes: InputAxis[]) {
-    return this.removeAxes(...axes);
+    return this.removeAxes(axes);
   }
 
-  addInputHandlers(...inputHandlers: InputHandler[]) {
+  addInputHandlers(inputHandlers: InputHandler[]) {
     inputHandlers.forEach((inputHandler) =>
       this._addInputHandler(inputHandler)
     );
     return this;
   }
   addInputHandler(...inputHandlers: InputHandler[]) {
-    return this.addInputHandlers(...inputHandlers);
+    return this.addInputHandlers(inputHandlers);
   }
 
-  removeInputHandlers(...inputHandlers: IConstructor<InputHandler>[]) {
+  removeInputHandlers(inputHandlers: IConstructor<InputHandler>[]) {
     inputHandlers.forEach((inputHandler) =>
       this._removeInputHandler(inputHandler)
     );
     return this;
   }
   removeInputHandler(...inputHandlers: IConstructor<InputHandler>[]) {
-    return this.removeInputHandlers(...inputHandlers);
+    return this.removeInputHandlers(inputHandlers);
   }
 
-  addEventListeners(...eventListeners: EventListener[]) {
+  addEventListeners(eventListeners: EventListener[]) {
     eventListeners.forEach((eventListener) =>
       this._addEventListener(eventListener)
     );
     return this;
   }
   addEventListener(...eventListeners: EventListener[]) {
-    return this.addEventListeners(...eventListeners);
+    return this.addEventListeners(eventListeners);
   }
 
-  removeEventListeners(...eventListeners: IConstructor<EventListener>[]) {
+  removeEventListeners(eventListeners: IConstructor<EventListener>[]) {
     eventListeners.forEach((eventListener) =>
       this._removeEventListener(eventListener)
     );
     return this;
   }
   removeEventListener(...eventListeners: IConstructor<EventListener>[]) {
-    return this.removeEventListeners(...eventListeners);
+    return this.removeEventListeners(eventListeners);
   }
 
   getOrCreateButton(name: string) {
@@ -214,6 +215,9 @@ export class Input extends Plugin {
 
   onAfterUpdate() {
     const time = this.getRequiredPlugin(Time);
+    this.eventListeners.forEach((eventListener) =>
+      eventListener.onAfterUpdate(time)
+    );
     this.inputHandlers.forEach((inputHandler) =>
       inputHandler.onAfterUpdate(time)
     );
@@ -307,6 +311,47 @@ export class Input extends Plugin {
       this.eventListenerMap.delete(EventListener);
       eventListener.UNSAFE_removeInput();
     });
+    return this;
+  }
+
+  toJSON(): IJSONObject {
+    return {
+      ...super.toJSON(),
+      buttons: Object.values(this.buttons).map((button) => button.toJSON()),
+      axes: Object.values(this.axes).map((axis) => axis.toJSON()),
+      inputHandlers: this.inputHandlers.map((inputHandler) =>
+        inputHandler.toJSON()
+      ),
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
+    if (isJSONArray(json.buttons)) {
+      json.buttons.forEach((json) => {
+        const buttonJSON = json as ReturnType<InputButton["toJSON"]>,
+          button = new InputButton(buttonJSON.name).fromJSON(buttonJSON);
+        this.buttons[button.getName()] = button;
+      });
+    }
+    if (isJSONArray(json.axes)) {
+      this.addAxes(
+        json.axes.map((json) => {
+          const axisJSON = json as ReturnType<InputAxis["toJSON"]>;
+          return new InputAxis(
+            axisJSON.name,
+            axisJSON.negButton,
+            axisJSON.posButton
+          ).fromJSON(axisJSON);
+        })
+      );
+    }
+    if (isJSONArray(json.inputHandlers)) {
+      this.addInputHandlers(
+        json.inputHandlers.map((json) =>
+          InputHandler.newFromJSON(json as IJSONObject)
+        )
+      );
+    }
     return this;
   }
 }

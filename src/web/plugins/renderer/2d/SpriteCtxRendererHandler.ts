@@ -12,7 +12,9 @@ export class SpriteCtxRendererHandler extends CtxRendererHandler {
       const renderer = this.getRequiredRenderer();
 
       spriteManager.getComponents().forEach((sprite) => {
-        const image = (sprite.getImageAsset() as WebImageAsset).getImage();
+        const image = sprite
+          .getImageAsset<WebImageAsset>()
+          .flatMap((webImageAsset) => webImageAsset.getImage());
 
         if (sprite.getRenderable()) {
           image.ifSome((img) =>

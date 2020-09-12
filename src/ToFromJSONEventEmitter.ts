@@ -3,20 +3,30 @@ import { IJSONObject } from "@aicacia/json";
 import { EventEmitter } from "events";
 
 export abstract class ToFromJSONEventEmitter extends EventEmitter {
-  static jsonName?: string;
+  static typeId?: string;
+  static toFromJSONEnabled = true;
 
-  static getJSONName() {
-    return this.jsonName || this.name;
+  static getTypeId() {
+    return this.typeId || this.name;
+  }
+  static isToFromJSONEnabled() {
+    return !!this.toFromJSONEnabled;
+  }
+
+  static getConstructorFromJSON<
+    T extends ToFromJSONEventEmitter = ToFromJSONEventEmitter
+  >(json: IJSONObject): IConstructor<T> {
+    return globalJSONClassRegistry
+      .getById<T>(json.typeId as string)
+      .expect(
+        `Failed to get class ${json.typeId} from globalJSONClassRegistry make sure the Component was added`
+      );
   }
 
   static newFromJSON<T extends ToFromJSONEventEmitter = ToFromJSONEventEmitter>(
     json: IJSONObject
   ): T {
-    const ComponentClass = globalJSONClassRegistry
-      .getById<T>(json.typeId as string)
-      .expect(
-        `Failed to get class ${json.typeId} from globalJSONClassRegistry make sure the Component was added`
-      );
+    const ComponentClass = this.getConstructorFromJSON<T>(json);
     return new ComponentClass().fromJSON(json);
   }
 

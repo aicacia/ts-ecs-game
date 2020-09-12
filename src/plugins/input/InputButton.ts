@@ -1,3 +1,5 @@
+import { IJSONObject } from "@aicacia/json";
+
 export class InputButton {
   private name: string;
   private value = 0.0;
@@ -39,6 +41,22 @@ export class InputButton {
       this.frameDown = frame;
     }
     this.value = 1.0;
+    return this;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      value: this.value,
+      frameDown: this.frameDown,
+      frameUp: this.frameUp,
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    this.name = json.name as string;
+    this.value = json.value as number;
+    this.frameDown = json.frameDown as number;
+    this.frameUp = json.frameUp as number;
     return this;
   }
 }

@@ -1,3 +1,4 @@
+import { IJSONObject } from "@aicacia/json";
 export declare class InputButton {
     private name;
     private value;
@@ -11,4 +12,11 @@ export declare class InputButton {
     UNSAFE_setValue(value: number): this;
     UNSAFE_up(frame: number): this;
     UNSAFE_down(frame: number): this;
+    toJSON(): {
+        name: string;
+        value: number;
+        frameDown: number;
+        frameUp: number;
+    };
+    fromJSON(json: IJSONObject): this;
 }

@@ -1,6 +1,11 @@
 import { none, Option, IConstructor } from "@aicacia/core";
 import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
 
+// tslint:disable-next-line: interface-name
+export interface Component {
+  on(event: "add-to-scene" | "remove-from-scene", listener: () => void): this;
+}
+
 export abstract class Component extends ToFromJSONEventEmitter {
   static Manager: IConstructor<Manager>;
   static requiredComponents: IRequirement<Component>[] = [];

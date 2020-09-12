@@ -1,6 +1,10 @@
+import { Option } from "@aicacia/core";
+import { IJSONObject } from "@aicacia/json";
+import { Assets } from "../../plugins";
 import { ImageAsset } from "../../plugins/assets/ImageAsset";
 import { RenderableComponent } from "../RenderableComponent";
 export declare class Sprite extends RenderableComponent {
+    static requiredPlugins: (typeof Assets)[];
     private layer;
     private imageAsset;
     private clipX;
@@ -9,7 +13,6 @@ export declare class Sprite extends RenderableComponent {
     private clipHeight;
     private width;
     private height;
-    constructor(imageAsset: ImageAsset);
     getClipX(): number;
     setClipX(clipX: number): this;
     getClipY(): number;
@@ -24,7 +27,18 @@ export declare class Sprite extends RenderableComponent {
     setHeight(height: number): this;
     getLayer(): number;
     setLayer(layer: number): this;
-    getImageAsset(): ImageAsset;
+    getImageAsset<T extends ImageAsset = ImageAsset>(): Option<T>;
     setImageAsset(imageAsset: ImageAsset): this;
     private onImageLoadHandler;
+    toJSON(): {
+        imageAssetUUID: string | null;
+        layer: number;
+        clipX: number;
+        clipY: number;
+        clipWidth: number;
+        clipHeight: number;
+        width: number;
+        height: number;
+    };
+    fromJSON(json: IJSONObject): this;
 }

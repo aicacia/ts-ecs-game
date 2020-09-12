@@ -1,15 +1,12 @@
-import { vec2 } from "gl-matrix";
 import { RenderableComponent } from "../../RenderableComponent";
+import { Transform2D } from "../../Transform2D";
+import { Transform3D } from "../../Transform3D";
 export declare class UIElement extends RenderableComponent {
-    protected width: number;
-    protected height: number;
+    static requiredComponents: (typeof Transform2D | typeof Transform3D)[][];
+    private dirty;
     private layer;
-    getLocalAABB(min: vec2, max: vec2): void;
-    getAABB(min: vec2, max: vec2): void;
-    getWidth(): number;
-    setWidth(width: number): this;
-    getHeight(): number;
-    setHeight(height: number): this;
+    isDirty(): boolean;
+    setDirty(dirty?: boolean): this;
     getLayer(): number;
     setLayer(layer: number): this;
 }

@@ -1,7 +1,9 @@
 import { Option, iter } from "@aicacia/core";
+import { IJSONObject, isJSONArray } from "@aicacia/json";
 import { Plugin } from "../../Plugin";
 
 export class Assets extends Plugin {
+  private assetMap: Record<string, Asset> = {};
   private assets: Asset[] = [];
   private loadedAssets: Asset[] = [];
   private loadingPromises: Map<Asset, Promise<void>> = new Map();
@@ -25,6 +27,9 @@ export class Assets extends Plugin {
     return this.loadingPromises.size > 0;
   }
 
+  getAsset<T extends Asset = Asset>(uuid: string): Option<T> {
+    return Option.from(this.assetMap[uuid]) as Option<T>;
+  }
   getAssets(): readonly Asset[] {
     return this.assets;
   }
@@ -151,16 +156,37 @@ export class Assets extends Plugin {
   }
 
   private _addAsset(asset: Asset) {
-    if (this.assets.indexOf(asset) === -1) {
+    const uuid = asset.getUUID();
+
+    if (!this.assetMap[uuid]) {
+      this.assetMap[uuid] = asset;
       this.assets.push(asset);
     }
     return this;
   }
 
   private _removeAsset(asset: Asset) {
-    const index = this.assets.indexOf(asset);
-    if (index !== -1) {
-      this.assets.splice(index, 1);
+    const uuid = asset.getUUID();
+
+    if (this.assetMap[uuid]) {
+      delete this.assetMap[uuid];
+      this.assets.splice(this.assets.indexOf(asset), 1);
+    }
+    return this;
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      assets: this.assets.map((asset) => asset.toJSON()),
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
+    if (isJSONArray(json.assets)) {
+      this.addAssets(
+        json.assets.map((json) => Asset.newFromJSON(json as IJSONObject))
+      );
     }
     return this;
   }

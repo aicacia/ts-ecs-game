@@ -1,5 +1,8 @@
 import { Option, IConstructor } from "@aicacia/core";
 import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
+export interface Component {
+    on(event: "add-to-scene" | "remove-from-scene", listener: () => void): this;
+}
 export declare abstract class Component extends ToFromJSONEventEmitter {
     static Manager: IConstructor<Manager>;
     static requiredComponents: IRequirement<Component>[];

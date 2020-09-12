@@ -12,4 +12,14 @@ export {
 export { Transform2D } from "./Transform2D";
 export { Camera3D, Camera3DManager } from "./Camera3D";
 export { Transform3D } from "./Transform3D";
-export { UIElement, UIElementManager, UIText } from "./UI";
+export {
+  UIElement,
+  UIElementManager,
+  UIText,
+  UIContainer,
+  ContainerAlignContent,
+  ContainerAlignItems,
+  ContainerDirection,
+  ContainerJustifyContent,
+  ContainerWrap,
+} from "./UI";

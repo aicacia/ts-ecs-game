@@ -5,6 +5,7 @@ import { IRequirement } from "../IRequirement";
 import { Plugin } from "../Plugin";
 
 export class FullScreenCanvas extends RunOnUpdatePlugin {
+  static toFromJSONEnabled = false;
   static requiredPlugins: IRequirement<Plugin>[] = [Input];
 
   private canvas: Canvas;

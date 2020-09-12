@@ -1,9 +1,9 @@
 import { none, Option, IConstructor } from "@aicacia/core";
-import { EventEmitter } from "events";
+import { ToFromJSONEventEmitter } from "./ToFromJSONEventEmitter";
 
 export abstract class Manager<
   C extends Component = Component
-> extends EventEmitter {
+> extends ToFromJSONEventEmitter {
   static managerPriority = 0;
 
   static getManagerPriority() {

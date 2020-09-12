@@ -1,4 +1,5 @@
 import { Option, IConstructor } from "@aicacia/core";
+import { IJSONObject } from "@aicacia/json";
 import { Plugin } from "../../Plugin";
 export declare abstract class Renderer extends Plugin {
     static pluginPriority: number;
@@ -6,9 +7,9 @@ export declare abstract class Renderer extends Plugin {
     private rendererHandlerMap;
     getRendererHandlers(): readonly RendererHandler[];
     getRendererHandler<R extends RendererHandler>(RendererHandler: IConstructor<R>): Option<RendererHandler<Renderer>>;
-    addRendererHandlers(...rendererHandlers: RendererHandler[]): this;
+    addRendererHandlers(rendererHandlers: RendererHandler[]): this;
     addRendererHandler(...rendererHandlers: RendererHandler[]): this;
-    removeRendererHandlers(...rendererHandlers: IConstructor<RendererHandler>[]): this;
+    removeRendererHandlers(rendererHandlers: IConstructor<RendererHandler>[]): this;
     removeRendererHandler(...rendererHandlers: IConstructor<RendererHandler>[]): this;
     onUpdate(): this;
     onAfterUpdate(): this;
@@ -16,5 +17,11 @@ export declare abstract class Renderer extends Plugin {
     private _removeRendererHandler;
     private sort;
     private sortFunction;
+    toJSON(): {
+        rendererHandlers: {
+            enabled: boolean;
+        }[];
+    };
+    fromJSON(json: IJSONObject): this;
 }
 import { RendererHandler } from "./RendererHandler";

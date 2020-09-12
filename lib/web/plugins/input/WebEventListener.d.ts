@@ -1,5 +1,6 @@
 import { EventListener } from "../../../plugins/input/EventListener";
 export declare class WebEventListener extends EventListener {
+    static toFromJSONEnabled: boolean;
     private touchInputEventPool;
     private mouseInputEventPool;
     private mouseWheelInputEventPool;

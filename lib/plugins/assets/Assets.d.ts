@@ -1,6 +1,8 @@
 import { Option } from "@aicacia/core";
+import { IJSONObject } from "@aicacia/json";
 import { Plugin } from "../../Plugin";
 export declare class Assets extends Plugin {
+    private assetMap;
     private assets;
     private loadedAssets;
     private loadingPromises;
@@ -10,6 +12,7 @@ export declare class Assets extends Plugin {
     findAll(fn: (asset: Asset) => boolean): Asset[];
     findAllWithName(name: string): Asset[];
     isLoading(): boolean;
+    getAsset<T extends Asset = Asset>(uuid: string): Option<T>;
     getAssets(): readonly Asset[];
     getLoadedAssets(): readonly Asset[];
     getLoadingAssets(): Asset[];
@@ -33,5 +36,12 @@ export declare class Assets extends Plugin {
     private _unloadAsset;
     private _addAsset;
     private _removeAsset;
+    toJSON(): {
+        assets: {
+            uuid: string;
+            name: string;
+        }[];
+    };
+    fromJSON(json: IJSONObject): this;
 }
 import { Asset } from "./Asset";

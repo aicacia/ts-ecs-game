@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option } from "@aicacia/core";
 import { DefaultDescriptorManager } from "../../DefaultDescriptorManager";
 
 export class Camera2DManager extends DefaultDescriptorManager<Camera2D> {

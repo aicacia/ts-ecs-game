@@ -1,6 +1,7 @@
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { TransformComponent } from "../TransformComponent";
 import { mat2dFromMat4 } from "../../math";
+import { IJSONArray, IJSONObject } from "@aicacia/json";
 
 const MAT4_0 = mat4.create(),
   QUAT_0 = quat.create(),
@@ -205,5 +206,22 @@ export class Transform3D extends TransformComponent {
       mat4.lookAt(MAT4_0, this.localPosition, localPosition, VEC3_UP)
     );
     return this.setNeedsUpdate();
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      localPosition: this.localPosition as IJSONArray,
+      localScale: this.localScale as IJSONArray,
+      localRotation: this.localRotation as IJSONArray,
+    };
+  }
+
+  fromJSON(json: IJSONObject) {
+    return super
+      .fromJSON(json)
+      .setLocalPosition(json.localPosition as vec3)
+      .setLocalScale(json.localScale as vec3)
+      .setLocalRotation(json.localRotation as quat);
   }
 }

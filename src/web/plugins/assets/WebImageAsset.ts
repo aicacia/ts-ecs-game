@@ -1,4 +1,5 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option } from "@aicacia/core";
+import { IJSONObject } from "@aicacia/json";
 import { ImageAsset } from "../../../plugins/assets/ImageAsset";
 
 export class WebImageAsset extends ImageAsset {
@@ -36,5 +37,17 @@ export class WebImageAsset extends ImageAsset {
   protected unloadAsset() {
     this.image.clear();
     return Promise.resolve();
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      src: this.src,
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
+    this.src = json.src as string;
+    return this;
   }
 }

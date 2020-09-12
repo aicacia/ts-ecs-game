@@ -1,3 +1,4 @@
+import { IJSONObject } from "@aicacia/json";
 import { EPSILON } from "../math";
 import { Plugin } from "../Plugin";
 
@@ -100,6 +101,22 @@ export class Time extends Plugin {
         ? this.maxDelta
         : this.delta;
 
+    return this;
+  }
+
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      frame: this.frame,
+      scale: this.scale,
+      fixedDelta: this.fixedDelta,
+    };
+  }
+  fromJSON(json: IJSONObject) {
+    super.fromJSON(json);
+    this.frame = json.frame as number;
+    this.scale = json.scale as number;
+    this.fixedDelta = json.fixedDelta as number;
     return this;
   }
 }

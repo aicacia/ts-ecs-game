@@ -1,4 +1,4 @@
-import { none, Option, some } from "@aicacia/core";
+import { none, Option } from "@aicacia/core";
 import { SpriteClip } from "./SpriteClip";
 import { Component } from "../../Component";
 import { Time } from "../..";

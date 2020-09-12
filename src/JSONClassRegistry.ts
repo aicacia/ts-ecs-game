@@ -19,8 +19,8 @@ export class JSONClassRegistry {
       })
       .unwrapOrElse(() => {
         const typeId =
-          typeof (klass as any).getJSONName === "function"
-            ? (klass as any).getJSONName()
+          typeof (klass as any).getTypeId === "function"
+            ? (klass as any).getTypeId()
             : klass.name;
         this.constructorToTypeId.set(klass, typeId);
         this.typeIdToConstructor.set(typeId, klass);

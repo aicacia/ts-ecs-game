@@ -13,6 +13,6 @@ export {
   CtxRendererHandler,
   SpriteCtxRendererHandler,
   TransformCtxRendererHandler,
-  UICtxRendererHandler,
+  UITextCtxRendererHandler,
 } from "./plugins";
 export { WebCanvas } from "./WebCanvas";

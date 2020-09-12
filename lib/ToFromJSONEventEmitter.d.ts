@@ -3,8 +3,11 @@ import { IConstructor } from "@aicacia/core";
 import { IJSONObject } from "@aicacia/json";
 import { EventEmitter } from "events";
 export declare abstract class ToFromJSONEventEmitter extends EventEmitter {
-    static jsonName?: string;
-    static getJSONName(): string;
+    static typeId?: string;
+    static toFromJSONEnabled: boolean;
+    static getTypeId(): string;
+    static isToFromJSONEnabled(): boolean;
+    static getConstructorFromJSON<T extends ToFromJSONEventEmitter = ToFromJSONEventEmitter>(json: IJSONObject): IConstructor<T>;
     static newFromJSON<T extends ToFromJSONEventEmitter = ToFromJSONEventEmitter>(json: IJSONObject): T;
     getConstructor(): IConstructor<this>;
     toJSON(): IJSONObject;

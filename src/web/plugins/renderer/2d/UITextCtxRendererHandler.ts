@@ -10,7 +10,7 @@ function getCtxFontStyle(uiText: UIText) {
   return `${uiText.getSize()}px ${uiText.getFont()}`;
 }
 
-export class UICtxRendererHandler extends CtxRendererHandler {
+export class UITextCtxRendererHandler extends CtxRendererHandler {
   onRender() {
     this.getManager(UIElementManager).ifSome((uiElementManager) => {
       const renderer = this.getRequiredRenderer();
@@ -23,13 +23,12 @@ export class UICtxRendererHandler extends CtxRendererHandler {
             .map((transform) =>
               renderer.render((ctx) => {
                 if (uiElement instanceof UIText) {
-                  const uiText = uiElement;
                   ctx.scale(INV_BASE_SIZE, -INV_BASE_SIZE);
-                  ctx.font = getCtxFontStyle(uiText);
-                  ctx.textBaseline = uiText.getBaseline();
-                  ctx.textAlign = uiText.getAlign();
-                  ctx.direction = uiText.getDirection();
-                  ctx.fillText(uiText.getText(), 0, 0);
+                  ctx.font = getCtxFontStyle(uiElement);
+                  ctx.textBaseline = uiElement.getBaseline();
+                  ctx.textAlign = uiElement.getAlign();
+                  ctx.direction = uiElement.getDirection();
+                  ctx.fillText(uiElement.getText(), 0, 0);
                 }
               }, transform.getMatrix2d(MAT2_0))
             );

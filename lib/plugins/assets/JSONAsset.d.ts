@@ -1,5 +1,5 @@
 import { Option } from "@aicacia/core";
-import { IJSON } from "@aicacia/json";
+import { IJSON, IJSONObject } from "@aicacia/json";
 import { Asset } from "./Asset";
 export declare class JSONAsset extends Asset {
     private json;
@@ -9,4 +9,11 @@ export declare class JSONAsset extends Asset {
     getJSON(): Option<IJSON>;
     protected loadAsset(): Promise<void>;
     protected unloadAsset(): Promise<void>;
+    toJSON(): {
+        src: RequestInfo;
+        options: RequestInit | undefined;
+        uuid: string;
+        name: string;
+    };
+    fromJSON(json: IJSONObject): this;
 }
