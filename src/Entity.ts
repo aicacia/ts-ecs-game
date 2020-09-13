@@ -256,37 +256,66 @@ export class Entity extends ToFromJSONEventEmitter {
   }
 
   validateRequirements() {
-    const missingComponents: IRequirement<Component>[] = [],
-      missingPlugins: IRequirement<Plugin>[] = [];
+    const missingComponents: Map<
+        IConstructor<Component>,
+        IRequirement<Component>[]
+      > = new Map(),
+      missingPlugins: Map<
+        IConstructor<Component>,
+        IRequirement<Plugin>[]
+      > = new Map();
 
-    for (const component of this.components) {
-      filterRequirements(
-        missingComponents,
-        component.getRequiredComponents(),
-        (C) => !this.hasComponent(C)
-      );
-      filterRequirements(
-        missingPlugins,
-        component.getRequiredPlugins(),
-        (P) => !this.getRequiredScene().hasPlugin(P)
-      );
+    for (const [Component, component] of this.componentMap) {
+      const missingRequiredComponents = filterRequirements(
+          component.getRequiredComponents(),
+          (C) => !this.hasComponent(C)
+        ),
+        missingRequiredPlugins = filterRequirements(
+          component.getRequiredPlugins(),
+          (P) => !this.getRequiredScene().hasPlugin(P)
+        );
+
+      if (missingRequiredComponents.length > 0) {
+        missingComponents.set(Component, missingRequiredComponents);
+      }
+      if (missingRequiredComponents.length > 0) {
+        missingPlugins.set(Component, missingRequiredPlugins);
+      }
     }
 
-    if (missingComponents.length > 0 || missingPlugins.length > 0) {
-      const componentMessage = missingComponents.map(
-        (missingRequirement) =>
-          `Entity requires ${requirementToString(missingRequirement)} Component`
-      );
-      const pluginMessage = missingPlugins.map(
-        (missingRequirement) =>
-          `Entity requires ${requirementToString(missingRequirement)} Plugin`
-      );
-      const message =
-        componentMessage.length > 0
-          ? componentMessage.join("\n") + "\n"
-          : "" + pluginMessage.join("\n");
+    if (missingComponents.size > 0 || missingPlugins.size > 0) {
+      const componentMessage = [...missingComponents.entries()]
+          .map(([component, missingRequirements]) =>
+            missingRequirements
+              .map(
+                (missingRequirement) =>
+                  `Entity's ${requirementToString(
+                    component
+                  )} requires ${requirementToString(
+                    missingRequirement
+                  )} Component`
+              )
+              .join("\n")
+          )
+          .join("\n"),
+        pluginMessage = [...missingPlugins.entries()]
+          .map(([component, missingRequirements]) =>
+            missingRequirements
+              .map(
+                (missingRequirement) =>
+                  `Entity's ${requirementToString(
+                    component
+                  )} requires ${requirementToString(missingRequirement)} Plugin`
+              )
+              .join("\n")
+          )
+          .join("\n");
 
-      throw new Error(message);
+      throw new Error(
+        componentMessage
+          ? `${componentMessage}\n${pluginMessage}`
+          : pluginMessage
+      );
     }
   }
 
@@ -329,16 +358,21 @@ export class Entity extends ToFromJSONEventEmitter {
 
       this.children.push(child);
 
-      child.scene = this.scene.clone();
       child.parent.replace(this);
       child.root = this.root;
       child.setDepth(this.depth + 1);
+      this.scene.ifSome((scene) => scene.UNSAFE_addEntityNow(child, true));
 
       this.emit("add-child", child);
     }
     return this;
   }
   private _removeChild(child: Entity) {
+    this.scene.ifSome((scene) => scene.UNSAFE_removeEntityNow(child));
+    this.UNSAFE_removeChild(child);
+    return this;
+  }
+  UNSAFE_removeChild(child: Entity) {
     const index = this.children.indexOf(child);
 
     if (index !== -1) {

@@ -5,6 +5,7 @@ import { EventEmitter } from "events";
 export declare abstract class ToFromJSONEventEmitter extends EventEmitter {
     static typeId?: string;
     static toFromJSONEnabled: boolean;
+    static toString(): string;
     static getTypeId(): string;
     static isToFromJSONEnabled(): boolean;
     static getConstructorFromJSON<T extends ToFromJSONEventEmitter = ToFromJSONEventEmitter>(json: IJSONObject): IConstructor<T>;

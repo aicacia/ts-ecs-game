@@ -1,9 +1,13 @@
 import * as tape from "tape";
 import { Component, Entity, Plugin, Scene } from ".";
 import { IJSONObject } from "@aicacia/json";
-import { globalJSONClassRegistry } from "./JSONClassRegistry";
+import { DefaultManager } from "./DefaultManager";
+
+export class TestManager extends DefaultManager<Test> {}
 
 export class Test extends Component {
+  static Manager = TestManager;
+
   position = 0;
   globalPosition = 0;
 
@@ -112,15 +116,8 @@ tape("Scene to/from JSON", (assert: tape.Test) => {
   scene.clear();
   scene.maintain();
 
-  const TestTypeId = globalJSONClassRegistry.getByConstructor(Test);
-  const Test1PluginTypeId = globalJSONClassRegistry.getByConstructor(
-    Test1Plugin
-  );
-  const Test2PluginTypeId = globalJSONClassRegistry.getByConstructor(
-    Test2Plugin
-  );
-
   assert.deepEqual(json, {
+    typeId: "Scene",
     name: "",
     entities: [
       {
@@ -131,23 +128,19 @@ tape("Scene to/from JSON", (assert: tape.Test) => {
             name: "",
             tags: ["child"],
             children: [],
-            components: [
-              { typeId: TestTypeId, position: 0, globalPosition: 0 },
-            ],
+            components: [{ typeId: "Test", position: 0, globalPosition: 0 }],
           },
           {
             name: "",
             tags: ["child"],
             children: [],
-            components: [
-              { typeId: TestTypeId, position: 0, globalPosition: 0 },
-            ],
+            components: [{ typeId: "Test", position: 0, globalPosition: 0 }],
           },
         ],
-        components: [{ typeId: TestTypeId, position: 0, globalPosition: 0 }],
+        components: [{ typeId: "Test", position: 0, globalPosition: 0 }],
       },
     ],
-    plugins: [{ typeId: Test1PluginTypeId }, { typeId: Test2PluginTypeId }],
+    plugins: [{ typeId: "Test1Plugin" }, { typeId: "Test2Plugin" }],
   });
 
   scene.fromJSON(json);
@@ -165,13 +158,26 @@ tape("Scene find(All)", (assert: tape.Test) => {
   const scene = new Scene().addEntity(
     new Entity()
       .addTag("parent")
-      .addChild(new Entity().addTag("child"), new Entity().addTag("child"))
+      .addChild(new Entity().addTag("child").addComponent(new Test()))
   );
 
   scene.maintain();
 
   assert.equals(scene.findAllWithTag("parent").length, 1);
+  assert.equals(scene.findAllWithTag("child").length, 1);
+
+  scene
+    .findWithTag("parent")
+    .unwrap()
+    .addChild(new Entity().addTag("child").addComponent(new Test()));
+
+  scene.maintain();
+
   assert.equals(scene.findAllWithTag("child").length, 2);
+  assert.equals(
+    scene.getRequiredManager(TestManager).getComponents().length,
+    2
+  );
 
   assert.end();
 });

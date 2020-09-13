@@ -43,24 +43,32 @@ export abstract class Plugin extends ToFromJSONEventEmitter {
   }
 
   validateRequirements() {
-    const missingPlugins: IConstructor<Plugin>[] = [];
+    const missingPlugins: IRequirement<Plugin>[] = [];
 
     for (const plugin of this.getRequiredScene().getPlugins()) {
-      filterRequirements(
-        missingPlugins,
+      const missingRequiredPlugins = filterRequirements(
         plugin.getRequiredPlugins(),
         (P) => !this.getRequiredScene().hasPlugin(P)
       );
+
+      if (missingRequiredPlugins.length > 0) {
+        missingPlugins.push(...missingRequiredPlugins);
+      }
     }
 
     if (missingPlugins.length > 0) {
-      const pluginMessage = missingPlugins.map(
-        (missingRequirement) =>
-          `${this.getConstructor()} Plugin requires ${requirementToString(
-            missingRequirement
-          )} Plugin`
-      );
-      throw new Error(pluginMessage.join("\n"));
+      const pluginMessage = missingPlugins
+        .map(
+          (missingRequirement) =>
+            `${requirementToString(
+              this.getConstructor()
+            )} Plugin requires ${requirementToString(
+              missingRequirement
+            )} Plugin`
+        )
+        .join("\n");
+
+      throw new Error(pluginMessage);
     }
   }
 

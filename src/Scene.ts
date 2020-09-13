@@ -35,8 +35,8 @@ export class Scene extends ToFromJSONEventEmitter {
   private isUpdating = false;
   private isInitted = false;
 
-  maintain() {
-    this.emit("maintain");
+  maintain(emit = true) {
+    emit && this.emit("maintain");
     this.entitiesToAdd.forEach((entity) => this.addEntityNow(entity, true));
     this.entitiesToAdd.length = 0;
     this.entitiesToRemove.forEach((entity) =>
@@ -193,7 +193,7 @@ export class Scene extends ToFromJSONEventEmitter {
         "Scene.addEntityNow called while updating, use force to suppress this Error"
       );
     }
-    return this._addEntityNow(entity, false);
+    return this.UNSAFE_addEntityNow(entity, false);
   }
 
   removeEntityNow(entity: Entity, force = false) {
@@ -202,7 +202,7 @@ export class Scene extends ToFromJSONEventEmitter {
         "Scene.removeEntityNow called while updating, use force to suppress this Error"
       );
     }
-    return this._removeEntityNow(entity);
+    return this.UNSAFE_removeEntityNow(entity);
   }
 
   UNSAFE_addComponent(component: Component) {
@@ -261,7 +261,7 @@ export class Scene extends ToFromJSONEventEmitter {
 
     return this;
   }
-  private _addEntityNow(entity: Entity, isChild: boolean) {
+  UNSAFE_addEntityNow(entity: Entity, isChild: boolean) {
     const entitySceneOption = entity.getScene();
 
     if (entitySceneOption.isSome()) {
@@ -288,7 +288,10 @@ export class Scene extends ToFromJSONEventEmitter {
     entity
       .getComponents()
       .forEach((component) => this.UNSAFE_addComponent(component));
-    entity.forEachChild((child) => this._addEntityNow(child, true), false);
+    entity.forEachChild(
+      (child) => this.UNSAFE_addEntityNow(child, true),
+      false
+    );
 
     if (process.env.NODE_ENV !== "production") {
       entity.validateRequirements();
@@ -299,7 +302,7 @@ export class Scene extends ToFromJSONEventEmitter {
     return this;
   }
 
-  private _removeEntityNow(entity: Entity) {
+  UNSAFE_removeEntityNow(entity: Entity) {
     const entitySceneOption = entity.getScene();
 
     if (entitySceneOption.isSome()) {
@@ -324,7 +327,7 @@ export class Scene extends ToFromJSONEventEmitter {
         entity.UNSAFE_removeScene();
       }
     } else {
-      entity.getParent().ifSome((parent) => parent.removeChild(entity));
+      entity.getParent().ifSome((parent) => parent.UNSAFE_removeChild(entity));
     }
 
     entity
@@ -413,7 +416,7 @@ export class Scene extends ToFromJSONEventEmitter {
         )
       );
     }
-    return this;
+    return this.maintain(false);
   }
 }
 

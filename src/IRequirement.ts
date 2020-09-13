@@ -3,11 +3,10 @@ import { IConstructor } from "@aicacia/core";
 export type IRequirement<T> = IConstructor<T> | Array<IConstructor<T>>;
 
 export function filterRequirements<T>(
-  missing: IRequirement<T>[],
   requirements: IRequirement<T>[],
   filter: (value: IConstructor<T>) => boolean
-) {
-  requirements.forEach((requirement) => {
+): IRequirement<T>[] {
+  return requirements.reduce((missing, requirement) => {
     if (Array.isArray(requirement)) {
       if (!requirement.some(filter)) {
         missing.push(requirement);
@@ -17,13 +16,14 @@ export function filterRequirements<T>(
         missing.push(requirement);
       }
     }
-  });
+    return missing;
+  }, [] as IRequirement<T>[]);
 }
 
 export function requirementToString<T>(requirement: IRequirement<T>): string {
   if (Array.isArray(requirement)) {
-    return `one of ${requirement.join(", ")}`;
+    return `one of ${requirement.map(requirementToString).join(", ")}`;
   } else {
-    return requirement.toString();
+    return requirement.name || (requirement as any).typeId || "UnknownClass";
   }
 }

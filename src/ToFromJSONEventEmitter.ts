@@ -6,6 +6,9 @@ export abstract class ToFromJSONEventEmitter extends EventEmitter {
   static typeId?: string;
   static toFromJSONEnabled = true;
 
+  static toString() {
+    return this.getTypeId();
+  }
   static getTypeId() {
     return this.typeId || this.name;
   }

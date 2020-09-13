@@ -1,6 +1,6 @@
 import * as tape from "tape";
 import { Transform3D } from "../..";
-import { ImageAsset, Time } from "../../plugins";
+import { Assets, ImageAsset, Time } from "../../plugins";
 import { Entity, Scene } from "../..";
 import { Sprite } from "./Sprite";
 
@@ -20,10 +20,10 @@ class TestImageAsset extends ImageAsset {
 }
 
 tape("Sprite", (assert: tape.Test) => {
-  const sprite = new Sprite(new TestImageAsset());
+  const sprite = new Sprite().setImageAsset(new TestImageAsset());
   const scene = new Scene()
     .addEntity(new Entity().addComponent(new Transform3D(), sprite))
-    .addPlugin(new Time());
+    .addPlugin(new Time(), new Assets());
 
   scene.update();
 
