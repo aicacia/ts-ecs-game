@@ -205,6 +205,7 @@ export class Scene extends ToFromJSONEventEmitter {
     return this.UNSAFE_removeEntityNow(entity);
   }
 
+  // @internal
   UNSAFE_addComponent(component: Component) {
     const Manager: IConstructor<Manager> = component.getManagerConstructor();
 
@@ -237,6 +238,7 @@ export class Scene extends ToFromJSONEventEmitter {
     return this;
   }
 
+  // @internal
   UNSAFE_removeComponent(component: Component) {
     const Manager: IConstructor<Manager> = component.getManagerConstructor();
 
@@ -261,6 +263,7 @@ export class Scene extends ToFromJSONEventEmitter {
 
     return this;
   }
+  // @internal
   UNSAFE_addEntityNow(entity: Entity, isChild: boolean) {
     const entitySceneOption = entity.getScene();
 
@@ -302,6 +305,7 @@ export class Scene extends ToFromJSONEventEmitter {
     return this;
   }
 
+  // @internal
   UNSAFE_removeEntityNow(entity: Entity) {
     const entitySceneOption = entity.getScene();
 

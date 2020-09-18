@@ -80,6 +80,7 @@ export class Entity extends ToFromJSONEventEmitter {
   getRequiredScene() {
     return this.getScene().expect("Entity expected to have a Scene");
   }
+  // @internal
   UNSAFE_setScene(scene: Scene, recur = false) {
     this.scene.replace(scene);
     if (recur) {
@@ -87,6 +88,7 @@ export class Entity extends ToFromJSONEventEmitter {
     }
     return this;
   }
+  // @internal
   UNSAFE_removeScene() {
     this.scene.clear();
     return this;
@@ -247,12 +249,12 @@ export class Entity extends ToFromJSONEventEmitter {
     return this.addChildren(children);
   }
 
-  removeChildren(...children: Entity[]) {
+  removeChildren(children: Entity[]) {
     children.forEach((child) => this._removeChild(child));
     return this;
   }
   removeChild(...children: Entity[]) {
-    return this.removeChildren(...children);
+    return this.removeChildren(children);
   }
 
   validateRequirements() {

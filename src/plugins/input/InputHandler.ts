@@ -10,10 +10,12 @@ export abstract class InputHandler<
     return Object.getPrototypeOf(this).constructor;
   }
 
+  // @internal
   UNSAFE_setInput(input: I) {
     this.input.replace(input);
     return this;
   }
+  // @internal
   UNSAFE_removeInput() {
     this.input.clear();
     return this;

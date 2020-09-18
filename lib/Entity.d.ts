@@ -60,7 +60,7 @@ export declare class Entity extends ToFromJSONEventEmitter {
     getChildren(): readonly Entity[];
     addChildren(children: Entity[]): this;
     addChild(...children: Entity[]): this;
-    removeChildren(...children: Entity[]): this;
+    removeChildren(children: Entity[]): this;
     removeChild(...children: Entity[]): this;
     validateRequirements(): void;
     private _addComponent;

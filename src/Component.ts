@@ -58,10 +58,12 @@ export abstract class Component extends ToFromJSONEventEmitter {
     );
   }
 
+  // @internal
   UNSAFE_setEntity(entity: Entity) {
     this.entity.replace(entity);
     return this;
   }
+  // @internal
   UNSAFE_removeEntity() {
     this.entity.clear();
     return this;
@@ -83,11 +85,12 @@ export abstract class Component extends ToFromJSONEventEmitter {
       `${this.getConstructor()} Component requires a Scene`
     );
   }
-
+  // @internal
   UNSAFE_setManager(manager: Manager) {
     this.manager.replace(manager);
     return this;
   }
+  // @internal
   UNSAFE_removeManager() {
     this.manager.clear();
     return this;

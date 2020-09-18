@@ -12,10 +12,12 @@ export abstract class Manager<
 
   protected scene: Option<Scene> = none();
 
+  // @internal
   UNSAFE_setScene(scene: Scene) {
     this.scene.replace(scene);
     return this;
   }
+  // @internal
   UNSAFE_removeScene() {
     this.scene.clear();
     return this;
