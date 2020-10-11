@@ -29,6 +29,8 @@ export declare abstract class Component extends ToFromJSONEventEmitter {
     UNSAFE_removeManager(): this;
     getManager<M extends Manager = Manager>(): Option<M>;
     getRequiredManager<M extends Manager = Manager>(): M;
+    getSceneManager<M extends Manager = Manager>(Manager: IConstructor<M>): Option<M>;
+    getRequiredSceneManager<M extends Manager = Manager>(Manager: IConstructor<M>): M;
     onInit(): this;
     onDetach(): this;
     onAdd(): this;

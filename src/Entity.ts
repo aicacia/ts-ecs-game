@@ -67,6 +67,9 @@ export class Entity extends ToFromJSONEventEmitter {
     return this.root === this;
   }
 
+  hasParent(): boolean {
+    return this.parent.isSome();
+  }
   getParent(): Option<Entity> {
     return this.parent;
   }

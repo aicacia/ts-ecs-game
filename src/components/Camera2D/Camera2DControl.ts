@@ -7,12 +7,13 @@ import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { Camera2DControlManager } from "./Camera2DControlManager";
 import { IJSONObject } from "@aicacia/json";
+import { EPSILON } from "../../math";
 
 const VEC2_0 = vec2.create(),
   VEC2_1 = vec2.create(),
   VEC2_2 = vec2.create(),
   ZERO = vec2.fromValues(0, 0),
-  MIN_SCALE = vec2.fromValues(1, 1);
+  MIN_SCALE = vec2.fromValues(EPSILON, EPSILON);
 
 export class Camera2DControl extends Component {
   static Manager = Camera2DControlManager;

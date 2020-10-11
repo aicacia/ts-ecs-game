@@ -1,9 +1,5 @@
 import { EventEmitter } from "events";
 
-export interface ICanvasOptions {
-  disableContextMenu?: boolean;
-}
-
 export abstract class Canvas extends EventEmitter {
   private width = 1;
   private height = 1;

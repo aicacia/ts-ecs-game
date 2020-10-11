@@ -100,6 +100,19 @@ export abstract class Component extends ToFromJSONEventEmitter {
   }
   getRequiredManager<M extends Manager = Manager>() {
     return this.getManager<M>().expect(
+      `${this.getConstructor()} Component is not part of a Manager ${Object.getPrototypeOf(
+        this
+      ).getManagerConstructor()} Manager`
+    );
+  }
+
+  getSceneManager<M extends Manager = Manager>(Manager: IConstructor<M>) {
+    return this.getScene().flatMap((scene) => scene.getManager(Manager));
+  }
+  getRequiredSceneManager<M extends Manager = Manager>(
+    Manager: IConstructor<M>
+  ) {
+    return this.getSceneManager(Manager).expect(
       `${this.getConstructor()} Component requires ${Object.getPrototypeOf(
         this
       ).getManagerConstructor()} Manager`
