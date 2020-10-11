@@ -1,8 +1,5 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
-export interface ICanvasOptions {
-    disableContextMenu?: boolean;
-}
 export declare abstract class Canvas extends EventEmitter {
     private width;
     private height;

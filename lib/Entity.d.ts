@@ -27,6 +27,7 @@ export declare class Entity extends ToFromJSONEventEmitter {
     getDepth(): number;
     getRoot(): Entity;
     isRoot(): boolean;
+    hasParent(): boolean;
     getParent(): Option<Entity>;
     hasScene(): boolean;
     getScene(): Option<Scene>;
