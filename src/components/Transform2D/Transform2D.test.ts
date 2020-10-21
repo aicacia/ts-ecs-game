@@ -67,8 +67,8 @@ tape("Transform2D.toLocalPosition", (assert: tape.Test) => {
     .toLocalPosition(globalPositionEntityLocal, globalPosition);
 
   assert.true(
-    vec2.equals(globalPositionEntityLocal, vec2.fromValues(1, 1)),
-    `[${globalPositionEntityLocal}] = [${vec2.fromValues(1, 1)}]`
+    vec2.equals(globalPositionEntityLocal, vec2.fromValues(-1, -1)),
+    `[${globalPositionEntityLocal}] = [${vec2.fromValues(-1, -1)}]`
   );
 
   assert.end();
