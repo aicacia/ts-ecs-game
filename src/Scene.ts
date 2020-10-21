@@ -156,8 +156,7 @@ export class Scene extends ToFromJSONEventEmitter {
 
   addPlugins(plugins: Plugin[]) {
     plugins.forEach((plugin) => this._addPlugin(plugin));
-    this.sortPlugins();
-    return this;
+    return this.sortPlugins();
   }
   addPlugin(...plugins: Plugin[]) {
     return this.addPlugins(plugins);
@@ -359,7 +358,6 @@ export class Scene extends ToFromJSONEventEmitter {
       if (process.env.NODE_ENV !== "production") {
         plugin.validateRequirements();
       }
-      this.sortPlugins();
       this.emit("add-plugin", plugin);
     }
     return this;
@@ -377,14 +375,16 @@ export class Scene extends ToFromJSONEventEmitter {
   }
 
   private sortPlugins() {
-    this.plugins.sort(this.pluginSortFunction);
+    this.plugins.sort(this.sortPluginsFunction);
+    return this;
   }
-  private pluginSortFunction(a: Plugin, b: Plugin) {
+  private sortPluginsFunction = (a: Plugin, b: Plugin) => {
     return a.getPluginPriority() - b.getPluginPriority();
-  }
+  };
 
   private sortManagers() {
     this.managers.sort(this.managerSortFunction);
+    return this;
   }
   private managerSortFunction(a: Manager, b: Manager) {
     return a.getManagerPriority() - b.getManagerPriority();

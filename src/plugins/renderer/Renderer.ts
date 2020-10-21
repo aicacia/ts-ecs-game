@@ -24,7 +24,7 @@ export abstract class Renderer extends Plugin {
     rendererHandlers.forEach((rendererHandler) =>
       this._addRendererHandler(rendererHandler)
     );
-    return this;
+    return this.sortRendererHandlers();
   }
   addRendererHandler(...rendererHandlers: RendererHandler[]) {
     return this.addRendererHandlers(rendererHandlers);
@@ -34,8 +34,7 @@ export abstract class Renderer extends Plugin {
     rendererHandlers.forEach((rendererHandler) =>
       this._removeRendererHandler(rendererHandler)
     );
-    this.sort();
-    return this;
+    return this.sortRendererHandlers();
   }
   removeRendererHandler(...rendererHandlers: IConstructor<RendererHandler>[]) {
     return this.removeRendererHandlers(rendererHandlers);
@@ -92,12 +91,16 @@ export abstract class Renderer extends Plugin {
     return this;
   }
 
-  private sort() {
-    this.rendererHandlers.sort(this.sortFunction);
+  private sortRendererHandlers() {
+    this.rendererHandlers.sort(this.sortRendererHandlersFunction);
+    return this;
   }
-  private sortFunction(a: RendererHandler, b: RendererHandler) {
+  private sortRendererHandlersFunction = (
+    a: RendererHandler,
+    b: RendererHandler
+  ) => {
     return a.getRendererHandlerPriority() - b.getRendererHandlerPriority();
-  }
+  };
 
   toJSON() {
     return {

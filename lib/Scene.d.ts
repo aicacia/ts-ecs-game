@@ -56,7 +56,7 @@ export declare class Scene extends ToFromJSONEventEmitter {
     private _addPlugin;
     private _removePlugin;
     private sortPlugins;
-    private pluginSortFunction;
+    private sortPluginsFunction;
     private sortManagers;
     private managerSortFunction;
     toJSON(): IJSONObject;

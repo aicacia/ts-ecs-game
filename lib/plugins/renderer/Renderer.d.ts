@@ -15,8 +15,8 @@ export declare abstract class Renderer extends Plugin {
     onAfterUpdate(): this;
     private _addRendererHandler;
     private _removeRendererHandler;
-    private sort;
-    private sortFunction;
+    private sortRendererHandlers;
+    private sortRendererHandlersFunction;
     toJSON(): {
         rendererHandlers: {
             enabled: boolean;
