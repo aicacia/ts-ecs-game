@@ -58,7 +58,15 @@ export function getPointFromAngle(out: vec2, angle: number) {
 }
 
 export function getAngleFromPoint(out: vec2) {
-  return Math.atan2(out[1], out[0]) - HALF_PI;
+  const x = out[0],
+    y = out[1],
+    angle = Math.atan2(y, x);
+
+  if (y < 0) {
+    return TAU + angle;
+  } else {
+    return angle;
+  }
 }
 
 const getTangentAngle_VEC2_0 = vec2.create();
@@ -86,13 +94,12 @@ export function clamp(value: number, min: number, max: number) {
 }
 
 export function angleVec2(out: vec2) {
-  return Math.atan2(out[1], out[0]) - HALF_PI;
+  return Math.atan2(out[1], out[0]);
 }
 
 export function vec2FromAngle(out: vec2, angle: number) {
-  const a = angle + HALF_PI;
-  out[0] = Math.cos(a);
-  out[1] = Math.sin(a);
+  out[0] = Math.cos(angle);
+  out[1] = Math.sin(angle);
   return out;
 }
 

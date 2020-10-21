@@ -4,6 +4,7 @@ import {
   composeMat2d,
   decomposeMat2d,
   getAngleBetweenPoints,
+  HALF_PI,
   mat4FromMat2d,
 } from "../../math";
 import { TransformComponent } from "../TransformComponent";
@@ -147,7 +148,6 @@ export class Transform2D extends TransformComponent {
       this.localScale,
       this.localRotation
     );
-
     return this;
   }
 
@@ -192,9 +192,16 @@ export class Transform2D extends TransformComponent {
     return mat2d.copy(out, this.getLocalMatrix());
   }
 
+  toLocalPosition(out: vec2, position: vec2) {
+    return vec2.sub(out, position, this.getPosition());
+  }
+
   lookAt(position: vec2) {
     return this.setLocalRotation(
-      getAngleBetweenPoints(this.localPosition, position)
+      getAngleBetweenPoints(
+        this.localPosition,
+        this.toLocalPosition(VEC2_0, position)
+      ) - HALF_PI
     );
   }
 

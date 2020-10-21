@@ -48,3 +48,28 @@ tape("Transform2D", (assert: tape.Test) => {
 
   assert.end();
 });
+
+tape("Transform2D.toLocalPosition", (assert: tape.Test) => {
+  const entity = new Entity().addComponent(
+      new Transform2D()
+        .setLocalPosition(vec2.fromValues(1, 1))
+        .setLocalRotation(Math.PI)
+    ),
+    scene = new Scene().addEntity(entity);
+
+  scene.update();
+
+  const globalPosition = vec2.fromValues(0, 0),
+    globalPositionEntityLocal = vec2.create();
+
+  entity
+    .getRequiredComponent(Transform2D)
+    .toLocalPosition(globalPositionEntityLocal, globalPosition);
+
+  assert.true(
+    vec2.equals(globalPositionEntityLocal, vec2.fromValues(1, 1)),
+    `[${globalPositionEntityLocal}] = [${vec2.fromValues(1, 1)}]`
+  );
+
+  assert.end();
+});
