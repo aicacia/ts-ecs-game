@@ -7,7 +7,7 @@ export declare class Loop {
     constructor(handler: ILoopHandler);
     getHandler(): ILoopHandler;
     setHandler(handler: ILoopHandler): this;
-    start(): Promise<void>;
+    start(): Promise<void> | undefined;
     stop(): this;
     isStopped(): boolean;
     private run;
