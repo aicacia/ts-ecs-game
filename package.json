@@ -16,7 +16,8 @@
     "clean": "rm -rf ./lib",
     "lint": "eslint . --fix",
     "doc": "typedoc",
-    "simple": "parcel examples/simple/index.html"
+    "simple": "parcel examples/simple/index.html",
+    "eventloop": "parcel examples/eventloop/index.html"
   },
   "husky": {
     "hooks": {
@@ -35,10 +36,10 @@
     "@types/raf": "^3.4.0",
     "@types/tape": "^4.13.0",
     "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.5.0",
-    "@typescript-eslint/parser": "^4.5.0",
-    "eslint": "^7.11.0",
-    "eslint-config-prettier": "^6.13.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.3.0",
     "nyc": "^15.1.0",
@@ -50,10 +51,10 @@
     "ts-node": "^9.0.0",
     "tslib": "^2.0.3",
     "typedoc": "^0.19.2",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.5"
   },
   "dependencies": {
-    "@aicacia/core": "^0.1.8",
+    "@aicacia/core": "^0.1.9",
     "@aicacia/json": "^0.1.4",
     "gl-matrix": "^3.3.0",
     "raf": "^3.4.1",

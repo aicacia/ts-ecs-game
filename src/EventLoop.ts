@@ -1,15 +1,29 @@
 import raf = require("raf");
+import { ILoopHandler } from "./Loop";
+import { Input } from "./plugins";
 
-export type ILoopHandler = (ms: number) => void;
-
-export class Loop {
+export class EventLoop {
+  private input: Input;
   private id: number | null = null;
   private running = false;
   private handler: ILoopHandler;
-  private resolve?: () => void;
 
-  constructor(handler: ILoopHandler) {
+  constructor(input: Input, handler: ILoopHandler) {
+    this.input = input;
+    this.input.on("events", this.start);
     this.handler = handler;
+  }
+
+  getInput() {
+    return this.input;
+  }
+  setInput(input: Input) {
+    if (this.input) {
+      this.input.off("events", this.start);
+    }
+    this.input = input;
+    this.input.on("events", this.start);
+    return this;
   }
 
   getHandler() {
@@ -20,15 +34,12 @@ export class Loop {
     return this;
   }
 
-  start() {
+  private start = () => {
     if (!this.running) {
       this.running = true;
-      return new Promise<void>((resolve) => {
-        this.resolve = resolve;
-        this.request();
-      });
+      this.request();
     }
-  }
+  };
   stop() {
     this.running = false;
 
@@ -43,14 +54,9 @@ export class Loop {
   }
 
   private run = (ms: number) => {
+    this.id = null;
     this.handler(ms);
-
-    if (this.running) {
-      this.request();
-    } else if (this.resolve) {
-      this.resolve();
-      this.resolve = undefined;
-    }
+    this.running = false;
     return this;
   };
 
