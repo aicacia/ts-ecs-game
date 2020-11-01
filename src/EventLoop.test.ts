@@ -14,9 +14,9 @@ tape("EventLoop", (assert: tape.Test) => {
 
   assert.true(loop.isStopped());
 
-  input.emit("events", [{ type: "resize" }]);
-  input.emit("events", [{ type: "resize" }]);
-  input.emit("events", [{ type: "resize" }]);
+  input.emit("event", { type: "resize" });
+  input.emit("event", { type: "resize" });
+  input.emit("event", { type: "resize" });
 
   setTimeout(() => {
     assert.equal(count, 1);

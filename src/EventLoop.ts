@@ -10,7 +10,7 @@ export class EventLoop {
 
   constructor(input: Input, handler: ILoopHandler) {
     this.input = input;
-    this.input.on("events", this.start);
+    this.input.on("event", this.start);
     this.handler = handler;
   }
 
@@ -19,10 +19,10 @@ export class EventLoop {
   }
   setInput(input: Input) {
     if (this.input) {
-      this.input.off("events", this.start);
+      this.input.off("event", this.start);
     }
     this.input = input;
-    this.input.on("events", this.start);
+    this.input.on("event", this.start);
     return this;
   }
 

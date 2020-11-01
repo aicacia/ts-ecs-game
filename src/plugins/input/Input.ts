@@ -46,6 +46,7 @@ export class Input extends Plugin {
   }
 
   queueEvent(event: InputEvent) {
+    this.emit("event", event);
     this.events.push(event);
     return this;
   }
@@ -197,9 +198,6 @@ export class Input extends Plugin {
       this.events.forEach((event) => inputHandler.onEvent(time, event));
       inputHandler.onUpdate(time);
     });
-    if (this.events.length) {
-      this.emit("events", this.events);
-    }
     this.events.forEach((event) => this.emit(event.type, event));
     this.eventListeners.forEach((eventListener) => {
       for (let i = 0; i < this.events.length; i++) {
