@@ -18,6 +18,7 @@ export declare class Scene extends ToFromJSONEventEmitter {
     private pluginsMap;
     private isUpdating;
     private isInitted;
+    init(): this;
     maintain(emit?: boolean): this;
     update(): this;
     clear(): this;
@@ -49,9 +50,21 @@ export declare class Scene extends ToFromJSONEventEmitter {
     removeEntity(...entities: Entity[]): this;
     addEntityNow(entity: Entity, force?: boolean): this;
     removeEntityNow(entity: Entity, force?: boolean): this;
+    /**
+     * @ignore
+     */
     UNSAFE_addComponent(component: Component): this;
+    /**
+     * @ignore
+     */
     UNSAFE_removeComponent(component: Component): this;
+    /**
+     * @ignore
+     */
     UNSAFE_addEntityNow(entity: Entity, isChild: boolean): this;
+    /**
+     * @ignore
+     */
     UNSAFE_removeEntityNow(entity: Entity): this;
     private _addPlugin;
     private _removePlugin;

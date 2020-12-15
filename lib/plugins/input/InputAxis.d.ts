@@ -21,7 +21,13 @@ export declare class InputAxis {
     getDead(): number;
     setDead(dead: number): this;
     getValue(): number;
+    /**
+     * @ignore
+     */
     UNSAFE_setValue(value: number): this;
+    /**
+     * @ignore
+     */
     UNSAFE_update(time: Time, value: number, isNeg: boolean, isPos: boolean): void;
     toJSON(): {
         name: string;

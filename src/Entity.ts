@@ -83,7 +83,9 @@ export class Entity extends ToFromJSONEventEmitter {
   getRequiredScene() {
     return this.getScene().expect("Entity expected to have a Scene");
   }
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_setScene(scene: Scene, recur = false) {
     this.scene.replace(scene);
     if (recur) {
@@ -91,7 +93,9 @@ export class Entity extends ToFromJSONEventEmitter {
     }
     return this;
   }
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_removeScene() {
     this.scene.clear();
     return this;

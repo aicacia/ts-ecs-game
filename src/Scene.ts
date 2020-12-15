@@ -35,6 +35,17 @@ export class Scene extends ToFromJSONEventEmitter {
   private isUpdating = false;
   private isInitted = false;
 
+  init() {
+    if (!this.isInitted) {
+      this.isInitted = true;
+      this.emit("init");
+      this.maintain();
+      this.plugins.forEach((plugin) => plugin.onInit());
+      this.isInitted = true;
+    }
+    return this;
+  }
+
   maintain(emit = true) {
     emit && this.emit("maintain");
     this.entitiesToAdd.forEach((entity) => this.addEntityNow(entity, true));
@@ -47,13 +58,10 @@ export class Scene extends ToFromJSONEventEmitter {
   }
 
   update() {
+    this.init();
     this.isUpdating = true;
     this.emit("update");
     this.maintain();
-    if (!this.isInitted) {
-      this.isInitted = true;
-      this.plugins.forEach((plugin) => plugin.onInit());
-    }
     this.plugins.forEach((plugin) => plugin.onUpdate());
     this.managers.forEach((manager) => manager.onUpdate());
     this.managers.forEach((manager) => manager.onAfterUpdate());
@@ -204,7 +212,9 @@ export class Scene extends ToFromJSONEventEmitter {
     return this.UNSAFE_removeEntityNow(entity);
   }
 
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_addComponent(component: Component) {
     const Manager: IConstructor<Manager> = component.getManagerConstructor();
 
@@ -237,7 +247,9 @@ export class Scene extends ToFromJSONEventEmitter {
     return this;
   }
 
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_removeComponent(component: Component) {
     const Manager: IConstructor<Manager> = component.getManagerConstructor();
 
@@ -262,7 +274,9 @@ export class Scene extends ToFromJSONEventEmitter {
 
     return this;
   }
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_addEntityNow(entity: Entity, isChild: boolean) {
     const entitySceneOption = entity.getScene();
 
@@ -304,7 +318,9 @@ export class Scene extends ToFromJSONEventEmitter {
     return this;
   }
 
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_removeEntityNow(entity: Entity) {
     const entitySceneOption = entity.getScene();
 

@@ -69,14 +69,11 @@ function onLoad() {
         // Handles all input
         input,
         // forces a canvas to stay in sync with the window size
-        new FullScreenCanvas(canvas)
+        new FullScreenCanvas(canvas),
+        new EventLoop(input)
       );
 
-  new EventLoop(input, () => {
-    scene.update();
-  });
-
-  scene.update();
+  scene.init();
 }
 
 window.addEventListener("load", onLoad);

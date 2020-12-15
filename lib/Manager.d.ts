@@ -4,7 +4,13 @@ export declare abstract class Manager<C extends Component = Component> extends T
     static managerPriority: number;
     static getManagerPriority(): number;
     protected scene: Option<Scene>;
+    /**
+     * @ignore
+     */
     UNSAFE_setScene(scene: Scene): this;
+    /**
+     * @ignore
+     */
     UNSAFE_removeScene(): this;
     getScene(): Option<Scene>;
     getConstructor(): IConstructor<this>;

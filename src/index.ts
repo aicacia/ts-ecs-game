@@ -50,6 +50,8 @@ export {
   ResizeInputHandler,
   TouchInputEvent,
   TouchInputHandler,
+  EventLoop,
+  Loop,
 } from "./plugins";
 export {
   composeMat2d,
@@ -81,9 +83,7 @@ export { Component } from "./Component";
 export { DefaultDescriptorManager } from "./DefaultDescriptorManager";
 export { DefaultManager } from "./DefaultManager";
 export { Entity } from "./Entity";
-export { EventLoop } from "./EventLoop";
 export { IRequirement } from "./IRequirement";
-export { Loop } from "./Loop";
 export { Manager } from "./Manager";
 export { Plugin } from "./Plugin";
 export { Pool } from "./Pool";

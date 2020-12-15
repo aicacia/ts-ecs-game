@@ -108,18 +108,18 @@ function onLoad() {
         // forces a canvas to stay in sync with the window size
         new FullScreenCanvas(canvas),
         // assets
-        new Assets().addAsset(logoAsset).loadAllInBackground()
-      ),
-    loop = new Loop(() => scene.update());
+        new Assets().addAsset(logoAsset).loadAllInBackground(),
+        new Loop()
+      );
 
   (window as any).scene = scene;
-  (window as any).loop = loop;
 
   canvas.getElement().style.position = "absolute";
   canvas.getElement().style.left = "0px";
   canvas.getElement().style.top = "0px";
   document.body.appendChild(canvas.getElement());
-  loop.start();
+
+  scene.init();
 
   setTimeout(() => {
     const json = scene.toJSON();

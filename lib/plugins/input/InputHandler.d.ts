@@ -3,7 +3,13 @@ import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
 export declare abstract class InputHandler<I extends Input = Input> extends ToFromJSONEventEmitter {
     private input;
     getConstructor(): IConstructor<this>;
+    /**
+     * @ignore
+     */
     UNSAFE_setInput(input: I): this;
+    /**
+     * @ignore
+     */
     UNSAFE_removeInput(): this;
     getInput(): Option<I>;
     getRequiredInput(): I;

@@ -66,12 +66,16 @@ export class InputAxis {
   getValue() {
     return this.value;
   }
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_setValue(value: number) {
     this.value = value;
     return this;
   }
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_update(time: Time, value: number, isNeg: boolean, isPos: boolean) {
     const delta = time.getDelta();
 

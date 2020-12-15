@@ -32,7 +32,13 @@ export declare class Entity extends ToFromJSONEventEmitter {
     hasScene(): boolean;
     getScene(): Option<Scene>;
     getRequiredScene(): Scene;
+    /**
+     * @ignore
+     */
     UNSAFE_setScene(scene: Scene, recur?: boolean): this;
+    /**
+     * @ignore
+     */
     UNSAFE_removeScene(): this;
     forEachChild(fn: (entity: Entity) => void, recur?: boolean): this;
     find(fn: (entity: Entity) => boolean, recur?: boolean): Option<Entity>;

@@ -10,12 +10,16 @@ export abstract class EventListener<
     return Object.getPrototypeOf(this).constructor;
   }
 
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_setInput(input: I) {
     this.input.replace(input);
     return this;
   }
-  // @internal
+  /**
+   * @ignore
+   */
   UNSAFE_removeInput() {
     this.input.clear();
     return this;

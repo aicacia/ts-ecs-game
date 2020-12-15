@@ -1,9 +1,9 @@
 import { Component } from "./Component";
 import { Manager } from "./Manager";
 
-export class DefaultManager<C extends Component = Component> extends Manager<
-  C
-> {
+export class DefaultManager<
+  C extends Component = Component
+> extends Manager<C> {
   private components: C[] = [];
 
   getComponents() {

@@ -19,13 +19,25 @@ export declare abstract class Component extends ToFromJSONEventEmitter {
     getRequiredComponent<C extends Component = Component>(Component: IConstructor<C>): C;
     getPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>): Option<P>;
     getRequiredPlugin<P extends Plugin = Plugin>(Plugin: IConstructor<P>): P;
+    /**
+     * @ignore
+     */
     UNSAFE_setEntity(entity: Entity): this;
+    /**
+     * @ignore
+     */
     UNSAFE_removeEntity(): this;
     getEntity(): Option<Entity>;
     getRequiredEntity(): Entity;
     getScene(): Option<import("./Scene").Scene>;
     getRequiredScene(): import("./Scene").Scene;
+    /**
+     * @ignore
+     */
     UNSAFE_setManager(manager: Manager): this;
+    /**
+     * @ignore
+     */
     UNSAFE_removeManager(): this;
     getManager<M extends Manager = Manager>(): Option<M>;
     getRequiredManager<M extends Manager = Manager>(): M;

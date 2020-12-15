@@ -3,6 +3,8 @@ export { Renderer, RendererHandler } from "./renderer";
 export { Time } from "./Time";
 export { FullScreenCanvas } from "./FullScreenCanvas";
 export { RunOnUpdatePlugin } from "./RunOnUpdatePlugin";
+export { EventLoop } from "./EventLoop";
+export { Loop } from "./Loop";
 export {
   EventListener,
   Input,
