@@ -1,10 +1,16 @@
+import { none, Option } from "@aicacia/core";
 import { getGlobalCanvas } from "./getGlobalCanvas";
 
-let CONTEXT: CanvasRenderingContext2D = null as any;
+const CONTEXT: Option<CanvasRenderingContext2D> = none();
 
 export function getGlobalContext() {
-  if (CONTEXT === null) {
-    CONTEXT = getGlobalCanvas().getContext("2d") as CanvasRenderingContext2D;
+  if (CONTEXT.isSome()) {
+    return CONTEXT.unwrap();
+  } else {
+    const context = getGlobalCanvas().getContext(
+      "2d"
+    ) as CanvasRenderingContext2D;
+    CONTEXT.replace(context);
+    return context;
   }
-  return CONTEXT;
 }

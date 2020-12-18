@@ -1,12 +1,10 @@
 import { vec2, vec4 } from "gl-matrix";
+import { Component, Entity, Scene } from "@aicacia/ecs";
 import {
   Camera2D,
   Camera2DManager,
-  Component,
-  Entity,
   FullScreenCanvas,
   Input,
-  Scene,
   Time,
   Transform2D,
   EventLoop,

@@ -1,6 +1,6 @@
 import { Option, IConstructor } from "@aicacia/core";
 import { IJSONObject } from "@aicacia/json";
-import { Plugin } from "../../Plugin";
+import { Plugin } from "@aicacia/ecs/lib/Plugin";
 export declare abstract class Renderer extends Plugin {
     static pluginPriority: number;
     private rendererHandlers;

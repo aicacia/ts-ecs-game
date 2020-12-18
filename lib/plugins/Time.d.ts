@@ -1,5 +1,5 @@
 import { IJSONObject } from "@aicacia/json";
-import { Plugin } from "../Plugin";
+import { Plugin } from "@aicacia/ecs/lib/Plugin";
 export declare class Time extends Plugin {
     static pluginPriority: number;
     private scale;

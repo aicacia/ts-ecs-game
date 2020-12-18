@@ -2,11 +2,16 @@ import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { mat2d, vec2, vec4 } from "gl-matrix";
 import { RenderableComponent } from "../RenderableComponent";
+import { TransformComponent } from "../TransformComponent";
+import { extractScale } from "../../math";
+import type { IJSONArray, IJSONObject } from "@aicacia/json";
+import { Camera2DManager } from "./Camera2DManager";
 
 const MAT2D_0 = mat2d.create(),
   VEC2_0 = vec2.create();
 
 export class Camera2D extends RenderableComponent {
+  static Manager = Camera2DManager;
   static requiredComponents = [[Transform2D, Transform3D]];
 
   private width = 1.0;
@@ -194,10 +199,3 @@ export class Camera2D extends RenderableComponent {
       .setBackground(json.background as vec4);
   }
 }
-
-import { TransformComponent } from "../TransformComponent";
-import { Camera2DManager } from "./Camera2DManager";
-import { extractScale } from "../../math";
-import { IJSONArray, IJSONObject } from "@aicacia/json";
-
-Camera2D.Manager = Camera2DManager;

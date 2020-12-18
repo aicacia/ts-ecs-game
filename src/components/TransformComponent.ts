@@ -1,6 +1,6 @@
-import { Option } from "@aicacia/core";
+import type { Option } from "@aicacia/core";
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
-import { Entity } from "../Entity";
+import type { Entity } from "@aicacia/ecs/lib/Entity";
 import { RenderableComponent } from "./RenderableComponent";
 import { TransformComponentManager } from "./TransformComponentManager";
 

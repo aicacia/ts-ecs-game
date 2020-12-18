@@ -1,4 +1,4 @@
-import { Component } from "../Component";
+import { Component } from "@aicacia/ecs/lib/Component";
 
 export class RenderableComponent extends Component {
   private renderable = true;

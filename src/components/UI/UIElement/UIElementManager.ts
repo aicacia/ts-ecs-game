@@ -1,4 +1,5 @@
-import { Manager } from "../../../Manager";
+import { Manager } from "@aicacia/ecs/lib/Manager";
+import type { UIElement } from "./UIElement";
 
 export class UIElementManager extends Manager<UIElement> {
   private layers: Map<number, UIElement[]> = new Map();
@@ -80,5 +81,3 @@ export class UIElementManager extends Manager<UIElement> {
     }
   }
 }
-
-import { UIElement } from "./UIElement";

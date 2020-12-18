@@ -1,5 +1,9 @@
 import { none, Option, IConstructor } from "@aicacia/core";
-import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
+import { ToFromJSONEventEmitter } from "@aicacia/ecs/lib/ToFromJSONEventEmitter";
+import type { Manager } from "@aicacia/ecs/lib/Manager";
+import type { Plugin } from "@aicacia/ecs/lib/Plugin";
+import type { Renderer } from "./Renderer";
+import type { IJSONObject } from "@aicacia/json";
 
 export abstract class RendererHandler<
   R extends Renderer = Renderer
@@ -98,8 +102,3 @@ export abstract class RendererHandler<
     return this;
   }
 }
-
-import { Manager } from "../../Manager";
-import { Plugin } from "../../Plugin";
-import { Renderer } from "./Renderer";
-import { IJSONObject } from "@aicacia/json";

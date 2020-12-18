@@ -1,8 +1,10 @@
 import { RenderableComponent } from "../../RenderableComponent";
 import { Transform2D } from "../../Transform2D";
 import { Transform3D } from "../../Transform3D";
+import { UIElementManager } from "./UIElementManager";
 
 export class UIElement extends RenderableComponent {
+  static Manager = UIElementManager;
   static requiredComponents = [[Transform2D, Transform3D]];
 
   private dirty = true;
@@ -27,7 +29,3 @@ export class UIElement extends RenderableComponent {
     return this;
   }
 }
-
-import { UIElementManager } from "./UIElementManager";
-
-UIElement.Manager = UIElementManager;

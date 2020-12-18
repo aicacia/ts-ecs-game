@@ -1,7 +1,7 @@
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { TransformComponent } from "../TransformComponent";
 import { mat2dFromMat4 } from "../../math";
-import { IJSONArray, IJSONObject } from "@aicacia/json";
+import type { IJSONArray, IJSONObject } from "@aicacia/json";
 
 const MAT4_0 = mat4.create(),
   QUAT_0 = quat.create(),

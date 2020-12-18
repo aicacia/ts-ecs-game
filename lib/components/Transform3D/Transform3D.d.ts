@@ -1,6 +1,6 @@
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import { TransformComponent } from "../TransformComponent";
-import { IJSONArray, IJSONObject } from "@aicacia/json";
+import type { IJSONArray, IJSONObject } from "@aicacia/json";
 export declare class Transform3D extends TransformComponent {
     private localPosition;
     private localScale;

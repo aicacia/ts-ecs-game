@@ -1,6 +1,6 @@
 import { IJSONObject } from "@aicacia/json";
 import { EPSILON } from "../math";
-import { Plugin } from "../Plugin";
+import { Plugin } from "@aicacia/ecs/lib/Plugin";
 
 export class Time extends Plugin {
   static pluginPriority = -Infinity;

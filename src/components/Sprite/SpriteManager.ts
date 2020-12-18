@@ -1,4 +1,5 @@
-import { Manager } from "../../Manager";
+import { Manager } from "@aicacia/ecs/lib/Manager";
+import type { Sprite } from "./Sprite";
 
 export class SpriteManager extends Manager<Sprite> {
   private layers: Record<number, Sprite[]> = {};
@@ -67,5 +68,3 @@ export class SpriteManager extends Manager<Sprite> {
     }
   }
 }
-
-import { Sprite } from "./Sprite";

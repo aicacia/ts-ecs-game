@@ -1,5 +1,6 @@
 import { none, Option } from "@aicacia/core";
-import { DefaultDescriptorManager } from "../../DefaultDescriptorManager";
+import { DefaultDescriptorManager } from "@aicacia/ecs/lib/DefaultDescriptorManager";
+import type { Camera2D } from "./Camera2D";
 
 export class Camera2DManager extends DefaultDescriptorManager<Camera2D> {
   private active: Option<Camera2D> = none();
@@ -48,5 +49,3 @@ export class Camera2DManager extends DefaultDescriptorManager<Camera2D> {
     return this;
   }
 }
-
-import { Camera2D } from "./Camera2D";

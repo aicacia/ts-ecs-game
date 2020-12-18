@@ -1,4 +1,5 @@
-import { Manager } from "../../../Manager";
+import { Manager } from "@aicacia/ecs/lib/Manager";
+import type { UIElement } from "./UIElement";
 export declare class UIElementManager extends Manager<UIElement> {
     private layers;
     isEmpty(): boolean;
@@ -13,4 +14,3 @@ export declare class UIElementManager extends Manager<UIElement> {
     onAfterUpdate(): this;
     private getOrCreateLayer;
 }
-import { UIElement } from "./UIElement";

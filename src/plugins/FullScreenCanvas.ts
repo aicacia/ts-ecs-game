@@ -1,8 +1,8 @@
 import { Canvas } from "../Canvas";
 import { RunOnUpdatePlugin } from "./RunOnUpdatePlugin";
 import { Input } from "./input";
-import { IRequirement } from "../IRequirement";
-import { Plugin } from "../Plugin";
+import { IRequirement } from "@aicacia/ecs/lib/IRequirement";
+import { Plugin } from "@aicacia/ecs/lib/Plugin";
 
 export class FullScreenCanvas extends RunOnUpdatePlugin {
   static toFromJSONEnabled = false;
@@ -37,8 +37,8 @@ export class FullScreenCanvas extends RunOnUpdatePlugin {
   private onResize() {
     const input = this.getRequiredPlugin(Input);
     this.canvas.set(
-      input.getButtonValue("width"),
-      input.getButtonValue("height")
+      input.getButtonValue("screen-width"),
+      input.getButtonValue("screen-height")
     );
   }
 }

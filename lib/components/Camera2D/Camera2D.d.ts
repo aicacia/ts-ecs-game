@@ -2,7 +2,10 @@ import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { mat2d, vec2, vec4 } from "gl-matrix";
 import { RenderableComponent } from "../RenderableComponent";
+import type { IJSONArray, IJSONObject } from "@aicacia/json";
+import { Camera2DManager } from "./Camera2DManager";
 export declare class Camera2D extends RenderableComponent {
+    static Manager: typeof Camera2DManager;
     static requiredComponents: (typeof Transform2D | typeof Transform3D)[][];
     private width;
     private height;
@@ -47,4 +50,3 @@ export declare class Camera2D extends RenderableComponent {
     };
     fromJSON(json: IJSONObject): this;
 }
-import { IJSONArray, IJSONObject } from "@aicacia/json";

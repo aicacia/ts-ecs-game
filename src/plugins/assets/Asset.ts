@@ -1,6 +1,6 @@
 import { IJSONObject } from "@aicacia/json";
 import { v4 } from "uuid";
-import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
+import { ToFromJSONEventEmitter } from "@aicacia/ecs/lib/ToFromJSONEventEmitter";
 
 // tslint:disable-next-line: interface-name
 export interface Asset {

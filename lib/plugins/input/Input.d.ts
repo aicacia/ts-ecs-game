@@ -1,5 +1,5 @@
 import { Option, IConstructor } from "@aicacia/core";
-import { Plugin } from "../../Plugin";
+import { Plugin } from "@aicacia/ecs/lib/Plugin";
 import { InputAxis } from "./InputAxis";
 import { InputButton } from "./InputButton";
 import { InputHandler } from "./InputHandler";

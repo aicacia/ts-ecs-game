@@ -1,6 +1,7 @@
 import { Option, iter } from "@aicacia/core";
 import { IJSONObject, isJSONArray } from "@aicacia/json";
-import { Plugin } from "../../Plugin";
+import { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { Asset } from "./Asset";
 
 export class Assets extends Plugin {
   private assetMap: Record<string, Asset> = {};
@@ -191,5 +192,3 @@ export class Assets extends Plugin {
     return this;
   }
 }
-
-import { Asset } from "./Asset";

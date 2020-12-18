@@ -1,5 +1,8 @@
 import { none, Option, IConstructor } from "@aicacia/core";
-import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
+import { ToFromJSONEventEmitter } from "@aicacia/ecs/lib/ToFromJSONEventEmitter";
+import type { Time } from "../Time";
+import type { Input } from "./Input";
+import type { InputEvent } from "./InputEvent";
 
 export abstract class EventListener<
   I extends Input = Input
@@ -57,7 +60,3 @@ export abstract class EventListener<
     return this;
   }
 }
-
-import { Time } from "../Time";
-import { Input } from "./Input";
-import { InputEvent } from "./InputEvent";

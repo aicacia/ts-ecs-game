@@ -1,5 +1,5 @@
 import { Option } from "@aicacia/core";
-import { Entity } from "../../Entity";
+import { Entity } from "@aicacia/ecs/lib/Entity";
 import { UIElement } from "./UIElement";
 export declare enum ContainerDirection {
     Row = "row",

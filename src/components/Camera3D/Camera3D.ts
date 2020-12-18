@@ -3,11 +3,15 @@ import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { EPSILON } from "../../math";
 import { RenderableComponent } from "../RenderableComponent";
+import { TransformComponent } from "../TransformComponent";
+import { Camera3DManager } from "./Camera3DManager";
+import type { IJSONArray, IJSONObject } from "@aicacia/json";
 
 const MAT4_0 = mat4.create(),
   VEC2_0 = vec2.create();
 
 export class Camera3D extends RenderableComponent {
+  static Manager = Camera3DManager;
   static requiredComponents = [[Transform2D, Transform3D]];
 
   private width = 1.0;
@@ -237,9 +241,3 @@ export class Camera3D extends RenderableComponent {
       .setBackground(json.background as vec4);
   }
 }
-
-import { TransformComponent } from "../TransformComponent";
-import { Camera3DManager } from "./Camera3DManager";
-import { IJSONArray, IJSONObject } from "@aicacia/json";
-
-Camera3D.Manager = Camera3DManager;

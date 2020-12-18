@@ -1,7 +1,7 @@
 import { Option } from "@aicacia/core";
-import { IJSONObject } from "@aicacia/json";
+import type { IJSONObject } from "@aicacia/json";
 import { Assets } from "../../plugins";
-import { ImageAsset } from "../../plugins/assets/ImageAsset";
+import type { ImageAsset } from "../../plugins/assets/ImageAsset";
 import { RenderableComponent } from "../RenderableComponent";
 export declare class Sprite extends RenderableComponent {
     static requiredPlugins: (typeof Assets)[];

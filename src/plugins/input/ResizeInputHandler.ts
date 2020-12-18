@@ -8,8 +8,8 @@ export class ResizeInputHandler extends InputHandler {
 
     switch (event.type) {
       case "resize":
-        input.getOrCreateButton("width").UNSAFE_setValue(event.width);
-        input.getOrCreateButton("height").UNSAFE_setValue(event.height);
+        input.getOrCreateButton("screen-width").UNSAFE_setValue(event.width);
+        input.getOrCreateButton("screen-height").UNSAFE_setValue(event.height);
         break;
     }
     return this;

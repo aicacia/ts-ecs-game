@@ -1,11 +1,11 @@
-import { Plugin } from "../Plugin";
-import { RunOnUpdateFn } from "../RunOnUpdateFn";
+import { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { IRunOnUpdateFn } from "../IRunOnUpdateFn";
 
 export abstract class RunOnUpdatePlugin extends Plugin {
-  private queue: RunOnUpdateFn<this>[] = [];
-  private swap: RunOnUpdateFn<this>[] = [];
+  private queue: IRunOnUpdateFn<this>[] = [];
+  private swap: IRunOnUpdateFn<this>[] = [];
 
-  runOnUpdate(...fns: RunOnUpdateFn<this>[]) {
+  runOnUpdate(...fns: IRunOnUpdateFn<this>[]) {
     this.queue.push(...fns);
     return this;
   }

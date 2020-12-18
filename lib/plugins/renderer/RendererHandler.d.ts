@@ -1,5 +1,9 @@
 import { Option, IConstructor } from "@aicacia/core";
-import { ToFromJSONEventEmitter } from "../../ToFromJSONEventEmitter";
+import { ToFromJSONEventEmitter } from "@aicacia/ecs/lib/ToFromJSONEventEmitter";
+import type { Manager } from "@aicacia/ecs/lib/Manager";
+import type { Plugin } from "@aicacia/ecs/lib/Plugin";
+import type { Renderer } from "./Renderer";
+import type { IJSONObject } from "@aicacia/json";
 export declare abstract class RendererHandler<R extends Renderer = Renderer> extends ToFromJSONEventEmitter {
     static rendererHandlerPriority: number;
     static getRendererHandlerPriority(): number;
@@ -13,8 +17,8 @@ export declare abstract class RendererHandler<R extends Renderer = Renderer> ext
     UNSAFE_removeRenderer(): this;
     getRenderer(): Option<R>;
     getRequiredRenderer(): R;
-    getScene(): Option<import("../..").Scene>;
-    getRequiredScene(): import("../..").Scene;
+    getScene(): Option<import("@aicacia/ecs/lib/Scene").Scene>;
+    getRequiredScene(): import("@aicacia/ecs/lib/Scene").Scene;
     getManager<M extends Manager>(Manager: IConstructor<M>): Option<M>;
     getRequiredManager<M extends Manager>(Manager: IConstructor<M>): M;
     getPlugin<P extends Plugin>(Plugin: new (...args: any[]) => P): Option<P>;
@@ -29,7 +33,3 @@ export declare abstract class RendererHandler<R extends Renderer = Renderer> ext
     };
     fromJSON(json: IJSONObject): this;
 }
-import { Manager } from "../../Manager";
-import { Plugin } from "../../Plugin";
-import { Renderer } from "./Renderer";
-import { IJSONObject } from "@aicacia/json";

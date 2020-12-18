@@ -1,5 +1,5 @@
 import { EventListener } from "../../../plugins/input/EventListener";
-import { Pool } from "../../../Pool";
+import { Pool } from "@aicacia/pool";
 import {
   TouchInputEvent,
   MouseInputEvent,

@@ -1,6 +1,6 @@
 import { Option, IConstructor } from "@aicacia/core";
 import { IJSONObject, isJSONArray } from "@aicacia/json";
-import { Plugin } from "../../Plugin";
+import { Plugin } from "@aicacia/ecs/lib/Plugin";
 
 export abstract class Renderer extends Plugin {
   static pluginPriority = Infinity;

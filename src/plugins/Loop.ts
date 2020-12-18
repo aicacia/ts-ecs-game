@@ -1,5 +1,5 @@
 import raf = require("raf");
-import { Plugin } from "../Plugin";
+import { Plugin } from "@aicacia/ecs/lib/Plugin";
 
 export type ILoopHandler = (ms: number) => void;
 

@@ -1,4 +1,5 @@
-import { Manager } from "../../Manager";
+import { Manager } from "@aicacia/ecs/lib/Manager";
+import type { Sprite } from "./Sprite";
 export declare class SpriteManager extends Manager<Sprite> {
     private layers;
     isEmpty(): boolean;
@@ -12,4 +13,3 @@ export declare class SpriteManager extends Manager<Sprite> {
     onAfterUpdate(): this;
     private getOrCreateLayer;
 }
-import { Sprite } from "./Sprite";

@@ -1,4 +1,4 @@
-import { IJSONArray, IJSONObject } from "@aicacia/json";
+import type { IJSONArray, IJSONObject } from "@aicacia/json";
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
 import {
   composeMat2d,

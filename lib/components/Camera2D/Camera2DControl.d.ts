@@ -1,9 +1,9 @@
 import { Input } from "../../plugins";
-import { Component } from "../../Component";
+import { Component } from "@aicacia/ecs/lib/Component";
 import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { Camera2DControlManager } from "./Camera2DControlManager";
-import { IJSONObject } from "@aicacia/json";
+import type { IJSONObject } from "@aicacia/json";
 export declare class Camera2DControl extends Component {
     static Manager: typeof Camera2DControlManager;
     static requiredComponents: (typeof Transform2D | typeof Transform3D)[][];

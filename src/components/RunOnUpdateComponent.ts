@@ -1,11 +1,11 @@
 import { RenderableComponent } from "./RenderableComponent";
-import { RunOnUpdateFn } from "../RunOnUpdateFn";
+import { IRunOnUpdateFn } from "../IRunOnUpdateFn";
 
 export abstract class RunOnUpdateComponent extends RenderableComponent {
-  private queue: RunOnUpdateFn<this>[] = [];
-  private swap: RunOnUpdateFn<this>[] = [];
+  private queue: IRunOnUpdateFn<this>[] = [];
+  private swap: IRunOnUpdateFn<this>[] = [];
 
-  runOnUpdate(...fns: RunOnUpdateFn<this>[]) {
+  runOnUpdate(...fns: IRunOnUpdateFn<this>[]) {
     this.queue.push(...fns);
     return this;
   }
