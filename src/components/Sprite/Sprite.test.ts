@@ -1,7 +1,8 @@
 import * as tape from "tape";
+import { Entity } from "@aicacia/ecs/lib/Entity";
+import { Scene } from "@aicacia/ecs/lib/Scene";
 import { Transform3D } from "../..";
 import { Assets, ImageAsset, Time } from "../../plugins";
-import { Entity, Scene } from "../..";
 import { Sprite } from "./Sprite";
 
 class TestImageAsset extends ImageAsset {

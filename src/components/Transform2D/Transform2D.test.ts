@@ -1,6 +1,8 @@
 import { mat2d, vec2 } from "gl-matrix";
 import * as tape from "tape";
-import { Entity, Scene, Transform2D } from "../..";
+import { Entity } from "@aicacia/ecs/lib/Entity";
+import { Scene } from "@aicacia/ecs/lib/Scene";
+import { Transform2D } from "../..";
 
 tape("Transform2D", (assert: tape.Test) => {
   const child = new Entity().addTag("child").addComponent(new Transform2D()),

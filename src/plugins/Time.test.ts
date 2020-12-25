@@ -1,5 +1,6 @@
 import * as tape from "tape";
-import { Scene, Time } from "..";
+import { Scene } from "@aicacia/ecs/lib/Scene";
+import { Time } from "..";
 
 tape("Time", (assert: tape.Test) => {
   const scene = new Scene().addPlugin(new Time());

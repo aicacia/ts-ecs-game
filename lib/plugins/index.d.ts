@@ -1,4 +1,4 @@
-export { Asset, Assets, JSONAsset, ImageAsset } from "./assets";
+export { Asset, Assets, JSONAsset, RawJSONAsset, ImageAsset } from "./assets";
 export { Renderer, RendererHandler } from "./renderer";
 export { Time } from "./Time";
 export { FullScreenCanvas } from "./FullScreenCanvas";

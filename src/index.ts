@@ -29,6 +29,7 @@ export {
   Asset,
   Assets,
   JSONAsset,
+  RawJSONAsset,
   ImageAsset,
   Time,
   Renderer,
