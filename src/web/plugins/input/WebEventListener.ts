@@ -11,11 +11,20 @@ import {
 export class WebEventListener extends EventListener {
   static toFromJSONEnabled = false;
 
-  private touchInputEventPool = new Pool(TouchInputEvent);
-  private mouseInputEventPool = new Pool(MouseInputEvent);
-  private mouseWheelInputEventPool = new Pool(MouseWheelInputEvent);
-  private keyboardInputEventPool = new Pool(KeyboardInputEvent);
-  private resizeInputEventPool = new Pool(ResizeInputEvent);
+  private touchInputEventPool = new Pool(TouchInputEvent, TouchInputEvent.init);
+  private mouseInputEventPool = new Pool(MouseInputEvent, MouseInputEvent.init);
+  private mouseWheelInputEventPool = new Pool(
+    MouseWheelInputEvent,
+    MouseWheelInputEvent.init
+  );
+  private keyboardInputEventPool = new Pool(
+    KeyboardInputEvent,
+    KeyboardInputEvent.init
+  );
+  private resizeInputEventPool = new Pool(
+    ResizeInputEvent,
+    ResizeInputEvent.init
+  );
 
   private element: Element;
   private window: Window;
@@ -105,7 +114,7 @@ export class WebEventListener extends EventListener {
       y = mouseEvent.clientY - elementRect.top,
       event = this.mouseInputEventPool.create(mouseEvent.type as any);
 
-    event.button = mouseEvent.which;
+    event.button = mouseEvent.button;
     event.x = x;
     event.y = y;
 

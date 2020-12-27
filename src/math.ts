@@ -79,10 +79,9 @@ export function getTangentAngle(vec: vec2) {
   return getAngleFromPoint(tmp);
 }
 
-const getAngleBetweenPoints_VEC2_0 = vec2.create();
-
 export function getAngleBetweenPoints(a: vec2, b: vec2): number {
-  return getAngleFromPoint(vec2.sub(getAngleBetweenPoints_VEC2_0, b, a));
+  const sign = b[1] < a[1] ? -1 : 1;
+  return Math.acos(vec2.dot(a, b) / (vec2.len(a) * vec2.len(b))) * sign;
 }
 
 export function sign(value: number) {

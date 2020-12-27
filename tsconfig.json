@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "importHelpers": true,
-    "target": "es5",
+    "target": "ES2015",
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
     "outDir": "lib",
     "strict": true,
+    "esModuleInterop": true,
     "downlevelIteration": true,
     "lib": ["esnext", "dom"]
   },

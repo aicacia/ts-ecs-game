@@ -1,4 +1,4 @@
-import raf = require("raf");
+import raf from "raf";
 import { Input } from "./input";
 import { Plugin } from "@aicacia/ecs/lib/Plugin";
 
