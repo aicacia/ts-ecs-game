@@ -34,6 +34,7 @@
   "license": "(MIT OR Apache-2.0)",
   "readmeFilename": "README.md",
   "devDependencies": {
+    "@types/raf": "3",
     "@types/tape": "4",
     "@types/uuid": "8",
     "@typescript-eslint/eslint-plugin": "4",

@@ -1,4 +1,4 @@
-import raf from "raf";
+import raf = require("raf");
 import { Plugin } from "@aicacia/ecs/lib/Plugin";
 
 export type ILoopHandler = (ms: number) => void;
