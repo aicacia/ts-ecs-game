@@ -3,6 +3,7 @@ import { Plugin } from "@aicacia/ecs/lib/Plugin";
 import { Scene } from "@aicacia/ecs/lib/Scene";
 import { EventLoop } from "./EventLoop";
 import { Input } from "./input";
+import { Time } from "./Time";
 
 class Counter extends Plugin {
   count = 0;
@@ -14,17 +15,20 @@ class Counter extends Plugin {
 }
 
 tape("EventLoop", (assert: tape.Test) => {
-  const input = new Input(),
-    loop = new EventLoop(input),
-    scene = new Scene().addPlugin(new Counter(), loop);
+  const scene = new Scene().addPlugin(
+    new Time(),
+    new Input(),
+    new Counter(),
+    new EventLoop()
+  );
 
-  assert.true(loop.isStopped());
+  assert.true(scene.getRequiredPlugin(EventLoop).isStopped());
 
   scene.init();
 
-  input.emit("event", { type: "resize" });
-  input.emit("event", { type: "resize" });
-  input.emit("event", { type: "resize" });
+  scene.getRequiredPlugin(Input).emit("event", { type: "resize" });
+  scene.getRequiredPlugin(Input).emit("event", { type: "resize" });
+  scene.getRequiredPlugin(Input).emit("event", { type: "resize" });
 
   setTimeout(() => {
     assert.equal(scene.getRequiredPlugin(Counter).count, 1);

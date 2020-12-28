@@ -3,23 +3,17 @@ import { Input } from "./input";
 import { Plugin } from "@aicacia/ecs/lib/Plugin";
 
 export class EventLoop extends Plugin {
-  private input: Input;
+  static requiredPlugins = [Input];
   private id: number | null = null;
   private running = false;
 
-  constructor(input: Input) {
-    super();
-    this.input = input;
-    this.input.on("event", this.start);
+  onInit() {
+    this.getRequiredPlugin(Input).on("event", this.start);
+    this.start();
+    return this;
   }
-
-  getInput() {
-    return this.input;
-  }
-  setInput(input: Input) {
-    this.input.off("event", this.start);
-    this.input = input;
-    this.input.on("event", this.start);
+  onRemove() {
+    this.getRequiredPlugin(Input).off("event", this.start);
     return this;
   }
 
@@ -51,11 +45,6 @@ export class EventLoop extends Plugin {
 
   private request() {
     this.id = raf(this.run);
-    return this;
-  }
-
-  onInit() {
-    this.start();
     return this;
   }
 }

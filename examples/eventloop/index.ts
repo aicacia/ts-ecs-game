@@ -43,9 +43,6 @@ function onLoad() {
   const canvas = new WebCanvas(
       document.getElementById("canvas") as HTMLCanvasElement
     ).set(256, 256),
-    input = new Input().addEventListener(
-      new WebEventListener(canvas.getElement())
-    ),
     scene = new Scene()
       .addEntity(
         // Camera setup
@@ -65,10 +62,10 @@ function onLoad() {
         // Required by many Components and plugins
         new Time(),
         // Handles all input
-        input,
+        new Input().addEventListener(new WebEventListener(canvas.getElement())),
         // forces a canvas to stay in sync with the window size
         new FullScreenCanvas(canvas),
-        new EventLoop(input)
+        new EventLoop()
       );
 
   scene.init();
