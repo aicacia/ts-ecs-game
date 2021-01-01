@@ -1,5 +1,5 @@
 import { none, Option, IConstructor } from "@aicacia/core";
-import { ToFromJSONEventEmitter } from "@aicacia/ecs/lib/ToFromJSONEventEmitter";
+import { ToFromJSONEventEmitter } from "@aicacia/ecs";
 
 export abstract class InputHandler<
   I extends Input = Input

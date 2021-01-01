@@ -1,5 +1,5 @@
 import { Input } from "./input";
-import { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { Plugin } from "@aicacia/ecs";
 export declare class EventLoop extends Plugin {
     static requiredPlugins: (typeof Input)[];
     private id;

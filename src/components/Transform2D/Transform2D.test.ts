@@ -1,7 +1,6 @@
 import { mat2d, vec2 } from "gl-matrix";
 import * as tape from "tape";
-import { Entity } from "@aicacia/ecs/lib/Entity";
-import { Scene } from "@aicacia/ecs/lib/Scene";
+import { Scene, Entity } from "@aicacia/ecs";
 import { Transform2D } from "../..";
 
 tape("Transform2D", (assert: tape.Test) => {

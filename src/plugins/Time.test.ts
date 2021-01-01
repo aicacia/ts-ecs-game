@@ -1,5 +1,5 @@
 import * as tape from "tape";
-import { Scene } from "@aicacia/ecs/lib/Scene";
+import { Scene } from "@aicacia/ecs";
 import { Time } from "..";
 
 tape("Time", (assert: tape.Test) => {

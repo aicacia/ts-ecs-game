@@ -1,6 +1,5 @@
 import * as tape from "tape";
-import { Plugin } from "@aicacia/ecs/lib/Plugin";
-import { Scene } from "@aicacia/ecs/lib/Scene";
+import { Scene, Plugin } from "@aicacia/ecs";
 import { EventLoop } from "./EventLoop";
 import { Input } from "./input";
 import { Time } from "./Time";

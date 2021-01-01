@@ -1,4 +1,4 @@
-import { DefaultManager } from "@aicacia/ecs/lib/DefaultManager";
+import { DefaultManager } from "@aicacia/ecs";
 import type { Camera2DControl } from "./Camera2DControl";
 
 export class Camera2DControlManager extends DefaultManager<Camera2DControl> {

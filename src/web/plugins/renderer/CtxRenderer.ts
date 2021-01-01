@@ -120,7 +120,7 @@ export class CtxRenderer extends Renderer {
       this.cameraProjection,
       this.cameraView
     );
-    this.scale = (1.0 / this.getCanvasSize()) * camera.getScale();
+    this.scale = (1.0 / this.getCanvasSize()) * camera.getZoom();
 
     this.ctx.save();
 

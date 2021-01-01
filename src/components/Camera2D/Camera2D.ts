@@ -89,13 +89,23 @@ export class Camera2D extends RenderableComponent {
     return this.setNeedsUpdate();
   }
 
-  getScale() {
-    return this.getEntity()
+  setZoom(zoom: number) {
+    this.getEntity()
       .flatMap(TransformComponent.getTransform)
       .map((transform) =>
-        vec2.len(extractScale(VEC2_0, transform.getMatrix2d(MAT2D_0)))
+        transform.setLocalScale2(vec2.set(VEC2_0, zoom, zoom))
+      );
+    return this;
+  }
+  getZoom() {
+    return this.getEntity()
+      .flatMap(TransformComponent.getTransform)
+      .map(
+        (transform) =>
+          vec2.len(extractScale(VEC2_0, transform.getMatrix2d(MAT2D_0))) *
+          this.size
       )
-      .unwrapOr(1);
+      .unwrapOr(this.size);
   }
 
   getView() {
@@ -186,7 +196,6 @@ export class Camera2D extends RenderableComponent {
       ...super.toJSON(),
       width: this.width,
       height: this.height,
-      size: this.size,
       background: this.background as IJSONArray,
     };
   }
@@ -195,7 +204,6 @@ export class Camera2D extends RenderableComponent {
     return super
       .fromJSON(json)
       .set(json.width as number, json.height as number)
-      .setSize(json.size as number)
       .setBackground(json.background as vec4);
   }
 }

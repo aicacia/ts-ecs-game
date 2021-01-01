@@ -1,6 +1,6 @@
 import { Option } from "@aicacia/core";
 import { IJSONObject } from "@aicacia/json";
-import { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { Plugin } from "@aicacia/ecs";
 import { Asset } from "./Asset";
 export declare class Assets extends Plugin {
     private assetMap;

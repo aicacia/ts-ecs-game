@@ -1,4 +1,4 @@
-import { Manager } from "@aicacia/ecs/lib/Manager";
+import { Manager } from "@aicacia/ecs";
 import type { UIElement } from "./UIElement";
 export declare class UIElementManager extends Manager<UIElement> {
     private layers;

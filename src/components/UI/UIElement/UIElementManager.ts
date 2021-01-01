@@ -1,4 +1,4 @@
-import { Manager } from "@aicacia/ecs/lib/Manager";
+import { Manager } from "@aicacia/ecs";
 import type { UIElement } from "./UIElement";
 
 export class UIElementManager extends Manager<UIElement> {

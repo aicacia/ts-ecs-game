@@ -1,7 +1,6 @@
 import { mat4, vec3 } from "gl-matrix";
 import * as tape from "tape";
-import { Entity } from "@aicacia/ecs/lib/Entity";
-import { Scene } from "@aicacia/ecs/lib/Scene";
+import { Scene, Entity } from "@aicacia/ecs";
 import { Camera3D, Transform3D } from "../..";
 
 tape("Camera3D", (assert: tape.Test) => {

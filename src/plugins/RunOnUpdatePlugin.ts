@@ -1,4 +1,4 @@
-import { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { Plugin } from "@aicacia/ecs";
 import { IRunOnUpdateFn } from "../IRunOnUpdateFn";
 
 export abstract class RunOnUpdatePlugin extends Plugin {

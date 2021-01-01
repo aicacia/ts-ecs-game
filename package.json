@@ -56,7 +56,7 @@
     "typescript": "4"
   },
   "dependencies": {
-    "@aicacia/ecs": "git+https://git@github.com/aicacia/ts-ecs",
+    "@aicacia/ecs": "aicacia/ts-ecs",
     "@aicacia/pool": "0",
     "@aicacia/core": "0",
     "@aicacia/json": "0",

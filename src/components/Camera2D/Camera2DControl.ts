@@ -2,7 +2,7 @@ import { vec2 } from "gl-matrix";
 import { Input } from "../../plugins";
 import { Camera2D } from "./Camera2D";
 import { TransformComponent } from "../TransformComponent";
-import { Component } from "@aicacia/ecs/lib/Component";
+import { Component } from "@aicacia/ecs";
 import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { Camera2DControlManager } from "./Camera2DControlManager";
@@ -86,14 +86,16 @@ export class Camera2DControl extends Component {
     const mouseWheel = input.getButtonValue("mouse-wheel"),
       zoomSpeed = vec2.set(VEC2_2, this.zoomSpeed, this.zoomSpeed);
 
-    if (mouseWheel > 0) {
-      vec2.add(scale, scale, zoomSpeed);
-    } else if (mouseWheel < 0) {
-      vec2.sub(scale, scale, zoomSpeed);
-      vec2.max(scale, MIN_SCALE, scale);
+    if (mouseWheel !== 0 && this.enabled) {
+      if (mouseWheel > 0) {
+        vec2.add(scale, scale, zoomSpeed);
+      } else if (mouseWheel < 0) {
+        vec2.sub(scale, scale, zoomSpeed);
+        vec2.max(scale, MIN_SCALE, scale);
+      }
+      transform.setLocalScale2(scale);
     }
 
-    this.enabled && transform.setLocalScale2(scale);
     vec2.copy(this.lastMouse, worldMouse);
 
     return this;

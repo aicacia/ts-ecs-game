@@ -1,5 +1,5 @@
 import { Option } from "@aicacia/core";
-import { DefaultDescriptorManager } from "@aicacia/ecs/lib/DefaultDescriptorManager";
+import { DefaultDescriptorManager } from "@aicacia/ecs";
 import type { Camera3D } from "./Camera3D";
 export declare class Camera3DManager extends DefaultDescriptorManager<Camera3D> {
     private active;

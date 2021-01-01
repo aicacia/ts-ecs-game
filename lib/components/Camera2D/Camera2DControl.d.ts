@@ -1,5 +1,5 @@
 import { Input } from "../../plugins";
-import { Component } from "@aicacia/ecs/lib/Component";
+import { Component } from "@aicacia/ecs";
 import { Transform2D } from "../Transform2D";
 import { Transform3D } from "../Transform3D";
 import { Camera2DControlManager } from "./Camera2DControlManager";

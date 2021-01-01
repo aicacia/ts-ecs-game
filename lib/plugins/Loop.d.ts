@@ -1,4 +1,4 @@
-import { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { Plugin } from "@aicacia/ecs";
 export declare type ILoopHandler = (ms: number) => void;
 export declare class Loop extends Plugin {
     private id;

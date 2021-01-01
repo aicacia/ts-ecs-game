@@ -1,6 +1,6 @@
 import { Option } from "@aicacia/core";
 import { SpriteClip } from "./SpriteClip";
-import { Component } from "@aicacia/ecs/lib/Component";
+import { Component } from "@aicacia/ecs";
 import { Time } from "../..";
 import { Sprite } from "./Sprite";
 export declare class SpriteSheet extends Component {

@@ -1,8 +1,7 @@
 import { Canvas } from "../Canvas";
 import { RunOnUpdatePlugin } from "./RunOnUpdatePlugin";
 import { Input } from "./input";
-import { IRequirement } from "@aicacia/ecs/lib/IRequirement";
-import { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { Plugin, IRequirement } from "@aicacia/ecs";
 
 export class FullScreenCanvas extends RunOnUpdatePlugin {
   static toFromJSONEnabled = false;

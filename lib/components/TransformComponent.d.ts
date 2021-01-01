@@ -1,6 +1,6 @@
 import type { Option } from "@aicacia/core";
 import { mat2d, mat4, quat, vec2, vec3 } from "gl-matrix";
-import type { Entity } from "@aicacia/ecs/lib/Entity";
+import type { Entity } from "@aicacia/ecs";
 import { RenderableComponent } from "./RenderableComponent";
 import { TransformComponentManager } from "./TransformComponentManager";
 export declare abstract class TransformComponent extends RenderableComponent {

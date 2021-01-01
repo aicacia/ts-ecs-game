@@ -31,7 +31,8 @@ export declare class Camera2D extends RenderableComponent {
     setMinSize(minSize: number): this;
     getMaxSize(): number;
     setMaxSize(maxSize: number): this;
-    getScale(): number;
+    setZoom(zoom: number): this;
+    getZoom(): number;
     getView(): mat2d;
     getProjection(): mat2d;
     setNeedsUpdate(needsUpdate?: boolean): this;
@@ -45,7 +46,6 @@ export declare class Camera2D extends RenderableComponent {
     toJSON(): {
         width: number;
         height: number;
-        size: number;
         background: IJSONArray;
     };
     fromJSON(json: IJSONObject): this;

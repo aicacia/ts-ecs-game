@@ -1,5 +1,5 @@
 import { IJSONObject } from "@aicacia/json";
-import { ToFromJSONEventEmitter } from "@aicacia/ecs/lib/ToFromJSONEventEmitter";
+import { ToFromJSONEventEmitter } from "@aicacia/ecs";
 export interface Asset {
     on(event: "load" | "unload", listener: () => void): this;
     on(event: "load-error" | "unload-error", listener: (error: Error) => void): this;

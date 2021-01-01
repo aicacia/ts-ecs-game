@@ -1,6 +1,5 @@
 import * as tape from "tape";
-import { Entity } from "@aicacia/ecs/lib/Entity";
-import { Scene } from "@aicacia/ecs/lib/Scene";
+import { Scene, Entity } from "@aicacia/ecs";
 import { Transform3D } from "../..";
 import { Assets, ImageAsset, Time } from "../../plugins";
 import { Sprite } from "./Sprite";

@@ -1,5 +1,5 @@
 import { none, Option, IConstructor } from "@aicacia/core";
-import { ToFromJSONEventEmitter } from "@aicacia/ecs/lib/ToFromJSONEventEmitter";
+import { ToFromJSONEventEmitter } from "@aicacia/ecs";
 import type { Time } from "../Time";
 import type { Input } from "./Input";
 import type { InputEvent } from "./InputEvent";

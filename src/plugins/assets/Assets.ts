@@ -1,6 +1,6 @@
 import { Option, iter } from "@aicacia/core";
 import { IJSONObject, isJSONArray } from "@aicacia/json";
-import { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { Plugin } from "@aicacia/ecs";
 import { Asset } from "./Asset";
 
 export class Assets extends Plugin {

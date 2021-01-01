@@ -1,4 +1,4 @@
-import { Manager } from "@aicacia/ecs/lib/Manager";
+import { Manager } from "@aicacia/ecs";
 import type { Sprite } from "./Sprite";
 export declare class SpriteManager extends Manager<Sprite> {
     private layers;

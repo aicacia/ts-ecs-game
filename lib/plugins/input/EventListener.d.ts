@@ -1,5 +1,5 @@
 import { Option, IConstructor } from "@aicacia/core";
-import { ToFromJSONEventEmitter } from "@aicacia/ecs/lib/ToFromJSONEventEmitter";
+import { ToFromJSONEventEmitter } from "@aicacia/ecs";
 import type { Time } from "../Time";
 import type { Input } from "./Input";
 import type { InputEvent } from "./InputEvent";
@@ -16,8 +16,8 @@ export declare abstract class EventListener<I extends Input = Input> extends ToF
     UNSAFE_removeInput(): this;
     getInput(): Option<I>;
     getRequiredInput(): I;
-    getScene(): Option<import("@aicacia/ecs/lib/Scene").Scene>;
-    getRequiredScene(): import("@aicacia/ecs/lib/Scene").Scene;
+    getScene(): Option<import("@aicacia/ecs").Scene>;
+    getRequiredScene(): import("@aicacia/ecs").Scene;
     queueEvent(event: InputEvent): Option<I>;
     abstract dequeueEvent(event: InputEvent): boolean;
     onAdd(): this;

@@ -1,6 +1,6 @@
 import raf = require("raf");
 import { Input } from "./input";
-import { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { Plugin } from "@aicacia/ecs";
 
 export class EventLoop extends Plugin {
   static requiredPlugins = [Input];

@@ -1,7 +1,5 @@
 import { none, Option, IConstructor } from "@aicacia/core";
-import { ToFromJSONEventEmitter } from "@aicacia/ecs/lib/ToFromJSONEventEmitter";
-import type { Manager } from "@aicacia/ecs/lib/Manager";
-import type { Plugin } from "@aicacia/ecs/lib/Plugin";
+import { Plugin, Manager, ToFromJSONEventEmitter } from "@aicacia/ecs";
 import type { Renderer } from "./Renderer";
 import type { IJSONObject } from "@aicacia/json";
 
