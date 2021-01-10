@@ -11,7 +11,7 @@ export class TransformCtxRendererHandler extends CtxRendererHandler {
         const renderer = this.getRequiredRenderer(),
           scale = renderer.getScale();
 
-        transformComponentManager.getComponents().forEach((transform) => {
+        for (const transform of transformComponentManager.getComponents()) {
           if (transform.getRenderable()) {
             renderer.render((ctx) => {
               ctx.beginPath();
@@ -31,7 +31,7 @@ export class TransformCtxRendererHandler extends CtxRendererHandler {
               ctx.fill();
             }, transform.getMatrix2d(MAT2D_0));
           }
-        });
+        }
       }
     );
 

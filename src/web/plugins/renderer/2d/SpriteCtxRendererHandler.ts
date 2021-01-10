@@ -11,7 +11,7 @@ export class SpriteCtxRendererHandler extends CtxRendererHandler {
     this.getManager(SpriteManager).ifSome((spriteManager) => {
       const renderer = this.getRequiredRenderer();
 
-      spriteManager.getComponents().forEach((sprite) => {
+      for (const sprite of spriteManager.getComponents()) {
         const image = sprite
           .getImageAsset<WebImageAsset>()
           .flatMap((webImageAsset) => webImageAsset.getImage());
@@ -44,7 +44,7 @@ export class SpriteCtxRendererHandler extends CtxRendererHandler {
               )
           );
         }
-      });
+      }
     });
 
     return this;

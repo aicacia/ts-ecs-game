@@ -52,7 +52,9 @@ export class Input extends Plugin {
   }
 
   addAxes(axes: InputAxis[]) {
-    axes.forEach((axis) => this._addAxis(axis));
+    for (const axis of axes) {
+      this._addAxis(axis);
+    }
     return this;
   }
   addAxis(...axes: InputAxis[]) {
@@ -98,7 +100,9 @@ export class Input extends Plugin {
   }
 
   removeAxes(axes: InputAxis[]) {
-    axes.forEach((axis) => this._removeAxis(axis));
+    for (const axis of axes) {
+      this._removeAxis(axis);
+    }
     return this;
   }
   removeAxis(...axes: InputAxis[]) {
@@ -106,9 +110,9 @@ export class Input extends Plugin {
   }
 
   addInputHandlers(inputHandlers: InputHandler[]) {
-    inputHandlers.forEach((inputHandler) =>
-      this._addInputHandler(inputHandler)
-    );
+    for (const inputHandler of inputHandlers) {
+      this._addInputHandler(inputHandler);
+    }
     return this;
   }
   addInputHandler(...inputHandlers: InputHandler[]) {
@@ -116,9 +120,9 @@ export class Input extends Plugin {
   }
 
   removeInputHandlers(inputHandlers: IConstructor<InputHandler>[]) {
-    inputHandlers.forEach((inputHandler) =>
-      this._removeInputHandler(inputHandler)
-    );
+    for (const inputHandler of inputHandlers) {
+      this._removeInputHandler(inputHandler);
+    }
     return this;
   }
   removeInputHandler(...inputHandlers: IConstructor<InputHandler>[]) {
@@ -126,19 +130,19 @@ export class Input extends Plugin {
   }
 
   addEventListeners(eventListeners: EventListener[]) {
-    eventListeners.forEach((eventListener) =>
-      this._addEventListener(eventListener)
-    );
+    for (const eventListener of eventListeners) {
+      this._addEventListener(eventListener);
+    }
     return this;
   }
   addEventListener(...eventListeners: EventListener[]) {
     return this.addEventListeners(eventListeners);
   }
 
-  removeEventListeners(eventListeners: IConstructor<EventListener>[]) {
-    eventListeners.forEach((eventListener) =>
-      this._removeEventListener(eventListener)
-    );
+  removeEventListeners(EventListeners: IConstructor<EventListener>[]) {
+    for (const EventListener of EventListeners) {
+      this._removeEventListener(EventListener);
+    }
     return this;
   }
   removeEventListener(...eventListeners: IConstructor<EventListener>[]) {
@@ -191,15 +195,19 @@ export class Input extends Plugin {
 
   onUpdate() {
     const time = this.getRequiredPlugin(Time);
-    this.eventListeners.forEach((eventListener) =>
-      eventListener.onUpdate(time)
-    );
-    this.inputHandlers.forEach((inputHandler) => {
-      this.events.forEach((event) => inputHandler.onEvent(time, event));
+    for (const eventListener of this.eventListeners) {
+      eventListener.onUpdate(time);
+    }
+    for (const inputHandler of this.inputHandlers) {
+      for (const event of this.events) {
+        inputHandler.onEvent(time, event);
+      }
       inputHandler.onUpdate(time);
-    });
-    this.events.forEach((event) => this.emit(event.type, event));
-    this.eventListeners.forEach((eventListener) => {
+    }
+    for (const event of this.events) {
+      this.emit(event.type, event);
+    }
+    for (const eventListener of this.eventListeners) {
       for (let i = 0; i < this.events.length; i++) {
         const event = this.events[i];
 
@@ -208,7 +216,7 @@ export class Input extends Plugin {
           i--;
         }
       }
-    });
+    }
     this.events.length = 0;
     this.updateAxes(time);
     return this;
@@ -216,12 +224,12 @@ export class Input extends Plugin {
 
   onAfterUpdate() {
     const time = this.getRequiredPlugin(Time);
-    this.eventListeners.forEach((eventListener) =>
-      eventListener.onAfterUpdate(time)
-    );
-    this.inputHandlers.forEach((inputHandler) =>
-      inputHandler.onAfterUpdate(time)
-    );
+    for (const eventListener of this.eventListeners) {
+      eventListener.onAfterUpdate(time);
+    }
+    for (const inputHandler of this.inputHandlers) {
+      inputHandler.onAfterUpdate(time);
+    }
     return this;
   }
 
@@ -240,9 +248,9 @@ export class Input extends Plugin {
   }
 
   private updateAxes(time: Time) {
-    Object.keys(this.axes).forEach((key) =>
-      this.updateAxis(this.axes[key], time)
-    );
+    for (const axis of Object.values(this.axes)) {
+      this.updateAxis(axis, time);
+    }
   }
 
   private updateAxis(axis: InputAxis, time: Time) {
@@ -328,11 +336,11 @@ export class Input extends Plugin {
   fromJSON(json: IJSONObject) {
     super.fromJSON(json);
     if (isJSONArray(json.buttons)) {
-      json.buttons.forEach((json) => {
-        const buttonJSON = json as ReturnType<InputButton["toJSON"]>,
+      for (const value of json.buttons) {
+        const buttonJSON = value as ReturnType<InputButton["toJSON"]>,
           button = new InputButton(buttonJSON.name).fromJSON(buttonJSON);
         this.buttons[button.getName()] = button;
-      });
+      }
     }
     if (isJSONArray(json.axes)) {
       this.addAxes(

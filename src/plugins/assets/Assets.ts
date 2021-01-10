@@ -53,7 +53,9 @@ export class Assets extends Plugin {
     return this.addAssets(assets);
   }
   addAssets(assets: Asset[]) {
-    assets.forEach((asset) => this._addAsset(asset));
+    for (const asset of assets) {
+      this._addAsset(asset);
+    }
     return this;
   }
 
@@ -61,7 +63,9 @@ export class Assets extends Plugin {
     return this.removeAssets(assets);
   }
   removeAssets(assets: Asset[]) {
-    assets.forEach((asset) => this._removeAsset(asset));
+    for (const asset of assets) {
+      this._removeAsset(asset);
+    }
     return this;
   }
 

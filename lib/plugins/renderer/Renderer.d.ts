@@ -9,7 +9,7 @@ export declare abstract class Renderer extends Plugin {
     getRendererHandler<R extends RendererHandler>(RendererHandler: IConstructor<R>): Option<RendererHandler<Renderer>>;
     addRendererHandlers(rendererHandlers: RendererHandler[]): this;
     addRendererHandler(...rendererHandlers: RendererHandler[]): this;
-    removeRendererHandlers(rendererHandlers: IConstructor<RendererHandler>[]): this;
+    removeRendererHandlers(RendererHandlers: IConstructor<RendererHandler>[]): this;
     removeRendererHandler(...rendererHandlers: IConstructor<RendererHandler>[]): this;
     onUpdate(): this;
     onAfterUpdate(): this;

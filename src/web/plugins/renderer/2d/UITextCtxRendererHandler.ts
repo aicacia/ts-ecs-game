@@ -15,7 +15,7 @@ export class UITextCtxRendererHandler extends CtxRendererHandler {
     this.getManager(UIElementManager).ifSome((uiElementManager) => {
       const renderer = this.getRequiredRenderer();
 
-      uiElementManager.getComponents().forEach((uiElement) => {
+      for (const uiElement of uiElementManager.getComponents()) {
         if (uiElement.getRenderable()) {
           uiElement
             .getEntity()
@@ -33,7 +33,7 @@ export class UITextCtxRendererHandler extends CtxRendererHandler {
               }, transform.getMatrix2d(MAT2_0))
             );
         }
-      });
+      }
     });
 
     return this;

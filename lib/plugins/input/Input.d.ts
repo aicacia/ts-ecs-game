@@ -33,7 +33,7 @@ export declare class Input extends Plugin {
     removeInputHandler(...inputHandlers: IConstructor<InputHandler>[]): this;
     addEventListeners(eventListeners: EventListener[]): this;
     addEventListener(...eventListeners: EventListener[]): this;
-    removeEventListeners(eventListeners: IConstructor<EventListener>[]): this;
+    removeEventListeners(EventListeners: IConstructor<EventListener>[]): this;
     removeEventListener(...eventListeners: IConstructor<EventListener>[]): this;
     getOrCreateButton(name: string): InputButton;
     getButton(name: string): Option<InputButton>;

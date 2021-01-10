@@ -40,9 +40,9 @@ export class SpriteManager extends Manager<Sprite> {
   };
 
   sort() {
-    Object.values(this.layers).forEach((layer) =>
-      layer.sort(this.sortFunction)
-    );
+    for (const layer of Object.values(this.layers)) {
+      layer.sort(this.sortFunction);
+    }
     return this;
   }
 

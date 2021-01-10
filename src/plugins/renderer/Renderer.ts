@@ -21,19 +21,19 @@ export abstract class Renderer extends Plugin {
   }
 
   addRendererHandlers(rendererHandlers: RendererHandler[]) {
-    rendererHandlers.forEach((rendererHandler) =>
-      this._addRendererHandler(rendererHandler)
-    );
+    for (const rendererHandler of rendererHandlers) {
+      this._addRendererHandler(rendererHandler);
+    }
     return this.sortRendererHandlers();
   }
   addRendererHandler(...rendererHandlers: RendererHandler[]) {
     return this.addRendererHandlers(rendererHandlers);
   }
 
-  removeRendererHandlers(rendererHandlers: IConstructor<RendererHandler>[]) {
-    rendererHandlers.forEach((rendererHandler) =>
-      this._removeRendererHandler(rendererHandler)
-    );
+  removeRendererHandlers(RendererHandlers: IConstructor<RendererHandler>[]) {
+    for (const RendererHandler of RendererHandlers) {
+      this._removeRendererHandler(RendererHandler);
+    }
     return this.sortRendererHandlers();
   }
   removeRendererHandler(...rendererHandlers: IConstructor<RendererHandler>[]) {
@@ -41,20 +41,20 @@ export abstract class Renderer extends Plugin {
   }
 
   onUpdate() {
-    this.rendererHandlers.forEach((rendererHandler) => {
+    for (const rendererHandler of this.rendererHandlers) {
       if (rendererHandler.getEnabled()) {
         rendererHandler.onBeforeRender();
         rendererHandler.onRender();
       }
-    });
+    }
     return this;
   }
   onAfterUpdate() {
-    this.rendererHandlers.forEach((rendererHandler) => {
+    for (const rendererHandler of this.rendererHandlers) {
       if (rendererHandler.getEnabled()) {
         rendererHandler.onAfterRender();
       }
-    });
+    }
     return this;
   }
 

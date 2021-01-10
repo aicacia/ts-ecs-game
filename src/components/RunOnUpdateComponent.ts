@@ -17,7 +17,9 @@ export abstract class RunOnUpdateComponent extends RenderableComponent {
       this.queue = this.swap;
       this.swap = queue;
 
-      queue.forEach((fn) => fn.call(this));
+      for (const fn of queue) {
+        fn.call(this);
+      }
       this.swap.length = 0;
     }
     return this;
