@@ -14,7 +14,7 @@ export class UIElement extends RenderableComponent {
     return this.dirty;
   }
   setDirty(dirty = true) {
-    this.dirty = !!dirty;
+    this.dirty = dirty === true;
     return this;
   }
 
