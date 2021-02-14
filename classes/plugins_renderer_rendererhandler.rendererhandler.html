@@ -109,6 +109,8 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="plugins_renderer_rendererhandler.rendererhandler.html#enabled" class="tsd-kind-icon">enabled</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="plugins_renderer_rendererhandler.rendererhandler.html#renderer" class="tsd-kind-icon">renderer</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#capturerejectionsymbol" class="tsd-kind-icon">capture<wbr>Rejection<wbr>Symbol</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#capturerejections" class="tsd-kind-icon">capture<wbr>Rejections</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#defaultmaxlisteners" class="tsd-kind-icon">default<wbr>Max<wbr>Listeners</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#errormonitor" class="tsd-kind-icon">error<wbr>Monitor</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="plugins_renderer_rendererhandler.rendererhandler.html#rendererhandlerpriority" class="tsd-kind-icon">renderer<wbr>Handler<wbr>Priority</a></li>
@@ -161,6 +163,8 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#istofromjsonenabled" class="tsd-kind-icon">is<wbr>ToFromJSONEnabled</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#listenercount-1" class="tsd-kind-icon">listener<wbr>Count</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#newfromjson" class="tsd-kind-icon">new<wbr>FromJSON</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#on-1" class="tsd-kind-icon">on</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#once-1" class="tsd-kind-icon">once</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="plugins_renderer_rendererhandler.rendererhandler.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 							</ul>
 						</section>
@@ -179,7 +183,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@types/node/events.d.ts:41</li>
+									<li>Defined in node_modules/@types/node/events.d.ts:23</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -207,7 +211,7 @@
 					<div class="tsd-signature tsd-kind-icon">enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L16">src/plugins/renderer/RendererHandler.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L16">src/plugins/renderer/RendererHandler.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -217,9 +221,34 @@
 					<div class="tsd-signature tsd-kind-icon">renderer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Option</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = none()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L15">src/plugins/renderer/RendererHandler.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L15">src/plugins/renderer/RendererHandler.ts:15</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="capturerejectionsymbol" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> <span class="tsd-flag ts-flagStatic">Static</span> capture<wbr>Rejection<wbr>Symbol</h3>
+					<div class="tsd-signature tsd-kind-icon">capture<wbr>Rejection<wbr>Symbol<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">unique </span><span class="tsd-signature-type">symbol</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in node_modules/@types/node/events.d.ts:43</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="capturerejections" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> capture<wbr>Rejections</h3>
+					<div class="tsd-signature tsd-kind-icon">capture<wbr>Rejections<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in node_modules/@types/node/events.d.ts:49</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Sets or gets the default captureRejection value for all emitters.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
 					<a name="defaultmaxlisteners" class="tsd-anchor"></a>
@@ -227,7 +256,7 @@
 					<div class="tsd-signature tsd-kind-icon">default<wbr>Max<wbr>Listeners<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@types/node/events.d.ts:45</li>
+							<li>Defined in node_modules/@types/node/events.d.ts:50</li>
 						</ul>
 					</aside>
 				</section>
@@ -237,7 +266,7 @@
 					<div class="tsd-signature tsd-kind-icon">error<wbr>Monitor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">unique </span><span class="tsd-signature-type">symbol</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in node_modules/@types/node/events.d.ts:55</li>
+							<li>Defined in node_modules/@types/node/events.d.ts:42</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -257,7 +286,7 @@
 					<div class="tsd-signature tsd-kind-icon">renderer<wbr>Handler<wbr>Priority<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L9">src/plugins/renderer/RendererHandler.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L9">src/plugins/renderer/RendererHandler.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -294,7 +323,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L37">src/plugins/renderer/RendererHandler.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L37">src/plugins/renderer/RendererHandler.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="plugins_renderer_rendererhandler.rendererhandler.html" class="tsd-signature-type">RendererHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -311,7 +340,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L33">src/plugins/renderer/RendererHandler.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L33">src/plugins/renderer/RendererHandler.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -421,7 +450,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L97">src/plugins/renderer/RendererHandler.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L97">src/plugins/renderer/RendererHandler.ts:97</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -444,7 +473,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L26">src/plugins/renderer/RendererHandler.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L26">src/plugins/renderer/RendererHandler.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IConstructor</span><span class="tsd-signature-symbol">&lt;</span><a href="plugins_renderer_rendererhandler.rendererhandler.html" class="tsd-signature-type">RendererHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -461,7 +490,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L18">src/plugins/renderer/RendererHandler.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L18">src/plugins/renderer/RendererHandler.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -478,7 +507,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L57">src/plugins/renderer/RendererHandler.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L57">src/plugins/renderer/RendererHandler.ts:57</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -524,7 +553,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L66">src/plugins/renderer/RendererHandler.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L66">src/plugins/renderer/RendererHandler.ts:66</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -571,7 +600,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L41">src/plugins/renderer/RendererHandler.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L41">src/plugins/renderer/RendererHandler.ts:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Option</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -588,7 +617,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L29">src/plugins/renderer/RendererHandler.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L29">src/plugins/renderer/RendererHandler.ts:29</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -605,7 +634,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L60">src/plugins/renderer/RendererHandler.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L60">src/plugins/renderer/RendererHandler.ts:60</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -634,7 +663,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L69">src/plugins/renderer/RendererHandler.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L69">src/plugins/renderer/RendererHandler.ts:69</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -681,7 +710,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L44">src/plugins/renderer/RendererHandler.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L44">src/plugins/renderer/RendererHandler.ts:44</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">R</span></h4>
@@ -698,7 +727,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L53">src/plugins/renderer/RendererHandler.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L53">src/plugins/renderer/RendererHandler.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Scene</span></h4>
@@ -715,7 +744,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L50">src/plugins/renderer/RendererHandler.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L50">src/plugins/renderer/RendererHandler.ts:50</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Option</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Scene</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -866,7 +895,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L75">src/plugins/renderer/RendererHandler.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L75">src/plugins/renderer/RendererHandler.ts:75</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="plugins_renderer_rendererhandler.rendererhandler.html" class="tsd-signature-type">RendererHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -883,7 +912,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L87">src/plugins/renderer/RendererHandler.ts:87</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L87">src/plugins/renderer/RendererHandler.ts:87</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="plugins_renderer_rendererhandler.rendererhandler.html" class="tsd-signature-type">RendererHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -900,7 +929,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L81">src/plugins/renderer/RendererHandler.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L81">src/plugins/renderer/RendererHandler.ts:81</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="plugins_renderer_rendererhandler.rendererhandler.html" class="tsd-signature-type">RendererHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -917,7 +946,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L78">src/plugins/renderer/RendererHandler.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L78">src/plugins/renderer/RendererHandler.ts:78</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="plugins_renderer_rendererhandler.rendererhandler.html" class="tsd-signature-type">RendererHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -934,7 +963,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L84">src/plugins/renderer/RendererHandler.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L84">src/plugins/renderer/RendererHandler.ts:84</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="plugins_renderer_rendererhandler.rendererhandler.html" class="tsd-signature-type">RendererHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -1173,7 +1202,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L21">src/plugins/renderer/RendererHandler.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L21">src/plugins/renderer/RendererHandler.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1219,7 +1248,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L91">src/plugins/renderer/RendererHandler.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L91">src/plugins/renderer/RendererHandler.ts:91</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>enabled<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span></h4>
@@ -1270,7 +1299,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/4cc1e88/src/plugins/renderer/RendererHandler.ts#L11">src/plugins/renderer/RendererHandler.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/aicacia/ts-ecs-game/blob/199ee67/src/plugins/renderer/RendererHandler.ts#L11">src/plugins/renderer/RendererHandler.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1321,7 +1350,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in node_modules/@types/node/events.d.ts:44</li>
+									<li>Defined in node_modules/@types/node/events.d.ts:31</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1374,6 +1403,76 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="on-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> on</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>emitter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventEmitter</span>, event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AsyncIterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in node_modules/@types/node/events.d.ts:28</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>emitter: <span class="tsd-signature-type">EventEmitter</span></h5>
+								</li>
+								<li>
+									<h5>event: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AsyncIterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="once-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> once</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">once<span class="tsd-signature-symbol">(</span>emitter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NodeEventTarget</span>, event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">once<span class="tsd-signature-symbol">(</span>emitter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DOMEventTarget</span>, event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in node_modules/@types/node/events.d.ts:26</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>emitter: <span class="tsd-signature-type">NodeEventTarget</span></h5>
+								</li>
+								<li>
+									<h5>event: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in node_modules/@types/node/events.d.ts:27</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>emitter: <span class="tsd-signature-type">DOMEventTarget</span></h5>
+								</li>
+								<li>
+									<h5>event: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
 					<a name="tostring" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> to<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
@@ -1418,6 +1517,12 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="plugins_renderer_rendererhandler.rendererhandler.html#renderer" class="tsd-kind-icon">renderer</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="plugins_renderer_rendererhandler.rendererhandler.html#capturerejectionsymbol" class="tsd-kind-icon">capture<wbr>Rejection<wbr>Symbol</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="plugins_renderer_rendererhandler.rendererhandler.html#capturerejections" class="tsd-kind-icon">capture<wbr>Rejections</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
 								<a href="plugins_renderer_rendererhandler.rendererhandler.html#defaultmaxlisteners" class="tsd-kind-icon">default<wbr>Max<wbr>Listeners</a>
@@ -1559,6 +1664,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static tsd-is-external">
 								<a href="plugins_renderer_rendererhandler.rendererhandler.html#newfromjson" class="tsd-kind-icon">new<wbr>FromJSON</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="plugins_renderer_rendererhandler.rendererhandler.html#on-1" class="tsd-kind-icon">on</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="plugins_renderer_rendererhandler.rendererhandler.html#once-1" class="tsd-kind-icon">once</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
 								<a href="plugins_renderer_rendererhandler.rendererhandler.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
