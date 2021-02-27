@@ -92,7 +92,7 @@ export class Camera2D extends RenderableComponent {
   setZoom(zoom: number) {
     this.getEntity()
       .flatMap(TransformComponent.getTransform)
-      .map((transform) =>
+      .ifSome((transform) =>
         transform.setLocalScale2(vec2.set(VEC2_0, zoom, zoom))
       );
     return this;

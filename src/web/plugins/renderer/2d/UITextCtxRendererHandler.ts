@@ -20,7 +20,7 @@ export class UITextCtxRendererHandler extends CtxRendererHandler {
           uiElement
             .getEntity()
             .flatMap(TransformComponent.getTransform)
-            .map((transform) =>
+            .ifSome((transform) =>
               renderer.render((ctx) => {
                 if (uiElement instanceof UIText) {
                   ctx.scale(INV_BASE_SIZE, -INV_BASE_SIZE);

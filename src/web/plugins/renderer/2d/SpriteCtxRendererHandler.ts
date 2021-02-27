@@ -12,37 +12,35 @@ export class SpriteCtxRendererHandler extends CtxRendererHandler {
       const renderer = this.getRequiredRenderer();
 
       for (const sprite of spriteManager.getComponents()) {
-        const image = sprite
+        const imageOption = sprite
           .getImageAsset<WebImageAsset>()
           .flatMap((webImageAsset) => webImageAsset.getImage());
 
-        if (sprite.getRenderable()) {
-          image.ifSome((img) =>
-            sprite
-              .getEntity()
-              .flatMap(TransformComponent.getTransform)
-              .map((transform) =>
-                renderer.render((ctx) => {
-                  const width = sprite.getWidth(),
-                    height = sprite.getHeight(),
-                    halfWidth = width * 0.5,
-                    halfHeight = height * 0.5;
+        if (sprite.getRenderable() && imageOption.isSome()) {
+          const image = imageOption.unwrap(),
+            transform = TransformComponent.getRequiredTransform(
+              sprite.getRequiredEntity()
+            );
 
-                  ctx.scale(1, -1);
-                  ctx.drawImage(
-                    img,
-                    sprite.getClipX(),
-                    sprite.getClipY(),
-                    sprite.getClipWidth(),
-                    sprite.getClipHeight(),
-                    -halfWidth,
-                    -halfHeight,
-                    width,
-                    height
-                  );
-                }, transform.getMatrix2d(MAT2_0))
-              )
-          );
+          renderer.render((ctx) => {
+            const width = sprite.getWidth(),
+              height = sprite.getHeight(),
+              halfWidth = width * 0.5,
+              halfHeight = height * 0.5;
+
+            ctx.scale(1, -1);
+            ctx.drawImage(
+              image,
+              sprite.getClipX(),
+              sprite.getClipY(),
+              sprite.getClipWidth(),
+              sprite.getClipHeight(),
+              -halfWidth,
+              -halfHeight,
+              width,
+              height
+            );
+          }, transform.getMatrix2d(MAT2_0));
         }
       }
     });

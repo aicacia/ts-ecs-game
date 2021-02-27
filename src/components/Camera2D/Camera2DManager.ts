@@ -40,7 +40,7 @@ export class Camera2DManager extends DefaultDescriptorManager<Camera2D> {
   removeComponent(camera: Camera2D) {
     super.removeComponent(camera);
 
-    this.active.map((active) => {
+    this.active.ifSome((active) => {
       if (active === camera) {
         this.active.clear();
       }

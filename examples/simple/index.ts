@@ -22,7 +22,8 @@ import {
   WebImageAsset,
   WebEventListener,
 } from "../../src/web";
-import logoPng from "./logo.png";
+// @ts-ignore
+import logoPng from "../assets/logo.png";
 
 class Rotator extends Component {
   static requiredComponents = [Transform2D];

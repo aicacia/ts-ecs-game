@@ -11,18 +11,18 @@ export abstract class TransformComponent extends RenderableComponent {
   static Manager = TransformComponentManager;
 
   static getParentTransform(entity: Entity): Option<TransformComponent> {
-    return entity.getParent().flatMap(TransformComponent.getTransform);
+    return entity.getParent().andThen(TransformComponent.getTransform);
   }
 
   static getTransform(entity: Entity) {
-    const entityTransform = entity.getComponentInstanceOf(
-      TransformComponent as any
-    ) as Option<TransformComponent>;
+    const entityTransform = entity
+      .getComponent<TransformComponent>(Transform2D)
+      .orElse(() => entity.getComponent<TransformComponent>(Transform3D));
 
-    if (entityTransform.isSome()) {
-      return entityTransform;
-    } else {
+    if (entityTransform.isNone()) {
       return TransformComponent.getParentTransform(entity);
+    } else {
+      return entityTransform;
     }
   }
 
@@ -148,3 +148,6 @@ export abstract class TransformComponent extends RenderableComponent {
   abstract getScale2(out: vec2): vec2;
   abstract getScale3(out: vec3): vec3;
 }
+
+import { Transform2D } from "./Transform2D";
+import { Transform3D } from "./Transform3D";
